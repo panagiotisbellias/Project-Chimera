@@ -51,15 +51,7 @@ In our head-to-head simulation, the **Learning Agent** achieved nearly **2x high
 
 Project Chimera wraps the creative "neural" brain of an LLM with two critical layers of intelligence:
 
-```mermaid
-graph TD
-    A[Neuro (LLM)] -->|Hypotheses| B[Symbolic Guardian]
-    B -->|Rules| C{Is Valid?}
-    C -->|Yes| D[Causal Engine]
-    C -->|No| B
-    D -->|Profit Impact| E[LLM Brain]
-    E -->|Decides| F[Optimal Action]
-```
+![The Chimera Architecture](assets/architecture.png)
 
 * **🧠 Neuro (The Brain):** The creative core (GPT-4o) that understands goals and brainstorms diverse strategies.
 * **🛡️ Symbolic (The Guardian):** A rule engine that acts as a safety net, preventing catastrophic, rule-breaking decisions.
