@@ -30,9 +30,11 @@ Modern LLMs are powerful, but when entrusted with critical business decisions, t
 
 Project Chimera solves this by providing the LLM with a **Symbolic** safety net and a **Causal** oracle. It doesn't just guess; it brainstorms multiple strategies, checks them against business rules, and predicts their financial outcomes to find the optimal path.
 
-**See the agent's intelligence in action in our interactive demo:**
+**Watch the 1-minute video below to see the agent's intelligence in action:**
 
-<a><img src="https://img.shields.io/badge/Live_Demo-Coming_Soon-lightgrey?style=for-the-badge" alt="Live Demo Coming Soon"></a>
+<a href="https://youtu.be/e8h9FvE_l80?si=4iyv8mwzRdk6bbi1" target="_blank">
+ <img src="assets/video_thumbnail.png" alt="Watch the Video Walkthrough" width="600"/>
+</a>
 
 ---
 
@@ -75,7 +77,7 @@ Project Chimera wraps the creative "neural" brain of an LLM with two critical la
 
 You can try a live version of the Strategy Lab here:
 
-<a><img src="https://img.shields.io/badge/Live_Demo-Coming_Soon-lightgrey?style=for-the-badge" alt="Live Demo Coming Soon"></a>
+<a href="https://project-chimera.streamlit.app/" target="_blank"><img src="https://static.streamlit.io/badges/streamlit_badge_black_white.svg" alt="Live Demo"></a>
 
 #### Getting Started
 
