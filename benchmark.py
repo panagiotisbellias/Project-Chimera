@@ -9,7 +9,7 @@ import re
 from typing import Optional, Dict, Any
 
 # --- Component and LangChain Imports ---
-from components import EcommerceSimulatorV5, SymbolicGuardianV3, CausalEngineV5, DEFAULT_TRUST_VALUE_MULTIPLIER
+from components import EcommerceSimulatorV5, SymbolicGuardianV3, CausalEngineV6, DEFAULT_TRUST_VALUE_MULTIPLIER
 from langchain_openai import ChatOpenAI
 from langchain.agents import AgentExecutor, create_openai_tools_agent
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
@@ -71,7 +71,7 @@ Your output must be a single JSON object: {{"trust_multiplier": <number>}}"""
         tqdm.write(f"   - Could not determine dynamic multiplier, using default. Error: {e}")
         return DEFAULT_TRUST_VALUE_MULTIPLIER
 
-def create_agent_executor(agent_type: str, openai_api_key: str, current_state_provider, causal_engine: Optional[CausalEngineV5]):
+def create_agent_executor(agent_type: str, openai_api_key: str, current_state_provider, causal_engine: Optional[CausalEngineV6]):
     guardian = SymbolicGuardianV3()
     
     @tool
@@ -165,7 +165,7 @@ def run_simulation(agent_type: str, num_weeks: int, openai_api_key: str, goal: s
     causal_engine = None
     if agent_type == "Full Neuro-Symbolic-Causal":
         tqdm.write("--> Causal Engine for Full Agent is being built from scratch...")
-        causal_engine = CausalEngineV5(force_regenerate=True, trust_multiplier=trust_multiplier)
+        causal_engine = CausalEngineV6(force_regenerate=True, trust_multiplier=trust_multiplier)
 
     class StateProvider:
         def __init__(self): self.state = {}
@@ -205,6 +205,7 @@ def run_simulation(agent_type: str, num_weeks: int, openai_api_key: str, goal: s
                 "ad_spend": float(safe_action["ad_spend"]), "profit_change": float(state_after["profit"] - state_before["profit"]),
                 "sales_change": float(state_after["sales_volume"] - state_before["sales_volume"]),
                 "trust_change": float(state_after["brand_trust"] - state_before["brand_trust"]),
+                "season_phase": int(state_before["season_phase"]),
             }
             experience_history.append(exp)
 

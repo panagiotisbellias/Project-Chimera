@@ -22,11 +22,9 @@ You can try a **live demo** of the Strategy Lab here:
 
 <a href="https://project-chimera.streamlit.app/" target="_blank"><img src="https://static.streamlit.io/badges/streamlit_badge_black_white.svg" alt="Live Demo"></a>
 
-**Watch the 1-minute video below to see the agent's intelligence in action:**
+**See Chimera in Action**
 
-<a href="https://youtu.be/e8h9FvE_l80?si=4iyv8mwzRdk6bbi1" target="_blank">
- <img src="assets/video_thumbnail.png" alt="Watch the Video Walkthrough" width="600"/>
-</a>
+![Chimera Demo](all-demo-chimera-final.gif)
 
 ---
 
@@ -43,35 +41,40 @@ You can try a **live demo** of the Strategy Lab here:
 ### ✨ Key Features
 
 * **Multi-Hypothesis Reasoning:** The agent actively brainstorms and evaluates multiple strategies before making a data-driven recommendation.
-* **Dynamic Learning from Experience:** The agent's Causal Engine retrains periodically on its own performance data, allowing it to adapt and improve.
+* **Dynamic Learning from Experience:** The agent's Causal Engine (CausalEngineV6) retrains periodically on its own performance data, allowing it to adapt and improve.
+* **Advanced XAI Suite:** Go beyond "black box" predictions with:
+    * **Per-Decision Explainability:** A SHAP-based panel that shows the factors driving each specific decision.
+    * **Interactive 'What-If' Simulator:** A tool to explore the agent's mind by changing market conditions and seeing how its predictions change in real-time.
 * **Advanced Economic Simulator:** A sophisticated simulation environment featuring non-linear dynamics like price elasticity and diminishing returns.
 * **Interactive Strategy Lab:** A full-featured Streamlit application (`app.py`) for real-time interaction and analysis.
 * **Automated Benchmarking Suite:** A powerful research script (`benchmark.py`) to rigorously compare different agent architectures.
 
 ---
 
-## 📈 Evolution & Development Report
+## 📈 Evolution & Development Report (Release v1.2.1)
+This version represents a major leap forward, transforming Project Chimera from a powerful prototype into a robust, transparent, and interactive analysis platform.
 
-### Starting Point: High Potential but Raw (V7.2)
-Initially, our Full Neuro-Symbolic-Causal agent behaved like a lucky but shortsighted LLM+Symbolic agent due to a broken learning mechanism — chasing short-term gains and eroding brand trust.
+- **🧠 Core Intelligence Upgrade (CausalEngineV6):** Fixed a fundamental statistical flaw ("data leakage") in the training data generation process. The Causal Engine now produces live, dynamic, and meaningful predictions, moving from a "dead brain" to a fully operational one.
 
-### Step-by-Step Improvements
+- **🔬 Explainability (XAI) Suite:**
+    * **Static SHAP Panel:** Integrated a panel to display the positive and negative factors for each decision, turning the "black box" into a "glass box."
+    * **Interactive 'What-If' Simulator:** Added a new tab where users can tweak market conditions and proposed actions with sliders to see the Causal Engine's predictions and explanations update in real-time.
 
-#### 1. Intelligence & Strategy
-- **Trust-Adjusted Profit Metric:** Added `TRUST_VALUE_MULTIPLIER` to balance profit with long-term brand trust.  
-- **Dynamic Strategic Personality:** “Strategy Interpreter” adjusts multiplier based on mission type (profit, balanced, trust).  
-- **Mandatory Rule Validation:** All hypotheses checked via `check_business_rules` before execution.  
-- **Improved Forecast Accuracy:** Added `initial_ad_spend` context to CausalEngine.
+- ✨ **UI/UX Overhaul:**
+    * **Tabbed Interface:** Re-organized the app into logical tabs: Strategy Lab, Performance Dashboard, and Run History.
+    * **Focused Dashboard:** Redesigned the performance dashboard into a cleaner 2x2 layout for the most critical metrics.
+    * **Delta Metrics & Run Log:** Added week-over-week change indicators and a professional log table for detailed analysis of past runs.
 
-#### 2. Architecture & Efficiency
-- **Benchmark Speed-Up:** CausalEngine initializes once per simulation.  
-- **Richer Simulation Physics:** Tuned `price_elasticity` and added `seasonality_amp`.  
-- **Decision Caching:** Interactive app remembers past similar decisions.
+- 🛠 **Code Health & Bug Squashing:** Resolved numerous bugs, including library versioning conflicts with LangChain and UI state issues, to create a more stable and reliable application.
 
-#### 3. Benchmarking & Analysis
-- **Multi-Scenario Testing:** Runs “Brand-Focused”, “Profit-Maximization”, and “Balanced” with separate reports.  
-- **Expanded Metrics:** Added cumulative/average weekly profit and ad spend tracking.  
-- **Live Strategy Feed:** Real-time logging of weekly decisions.
+---
+
+## 🔬Advanced XAI: From Glass Box to Interactive Simulator
+Version 1.2.1 introduces a full suite of XAI tools. We didn't just want to see why the agent made a decision; we wanted to interact with its reasoning. The new **"What-If Analysis"** tab allows you to do exactly that—explore the agent's mind by testing counterfactual scenarios live.
+
+See the Interactive 'What-If' Simulator in Action:
+
+![Chimera What-If Demo](demo-what-if-final.gif)
 
 ---
 
@@ -116,11 +119,9 @@ Initially, our Full Neuro-Symbolic-Causal agent behaved like a lucky but shortsi
 ### 🗺️ Future Roadmap
 
 Project Chimera is a living project. The next steps in our vision include:
-
-* **Deep XAI (Explainable AI):** Integrating a Causal Graph visualization layer to explain *why* the Causal Engine predicted a certain outcome.
 * **Multi-Agent Competitive Simulations:** Evolving the benchmark into an ecosystem where multiple Chimera agents compete against each other in the same market.
 * **Domain-Agnostic Framework:** Refactoring the core logic into a general-purpose framework for other domains like finance or healthcare.
-
+* **Autonomous Learning & Self-Improvement:** Enabling the agent to not just learn from data, but to actively run its own experiments to discover new causal relationships in the environment.
 ---
 
 ### 🚀 Live Demo & Usage

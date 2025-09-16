@@ -11,6 +11,8 @@ import pandas as pd
 from econml.dml import CausalForestDML
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.multioutput import MultiOutputRegressor
+import shap
+from tqdm import tqdm
 
 
 COST_PER_ITEM = 50.0
@@ -297,13 +299,13 @@ class SymbolicGuardianV3:
         return a, report
 
 
-# ----------------------------
-# CausalEngineV5
-# ----------------------------
-
 DEFAULT_TRUST_VALUE_MULTIPLIER = 100_000 
 
-class CausalEngineV5:
+# ----------------------------
+# CausalEngineV6
+# ----------------------------
+
+class CausalEngineV6:
     """
     The final version of the causal engine has been restructured.
         - Treatment = [price_change, ad_spend].
@@ -340,39 +342,56 @@ class CausalEngineV5:
         self._fit_model(self.initial_train_history)
         print("   - Causal Engine V5 initialization and training completed.")
 
+
+
     def _generate_initial_data(
         self,
         simulator: EcommerceSimulatorV5,
         guardian: SymbolicGuardianV3,
-        num_simulations: int = 120,
-        num_steps: int = 60,
-        price_change_range: Tuple[float, float] = (-0.30, 0.40),
-        ad_spend_range: Tuple[float, float] = (0.0, 2000.0),
+        num_simulations: int = 200,
+        num_steps: int = 50,
     ) -> pd.DataFrame:
         rows: List[Dict[str, Any]] = []
-        for i in range(num_simulations):
+        print("-> Causal Engine V5: Generating new, truly randomized initial data...")
+        
+        #Let's only take absolute and situation-independent limits from the Guardian
+        abs_max_discount = guardian.cfg['max_dn']
+        abs_max_increase = guardian.cfg['max_up']
+        abs_ad_cap = guardian.cfg['ad_cap']
+
+        for i in tqdm(range(num_simulations), desc="Generating Initial Training Data"):
             simulator.reset(seed=i)
             for _ in range(num_steps):
                 state_before = simulator.state.copy()
-                raw_action = {
-                    "price_change": float(self.rng.uniform(*price_change_range)),
-                    "ad_spend": float(self.rng.uniform(*ad_spend_range)),
-                }
-                safe_action, _ = guardian.repair_action(raw_action, state_before)
-                simulator.take_action(safe_action)
-                state_after = simulator.state.copy()
 
+                # --- FINAL SOLUTION: COMPLETELY STATE-INDEPENDENT ACTION GENERATION ---
+                # Actions are generated regardless of any value in `state_before`.
+                # This breaks any unwanted relationships between X (state) and T (action).
+                
+                # Price change is completely random within absolute percentage limits.
+                price_change = float(self.rng.uniform(-abs_max_discount, abs_max_increase))
+                
+                # Ad spend is completely random within an absolute ceiling limit.
+                ad_spend = float(self.rng.uniform(0, abs_ad_cap))
+
+                action_for_sim = {
+                    "price_change": price_change,
+                    "ad_spend": ad_spend
+                }
+                
+                # We run the simulation with this completely random action.
+                # We do NOT include Guardian's state-dependent corrections in the training data.
+                state_after = simulator.take_action(action_for_sim)
                 profit_change = float(state_after["profit"] - state_before["profit"])
                 trust_change = float(state_after["brand_trust"] - state_before["brand_trust"])
 
                 rows.append({
-                    #UPDATE: Added ad spend to provide better context to the model
                     "initial_price": float(state_before["price"]),
                     "initial_brand_trust": float(state_before["brand_trust"]),
                     "initial_ad_spend": float(state_before["weekly_ad_spend"]),
-                    "price_change": float(safe_action["price_change"]),
-                    "ad_spend": float(safe_action["ad_spend"]),
-                    # UPDATE: Target variable is calculated using dynamic multiplier
+                    "season_phase": int(state_before["season_phase"]),
+                    "price_change": float(action_for_sim["price_change"]),
+                    "ad_spend": float(action_for_sim["ad_spend"]),
                     "trust_adjusted_profit_change": profit_change + (trust_change * self.trust_multiplier),
                     "profit_change": profit_change,
                     "trust_change": trust_change,
@@ -394,7 +413,7 @@ class CausalEngineV5:
         # UPDATE: We are using the new target variable (Y) and full context (XW)
         Y = training_data["trust_adjusted_profit_change"].values
         T = training_data[["price_change", "ad_spend"]].values
-        XW = training_data[["initial_price", "initial_brand_trust", "initial_ad_spend"]].values
+        XW = training_data[["initial_price", "initial_brand_trust", "initial_ad_spend", "season_phase"]].values
 
         self.model = CausalForestDML(
             model_y=GradientBoostingRegressor(random_state=123),
@@ -430,6 +449,7 @@ class CausalEngineV5:
             "initial_price": float(context["price"]),
             "initial_brand_trust": float(context["brand_trust"]),
             "initial_ad_spend": float(context["weekly_ad_spend"]), 
+            "season_phase": int(context.get("season_phase", 0)),
         }])
 
         T0 = np.array([[0.0, 0.0]])
@@ -494,3 +514,46 @@ class CausalEngineV5:
             "horizon": len(plan),
             "rollouts": n_rollouts,
         }
+    
+
+    def explain_decision(self, context: Dict[str, Any], action: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Using SHAP, CausalForestDML explains the factors behind the model's prediction for a particular decision.
+        """
+        if self.model is None:
+            raise RuntimeError("Causal model is not trained.")
+
+        feature_names = ["initial_price", "initial_brand_trust", "initial_ad_spend", "season_phase", "price_change", "ad_spend"]
+
+        instance_data = {
+            "initial_price": context.get("price", 0.0),
+            "initial_brand_trust": context.get("brand_trust", 0.0),
+            "initial_ad_spend": context.get("weekly_ad_spend", 0.0),
+            "season_phase": int(context.get("season_phase", 0)),
+            "price_change": action.get("price_change", 0.0),
+            "ad_spend": action.get("ad_spend", 0.0)
+        }
+        instance_df = pd.DataFrame([instance_data], columns=feature_names)
+        instance_numpy = instance_df.values
+
+        def prediction_wrapper(data_numpy):
+            X_context = data_numpy[:, :4]
+            T1_action = data_numpy[:, 4:]
+            T0_noop = np.zeros_like(T1_action)
+            return self.model.effect(X_context, T0=T0_noop, T1=T1_action)
+
+        background_data_sample = self.initial_train_history.sample(min(100, len(self.initial_train_history)))
+        
+        background_data_numpy = background_data_sample[feature_names].values
+
+        explainer = shap.Explainer(prediction_wrapper, background_data_numpy)
+        
+        shap_values_obj = explainer(instance_numpy)
+
+        explanation = {
+            "features": feature_names,
+            "shap_values": shap_values_obj.values[0].tolist(),
+            "base_value": shap_values_obj.base_values[0]
+        }
+        
+        return explanation
