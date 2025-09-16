@@ -24,7 +24,7 @@ You can try a **live demo** of the Strategy Lab here:
 
 **See Chimera in Action**
 
-![Chimera Demo](all-demo-chimera-final.gif)
+![Chimera Demo](assets/all-demo-chimera-final.gif)
 
 ---
 
@@ -74,7 +74,7 @@ Version 1.2.1 introduces a full suite of XAI tools. We didn't just want to see w
 
 See the Interactive 'What-If' Simulator in Action:
 
-![Chimera What-If Demo](demo-what-if-final.gif)
+![Chimera What-If Demo](assets/demo-what-if-final.gif)
 
 ---
 
