@@ -9,7 +9,7 @@ import re
 from typing import Optional, Dict, Any
 
 # --- Component and LangChain Imports ---
-from components import EcommerceSimulatorV5, SymbolicGuardianV3, CausalEngineV6, DEFAULT_TRUST_VALUE_MULTIPLIER
+from components import EcommerceSimulatorV5, SymbolicGuardianV4, CausalEngineV6, DEFAULT_TRUST_VALUE_MULTIPLIER
 from langchain_openai import ChatOpenAI
 from langchain.agents import AgentExecutor, create_openai_tools_agent
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
@@ -72,7 +72,7 @@ Your output must be a single JSON object: {{"trust_multiplier": <number>}}"""
         return DEFAULT_TRUST_VALUE_MULTIPLIER
 
 def create_agent_executor(agent_type: str, openai_api_key: str, current_state_provider, causal_engine: Optional[CausalEngineV6]):
-    guardian = SymbolicGuardianV3()
+    guardian = SymbolicGuardianV4()
     
     @tool
     def check_business_rules(price_change: float = 0.0, ad_spend: float = 0.0) -> str:
@@ -161,7 +161,7 @@ def create_agent_executor(agent_type: str, openai_api_key: str, current_state_pr
 
 def run_simulation(agent_type: str, num_weeks: int, openai_api_key: str, goal: str, trust_multiplier: Optional[float] = None):
     simulator = EcommerceSimulatorV5(seed=42)
-    guardian = SymbolicGuardianV3()
+    guardian = SymbolicGuardianV4()
     causal_engine = None
     if agent_type == "Full Neuro-Symbolic-Causal":
         tqdm.write("--> Causal Engine for Full Agent is being built from scratch...")

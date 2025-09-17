@@ -185,26 +185,30 @@ class EcommerceSimulatorV5:
 
 
 # ----------------------------
-# SymbolicGuardianV3
+# SymbolicGuardianV4
 # ----------------------------
 
-class SymbolicGuardianV3:
+class SymbolicGuardianV4:
     """
-    Symmetric rules and automatic repair logic.
+    Symmetric rules and automatic repair logic (with safety buffer).
         - Price increases/discounts are limited by percentage.
         - Minimum profit margin and maximum price are maintained.
         - Weekly ad spend: absolute cap + previous week's increase cap.
+        - NEW in V4: A small safety buffer is applied above the minimum safe price
+          to avoid rounding/precision edge cases detected in formal verification (TLA+ model).
     """
 
     def __init__(
         self,
-        max_discount_per_week: float = 0.40,       # %No discounts over 40
+        max_discount_per_week: float = 0.40,       # No discounts over 40%
         max_price_increase_per_week: float = 0.50, # No more than 50% increase
-        min_profit_margin_percentage: float = 0.15,# minimum 15% margin
+        min_profit_margin_percentage: float = 0.15,# Minimum 15% margin
         max_price: float = 150.0,
         unit_cost: float = COST_PER_ITEM,
-        ad_absolute_cap: float = 5000.0,           # weekly absolute ceiling
-        ad_increase_cap: float = 1000.0,           # maximum increase compared to the previous week
+        ad_absolute_cap: float = 5000.0,           # Weekly absolute ceiling
+        ad_increase_cap: float = 1000.0,           # Max increase vs last week
+        safety_buffer_ratio: float = 0.01,         # NEW in V4: +1% buffer above min safe price
+        safety_buffer_abs: float = 0.0             # Optional absolute buffer in currency units
     ):
         self.cfg = dict(
             max_dn=max_discount_per_week,
@@ -214,6 +218,8 @@ class SymbolicGuardianV3:
             unit_cost=unit_cost,
             ad_cap=ad_absolute_cap,
             ad_increase_cap=ad_increase_cap,
+            safety_buffer_ratio=safety_buffer_ratio,
+            safety_buffer_abs=safety_buffer_abs
         )
 
     def validate_action(self, action: Dict[str, Any], current_state: Dict[str, Any]) -> Dict[str, Any]:
@@ -252,10 +258,17 @@ class SymbolicGuardianV3:
             return {"is_valid": False, "message": f"Rule Violation: Price cannot exceed ${c['max_price']}."}
 
         margin = (future_price - c["unit_cost"]) / max(1e-6, future_price)
-        if future_price <= c["unit_cost"] or margin < c["min_margin"]:
+        min_safe_price = c["unit_cost"] / (1.0 - c["min_margin"])
+        # NEW in V4: Apply safety buffer to validation threshold
+        min_safe_price_with_buffer = min_safe_price * (1.0 + c["safety_buffer_ratio"]) + c["safety_buffer_abs"]
+
+        if future_price <= c["unit_cost"] or future_price < min_safe_price_with_buffer or margin < c["min_margin"]:
             return {
                 "is_valid": False,
-                "message": f"Rule Violation: Profit margin < {c['min_margin']*100:.0f}% or price below cost (${c['unit_cost']}).",
+                "message": (
+                    f"Rule Violation: Profit margin < {c['min_margin']*100:.0f}% "
+                    f"or price below safe threshold (${min_safe_price_with_buffer:.2f} with buffer)."
+                ),
             }
 
         return {"is_valid": True, "message": "Action is valid and compliant with all rules."}
@@ -263,6 +276,8 @@ class SymbolicGuardianV3:
     def repair_action(self, action: Dict[str, Any], current_state: Dict[str, Any]) -> Tuple[Dict[str, Any], Dict[str, Any]]:
         """
         In case of violation of the rules, the action is made valid by correcting it as much as possible.
+        NEW in V4: When repairing for minimum margin, also apply a safety buffer above the exact threshold
+        to avoid edge-case violations due to rounding/precision issues.
         """
         c = self.cfg
         a = dict(
@@ -277,10 +292,10 @@ class SymbolicGuardianV3:
         if a["ad_spend"] - prev_ad > c["ad_increase_cap"]:
             a["ad_spend"] = prev_ad + c["ad_increase_cap"]
 
-        # 2) Price change percentage
+        # Price change percentage
         a["price_change"] = max(-c["max_dn"], min(c["max_up"], a["price_change"]))
 
-        # 3) Future price ceiling and minimum margin requirement
+        # Future price ceiling and minimum margin requirement
         base_price = float(current_state["price"])
         future_price = base_price * (1.0 + a["price_change"])
 
@@ -289,10 +304,13 @@ class SymbolicGuardianV3:
             a["price_change"] = (c["max_price"] / base_price) - 1.0
             future_price = c["max_price"]
 
-        # Min marj 
+        # Min margin with safety buffer
         margin = (future_price - c["unit_cost"]) / max(1e-6, future_price)
-        if future_price <= c["unit_cost"] or margin < c["min_margin"]:
-            target_price = c["unit_cost"] / (1.0 - c["min_margin"])
+        min_safe_price = c["unit_cost"] / (1.0 - c["min_margin"])
+        min_safe_price_with_buffer = min_safe_price * (1.0 + c["safety_buffer_ratio"]) + c["safety_buffer_abs"]
+
+        if future_price <= c["unit_cost"] or future_price < min_safe_price_with_buffer or margin < c["min_margin"]:
+            target_price = min_safe_price_with_buffer
             a["price_change"] = (target_price / base_price) - 1.0
 
         report = self.validate_action(a, current_state)
@@ -334,7 +352,7 @@ class CausalEngineV6:
             self._load_data()
         else:
             print("-> Causal Engine V5: Generating new initial data (may take a few minutes)...")
-            guardian = SymbolicGuardianV3()
+            guardian = SymbolicGuardianV4()
             sim = EcommerceSimulatorV5(seed=42)
             self.initial_train_history = self._generate_initial_data(sim, guardian)
             self._save_data()
@@ -348,7 +366,7 @@ class CausalEngineV6:
     def _generate_initial_data(
         self,
         simulator: EcommerceSimulatorV5,
-        guardian: SymbolicGuardianV3,
+        guardian: SymbolicGuardianV4,
         num_simulations: int = 500,
         num_steps: int = 50,
     ) -> pd.DataFrame:
@@ -465,7 +483,7 @@ class CausalEngineV6:
     def simulate_plan(
         self,
         simulator: EcommerceSimulatorV5,
-        guardian: SymbolicGuardianV3,
+        guardian: SymbolicGuardianV4,
         start_state: Optional[Dict[str, Any]],
         plan: List[Dict[str, Any]],
         n_rollouts: int = 64,

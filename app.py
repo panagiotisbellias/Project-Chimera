@@ -18,7 +18,7 @@ import shap
 import numpy as np
 
 from components import (
-    EcommerceSimulatorV5, SymbolicGuardianV3, CausalEngineV6, 
+    EcommerceSimulatorV5, SymbolicGuardianV4, CausalEngineV6, 
     COST_PER_ITEM, DEFAULT_TRUST_VALUE_MULTIPLIER
 )
 
@@ -78,7 +78,7 @@ def get_decision_from_response(response: dict):
 
 def apply_decision_and_prepare_experience(decision: dict):
     sim: EcommerceSimulatorV5 = st.session_state.simulator
-    guardian: SymbolicGuardianV3 = st.session_state.guardian
+    guardian: SymbolicGuardianV4 = st.session_state.guardian
     before = sim.state.copy()
     safe_action, report = guardian.repair_action(decision.get("action", {}), before)
     after = sim.take_action(safe_action)
@@ -104,7 +104,7 @@ def generate_feedback_on_last_action(last_decision_info: dict) -> str:
 # @st.cache_resource
 def setup_agent_and_tools(agent_type: str):
     """Sets up the agent and its tools based on the selected type."""
-    guardian: SymbolicGuardianV3 = st.session_state.guardian
+    guardian: SymbolicGuardianV4 = st.session_state.guardian
     causal_engine: CausalEngineV6 = st.session_state.causal_engine
 
     @tool
@@ -198,7 +198,7 @@ st.title("Project Chimera: The Adaptive Strategy Lab")
 
 # Initialize session state
 if "app_initialized" not in st.session_state:
-    st.session_state.guardian = SymbolicGuardianV3()
+    st.session_state.guardian = SymbolicGuardianV4()
     st.session_state.simulator = EcommerceSimulatorV5(seed=123)
     st.session_state.causal_engine = CausalEngineV6(force_regenerate=False)
     st.session_state.history = [st.session_state.simulator.state.copy()]

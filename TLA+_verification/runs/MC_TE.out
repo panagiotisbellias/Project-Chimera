@@ -1,0 +1,767 @@
+@!@!@STARTMSG 2262:0 @!@!@
+TLC2 Version 2.20 of Day Month 20?? (rev: 97e7dc3)
+@!@!@ENDMSG 2262 @!@!@
+@!@!@STARTMSG 2187:0 @!@!@
+Running breadth-first search Model-Checking with fp 58 and seed 1963659910591751761 with 4 workers on 8 cores with 608MB heap and 1365MB offheap memory [pid: 91422] (Mac OS X 13.0.1 x86_64, Eclipse Adoptium 17.0.16 x86_64, OffHeapDiskFPSet, DiskStateQueue).
+@!@!@ENDMSG 2187 @!@!@
+@!@!@STARTMSG 2220:0 @!@!@
+Starting SANY...
+@!@!@ENDMSG 2220 @!@!@
+Parsing file /Users/aytugakarlar/Desktop/Project-Chimera-FINAL/ChimeraGuardianProof.toolbox/Model_Guardian_Proof/MC.tla
+Parsing file /Users/aytugakarlar/Desktop/Project-Chimera-FINAL/ChimeraGuardianProof.toolbox/Model_Guardian_Proof/ChimeraGuardianProof.tla
+Parsing file /Applications/TLA+ Toolbox.app/Contents/Eclipse/plugins/org.lamport.tlatools_1.0.0.202509110129/tla2sany/StandardModules/TLC.tla
+Parsing file /Applications/TLA+ Toolbox.app/Contents/Eclipse/plugins/org.lamport.tlatools_1.0.0.202509110129/tla2sany/StandardModules/Naturals.tla
+Parsing file /Applications/TLA+ Toolbox.app/Contents/Eclipse/plugins/org.lamport.tlatools_1.0.0.202509110129/tla2sany/StandardModules/Sequences.tla
+Parsing file /Applications/TLA+ Toolbox.app/Contents/Eclipse/plugins/org.lamport.tlatools_1.0.0.202509110129/tla2sany/StandardModules/FiniteSets.tla
+Semantic processing of module Naturals
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module TLC
+Semantic processing of module ChimeraGuardianProof
+Semantic processing of module MC
+Linting of module ChimeraGuardianProof
+Linting of module MC
+@!@!@STARTMSG 2219:0 @!@!@
+SANY finished.
+@!@!@ENDMSG 2219 @!@!@
+@!@!@STARTMSG 2185:0 @!@!@
+Starting... (2025-09-17 15:12:36)
+@!@!@ENDMSG 2185 @!@!@
+@!@!@STARTMSG 2189:0 @!@!@
+Computing initial states...
+@!@!@ENDMSG 2189 @!@!@
+@!@!@STARTMSG 2190:0 @!@!@
+Finished computing initial states: 1 distinct state generated at 2025-09-17 15:12:38.
+@!@!@ENDMSG 2190 @!@!@
+@!@!@STARTMSG 2200:0 @!@!@
+Progress(13) at 2025-09-17 15:12:41: 614,394 states generated (614,394 s/min), 36,213 distinct states found (36,213 ds/min), 10,613 states left on queue.
+@!@!@ENDMSG 2200 @!@!@
+@!@!@STARTMSG 2200:0 @!@!@
+Progress(29) at 2025-09-17 15:13:41: 20,946,576 states generated (20,332,182 s/min), 1,000,699 distinct states found (964,486 ds/min), 127,941 states left on queue.
+@!@!@ENDMSG 2200 @!@!@
+@!@!@STARTMSG 2200:0 @!@!@
+Progress(35) at 2025-09-17 15:14:41: 40,716,616 states generated (19,770,040 s/min), 1,898,422 distinct states found (897,723 ds/min), 201,916 states left on queue.
+@!@!@ENDMSG 2200 @!@!@
+@!@!@STARTMSG 2200:0 @!@!@
+Progress(39) at 2025-09-17 15:15:41: 62,667,368 states generated (21,950,752 s/min), 2,876,513 distinct states found (978,091 ds/min), 265,411 states left on queue.
+@!@!@ENDMSG 2200 @!@!@
+@!@!@STARTMSG 2201:0 @!@!@
+The coverage statistics at 2025-09-17 15:15:41 (see https://explain.tlapl.us/module-coverage-statistics for how to interpret the following statistics).
+@!@!@ENDMSG 2201 @!@!@
+@!@!@STARTMSG 2779:0 @!@!@
+<week line 27, col 18 to line 27, col 21 of module ChimeraGuardianProof>: 38
+@!@!@ENDMSG 2779 @!@!@
+@!@!@STARTMSG 2779:0 @!@!@
+<price line 27, col 11 to line 27, col 15 of module ChimeraGuardianProof>: 5910
+@!@!@ENDMSG 2779 @!@!@
+@!@!@STARTMSG 2779:0 @!@!@
+<ad_spend line 27, col 24 to line 27, col 31 of module ChimeraGuardianProof>: 11
+@!@!@ENDMSG 2779 @!@!@
+@!@!@STARTMSG 2779:0 @!@!@
+<prev_ad line 27, col 34 to line 27, col 40 of module ChimeraGuardianProof>: 11
+@!@!@ENDMSG 2779 @!@!@
+@!@!@STARTMSG 2773:0 @!@!@
+<Init line 90, col 1 to line 90, col 4 of module ChimeraGuardianProof>: 1:1
+@!@!@ENDMSG 2773 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 91, col 3 to line 94, col 16 of module ChimeraGuardianProof: 1
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2772:0 @!@!@
+<Next line 101, col 1 to line 101, col 4 of module ChimeraGuardianProof (102 5 108 30)>: 2879260:62728739
+@!@!@ENDMSG 2772 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 102, col 8 to line 102, col 16 of module ChimeraGuardianProof: 2613819
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 102, col 8 to line 102, col 11 of module ChimeraGuardianProof: 2613825
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 105, col 15 to line 105, col 51 of module ChimeraGuardianProof: 62732301
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 105, col 24 to line 105, col 51 of module ChimeraGuardianProof: 62732452
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 65, col 9 to line 65, col 60 of module ChimeraGuardianProof: 62732474
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 65, col 12 to line 65, col 31 of module ChimeraGuardianProof: 62732478
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||||line 65, col 12 to line 65, col 19 of module ChimeraGuardianProof: 62732482
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||||line 65, col 23 to line 65, col 31 of module ChimeraGuardianProof: 62732488
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 65, col 38 to line 65, col 46 of module ChimeraGuardianProof: 11891664
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 65, col 53 to line 65, col 60 of module ChimeraGuardianProof: 50840857
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 57, col 9 to line 61, col 31 of module ChimeraGuardianProof: 62732524
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 57, col 12 to line 57, col 44 of module ChimeraGuardianProof: 62739813
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||||line 57, col 12 to line 57, col 24 of module ChimeraGuardianProof: 62740066
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||||line 57, col 28 to line 57, col 44 of module ChimeraGuardianProof: 62740121
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 58, col 14 to line 58, col 30 of module ChimeraGuardianProof: 15685026
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 59, col 14 to line 61, col 31 of module ChimeraGuardianProof: 47055167
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||||line 59, col 17 to line 59, col 55 of module ChimeraGuardianProof: 47055194
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||||line 59, col 17 to line 59, col 29 of module ChimeraGuardianProof: 47055208
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||||line 59, col 34 to line 59, col 54 of module ChimeraGuardianProof: 47055231
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||||||line 59, col 38 to line 59, col 54 of module ChimeraGuardianProof: 47055257
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||||line 60, col 20 to line 60, col 40 of module ChimeraGuardianProof: 15685099
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||||line 61, col 19 to line 61, col 31 of module ChimeraGuardianProof: 31370194
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 63, col 9 to line 63, col 52 of module ChimeraGuardianProof: 62740409
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 63, col 9 to line 63, col 17 of module ChimeraGuardianProof: 62740427
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 63, col 22 to line 63, col 51 of module ChimeraGuardianProof: 62740440
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||||line 63, col 23 to line 63, col 41 of module ChimeraGuardianProof: 62740455
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||||line 63, col 23 to line 63, col 31 of module ChimeraGuardianProof: 62740467
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||||line 63, col 35 to line 63, col 41 of module ChimeraGuardianProof: 62740482
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 67, col 5 to line 69, col 15 of module ChimeraGuardianProof: 62740788
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 67, col 8 to line 67, col 42 of module ChimeraGuardianProof: 62741841
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||||line 67, col 8 to line 67, col 13 of module ChimeraGuardianProof: 62741980
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||||line 67, col 17 to line 67, col 42 of module ChimeraGuardianProof: 62742004
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 68, col 10 to line 68, col 35 of module ChimeraGuardianProof: 7476270
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 69, col 10 to line 69, col 15 of module ChimeraGuardianProof: 55265765
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 105, col 38 to line 105, col 42 of module ChimeraGuardianProof: 62742058
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 105, col 45 to line 105, col 50 of module ChimeraGuardianProof: 62742076
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 106, col 15 to line 106, col 64 of module ChimeraGuardianProof: 62742095
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 106, col 27 to line 106, col 64 of module ChimeraGuardianProof: 62742122
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 74, col 9 to line 74, col 32 of module ChimeraGuardianProof: 62742144
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 74, col 12 to line 74, col 17 of module ChimeraGuardianProof: 62742162
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||||line 74, col 12 to line 74, col 13 of module ChimeraGuardianProof: 62742177
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 74, col 31 to line 74, col 32 of module ChimeraGuardianProof: 62744532
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 76, col 9 to line 76, col 62 of module ChimeraGuardianProof: 62744949
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 76, col 12 to line 76, col 32 of module ChimeraGuardianProof: 62745317
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||||line 76, col 12 to line 76, col 23 of module ChimeraGuardianProof: 62745511
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||||line 76, col 27 to line 76, col 32 of module ChimeraGuardianProof: 62745533
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 76, col 51 to line 76, col 62 of module ChimeraGuardianProof: 62745545
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 78, col 9 to line 80, col 23 of module ChimeraGuardianProof: 62745556
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 78, col 12 to line 78, col 48 of module ChimeraGuardianProof: 62745574
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||||line 78, col 13 to line 78, col 29 of module ChimeraGuardianProof: 62745587
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||||line 78, col 13 to line 78, col 22 of module ChimeraGuardianProof: 62745619
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||||line 78, col 26 to line 78, col 29 of module ChimeraGuardianProof: 62745642
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||||line 78, col 34 to line 78, col 48 of module ChimeraGuardianProof: 62747085
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 79, col 15 to line 79, col 36 of module ChimeraGuardianProof: 21298066
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 80, col 14 to line 80, col 23 of module ChimeraGuardianProof: 41449023
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 81, col 6 to line 81, col 15 of module ChimeraGuardianProof: 62747093
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 106, col 43 to line 106, col 53 of module ChimeraGuardianProof: 62747094
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 106, col 56 to line 106, col 63 of module ChimeraGuardianProof: 62747099
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 107, col 15 to line 107, col 33 of module ChimeraGuardianProof: 62747111
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 107, col 26 to line 107, col 33 of module ChimeraGuardianProof: 62747371
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 108, col 15 to line 108, col 30 of module ChimeraGuardianProof: 62747488
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 108, col 23 to line 108, col 30 of module ChimeraGuardianProof: 62747743
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 104, col 29 to line 104, col 42 of module ChimeraGuardianProof: 10458107
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 103, col 22 to line 103, col 39 of module ChimeraGuardianProof: 2614528
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2772:0 @!@!@
+<Next line 101, col 1 to line 101, col 4 of module ChimeraGuardianProof (110 8 111 54)>: 0:0
+@!@!@ENDMSG 2772 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 110, col 11 to line 110, col 20 of module ChimeraGuardianProof: 2614548
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 111, col 11 to line 111, col 54 of module ChimeraGuardianProof: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2774:0 @!@!@
+<Invariant_BufferedMargin line 118, col 1 to line 118, col 24 of module ChimeraGuardianProof>
+@!@!@ENDMSG 2774 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 118, col 29 to line 118, col 61 of module ChimeraGuardianProof: 2880180
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2774:0 @!@!@
+<Invariant_PriceCap line 119, col 1 to line 119, col 18 of module ChimeraGuardianProof>
+@!@!@ENDMSG 2774 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 119, col 23 to line 119, col 40 of module ChimeraGuardianProof: 2880180
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2774:0 @!@!@
+<Invariant_AdSpendAbsolute line 120, col 1 to line 120, col 25 of module ChimeraGuardianProof>
+@!@!@ENDMSG 2774 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 120, col 30 to line 120, col 47 of module ChimeraGuardianProof: 2880180
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2774:0 @!@!@
+<Invariant_AdSpendRelative line 121, col 1 to line 121, col 25 of module ChimeraGuardianProof>
+@!@!@ENDMSG 2774 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 121, col 30 to line 121, col 68 of module ChimeraGuardianProof: 2880180
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2202:0 @!@!@
+End of statistics.
+@!@!@ENDMSG 2202 @!@!@
+@!@!@STARTMSG 2200:0 @!@!@
+Progress(42) at 2025-09-17 15:16:41: 83,778,675 states generated (21,111,307 s/min), 3,802,322 distinct states found (925,809 ds/min), 311,541 states left on queue.
+@!@!@ENDMSG 2200 @!@!@
+@!@!@STARTMSG 2200:0 @!@!@
+Progress(44) at 2025-09-17 15:17:41: 101,299,283 states generated (17,520,608 s/min), 4,560,698 distinct states found (758,376 ds/min), 339,873 states left on queue.
+@!@!@ENDMSG 2200 @!@!@
+@!@!@STARTMSG 2200:0 @!@!@
+Progress(47) at 2025-09-17 15:18:41: 126,700,764 states generated (25,401,481 s/min), 5,649,582 distinct states found (1,088,884 ds/min), 370,402 states left on queue.
+@!@!@ENDMSG 2200 @!@!@
+@!@!@STARTMSG 2200:0 @!@!@
+Progress(50) at 2025-09-17 15:19:41: 148,721,408 states generated (22,020,644 s/min), 6,585,751 distinct states found (936,169 ds/min), 389,053 states left on queue.
+@!@!@ENDMSG 2200 @!@!@
+@!@!@STARTMSG 2201:0 @!@!@
+The coverage statistics at 2025-09-17 15:19:41 (see https://explain.tlapl.us/module-coverage-statistics for how to interpret the following statistics).
+@!@!@ENDMSG 2201 @!@!@
+@!@!@STARTMSG 2779:0 @!@!@
+<week line 27, col 18 to line 27, col 21 of module ChimeraGuardianProof>: 50
+@!@!@ENDMSG 2779 @!@!@
+@!@!@STARTMSG 2779:0 @!@!@
+<price line 27, col 11 to line 27, col 15 of module ChimeraGuardianProof>: 9687
+@!@!@ENDMSG 2779 @!@!@
+@!@!@STARTMSG 2779:0 @!@!@
+<ad_spend line 27, col 24 to line 27, col 31 of module ChimeraGuardianProof>: 11
+@!@!@ENDMSG 2779 @!@!@
+@!@!@STARTMSG 2779:0 @!@!@
+<prev_ad line 27, col 34 to line 27, col 40 of module ChimeraGuardianProof>: 11
+@!@!@ENDMSG 2779 @!@!@
+@!@!@STARTMSG 2773:0 @!@!@
+<Init line 90, col 1 to line 90, col 4 of module ChimeraGuardianProof>: 1:1
+@!@!@ENDMSG 2773 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 91, col 3 to line 94, col 16 of module ChimeraGuardianProof: 1
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2772:0 @!@!@
+<Next line 101, col 1 to line 101, col 4 of module ChimeraGuardianProof (102 5 108 30)>: 6586397:148735668
+@!@!@ENDMSG 2772 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 102, col 8 to line 102, col 16 of module ChimeraGuardianProof: 6197333
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 102, col 8 to line 102, col 11 of module ChimeraGuardianProof: 6197339
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 105, col 15 to line 105, col 51 of module ChimeraGuardianProof: 148736218
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 105, col 24 to line 105, col 51 of module ChimeraGuardianProof: 148736242
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 65, col 9 to line 65, col 60 of module ChimeraGuardianProof: 148736257
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 65, col 12 to line 65, col 31 of module ChimeraGuardianProof: 148736272
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||||line 65, col 12 to line 65, col 19 of module ChimeraGuardianProof: 148736305
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||||line 65, col 23 to line 65, col 31 of module ChimeraGuardianProof: 148736318
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 65, col 38 to line 65, col 46 of module ChimeraGuardianProof: 28425637
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 65, col 53 to line 65, col 60 of module ChimeraGuardianProof: 120310712
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 57, col 9 to line 61, col 31 of module ChimeraGuardianProof: 148736366
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 57, col 12 to line 57, col 44 of module ChimeraGuardianProof: 148736374
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||||line 57, col 12 to line 57, col 24 of module ChimeraGuardianProof: 148736382
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||||line 57, col 28 to line 57, col 44 of module ChimeraGuardianProof: 148736610
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 58, col 14 to line 58, col 30 of module ChimeraGuardianProof: 37184161
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 59, col 14 to line 61, col 31 of module ChimeraGuardianProof: 111552543
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||||line 59, col 17 to line 59, col 55 of module ChimeraGuardianProof: 111552557
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||||line 59, col 17 to line 59, col 29 of module ChimeraGuardianProof: 111552573
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||||line 59, col 34 to line 59, col 54 of module ChimeraGuardianProof: 111552586
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||||line 60, col 20 to line 60, col 40 of module ChimeraGuardianProof: 37184202
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||||line 61, col 19 to line 61, col 31 of module ChimeraGuardianProof: 74368401
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 63, col 9 to line 63, col 52 of module ChimeraGuardianProof: 148736805
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 63, col 9 to line 63, col 17 of module ChimeraGuardianProof: 148736840
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 63, col 22 to line 63, col 51 of module ChimeraGuardianProof: 148736874
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 67, col 5 to line 69, col 15 of module ChimeraGuardianProof: 148742111
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 67, col 8 to line 67, col 42 of module ChimeraGuardianProof: 148744586
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||||line 67, col 8 to line 67, col 13 of module ChimeraGuardianProof: 148744634
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||||line 67, col 17 to line 67, col 42 of module ChimeraGuardianProof: 148744654
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 68, col 10 to line 68, col 35 of module ChimeraGuardianProof: 17643696
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 69, col 10 to line 69, col 15 of module ChimeraGuardianProof: 131100980
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 105, col 38 to line 105, col 42 of module ChimeraGuardianProof: 148744696
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 105, col 45 to line 105, col 50 of module ChimeraGuardianProof: 148744706
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 106, col 15 to line 106, col 64 of module ChimeraGuardianProof: 148744715
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 106, col 27 to line 106, col 64 of module ChimeraGuardianProof: 148744730
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 74, col 9 to line 74, col 32 of module ChimeraGuardianProof: 148744742
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 74, col 12 to line 74, col 17 of module ChimeraGuardianProof: 148744755
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 74, col 31 to line 74, col 32 of module ChimeraGuardianProof: 148744761
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 76, col 9 to line 76, col 62 of module ChimeraGuardianProof: 148744769
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 76, col 12 to line 76, col 32 of module ChimeraGuardianProof: 148744777
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||||line 76, col 12 to line 76, col 23 of module ChimeraGuardianProof: 148744790
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||||line 76, col 27 to line 76, col 32 of module ChimeraGuardianProof: 148744805
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 76, col 51 to line 76, col 62 of module ChimeraGuardianProof: 148744814
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 78, col 9 to line 80, col 23 of module ChimeraGuardianProof: 148744828
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 78, col 12 to line 78, col 48 of module ChimeraGuardianProof: 148744837
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||||line 78, col 13 to line 78, col 29 of module ChimeraGuardianProof: 148744852
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||||line 78, col 13 to line 78, col 22 of module ChimeraGuardianProof: 148744864
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||||line 78, col 26 to line 78, col 29 of module ChimeraGuardianProof: 148744871
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||||line 78, col 34 to line 78, col 48 of module ChimeraGuardianProof: 148744880
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 79, col 15 to line 79, col 36 of module ChimeraGuardianProof: 50485038
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 80, col 14 to line 80, col 23 of module ChimeraGuardianProof: 98259851
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 81, col 6 to line 81, col 15 of module ChimeraGuardianProof: 148744897
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 106, col 43 to line 106, col 53 of module ChimeraGuardianProof: 148744904
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 106, col 56 to line 106, col 63 of module ChimeraGuardianProof: 148744911
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 107, col 15 to line 107, col 33 of module ChimeraGuardianProof: 148744918
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 107, col 26 to line 107, col 33 of module ChimeraGuardianProof: 148744929
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 108, col 15 to line 108, col 30 of module ChimeraGuardianProof: 148744935
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 108, col 23 to line 108, col 30 of module ChimeraGuardianProof: 148744947
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 104, col 29 to line 104, col 42 of module ChimeraGuardianProof: 24790843
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 103, col 22 to line 103, col 39 of module ChimeraGuardianProof: 6197712
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2772:0 @!@!@
+<Next line 101, col 1 to line 101, col 4 of module ChimeraGuardianProof (110 8 111 54)>: 0:0
+@!@!@ENDMSG 2772 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 110, col 11 to line 110, col 20 of module ChimeraGuardianProof: 6197724
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 111, col 11 to line 111, col 54 of module ChimeraGuardianProof: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2774:0 @!@!@
+<Invariant_BufferedMargin line 118, col 1 to line 118, col 24 of module ChimeraGuardianProof>
+@!@!@ENDMSG 2774 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 118, col 29 to line 118, col 61 of module ChimeraGuardianProof: 6586903
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 86, col 3 to line 87, col 36 of module ChimeraGuardianProof: 6586931
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 118, col 56 to line 118, col 60 of module ChimeraGuardianProof: 6586933
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2774:0 @!@!@
+<Invariant_PriceCap line 119, col 1 to line 119, col 18 of module ChimeraGuardianProof>
+@!@!@ENDMSG 2774 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 119, col 23 to line 119, col 40 of module ChimeraGuardianProof: 6586937
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2774:0 @!@!@
+<Invariant_AdSpendAbsolute line 120, col 1 to line 120, col 25 of module ChimeraGuardianProof>
+@!@!@ENDMSG 2774 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 120, col 30 to line 120, col 47 of module ChimeraGuardianProof: 6586938
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2774:0 @!@!@
+<Invariant_AdSpendRelative line 121, col 1 to line 121, col 25 of module ChimeraGuardianProof>
+@!@!@ENDMSG 2774 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 121, col 30 to line 121, col 68 of module ChimeraGuardianProof: 6586946
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 121, col 31 to line 121, col 48 of module ChimeraGuardianProof: 6586948
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 121, col 31 to line 121, col 38 of module ChimeraGuardianProof: 6586949
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 121, col 42 to line 121, col 48 of module ChimeraGuardianProof: 6586950
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 121, col 54 to line 121, col 68 of module ChimeraGuardianProof: 6586950
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2777:0 @!@!@
+End of statistics (please note that for performance reasons large models
+are best checked with coverage and cost statistics disabled).
+@!@!@ENDMSG 2777 @!@!@
+@!@!@STARTMSG 2200:0 @!@!@
+Progress(52) at 2025-09-17 15:20:41: 171,513,391 states generated (22,791,983 s/min), 7,549,865 distinct states found (964,114 ds/min), 403,484 states left on queue.
+@!@!@ENDMSG 2200 @!@!@
+@!@!@STARTMSG 2193:0 @!@!@
+Model checking completed. No error has been found.
+  Estimates of the probability that TLC did not check all reachable states
+  because two distinct states had the same fingerprint:
+  calculated (optimistic):  val = 6.9E-5
+  based on the actual fingerprints:  val = 1.6E-9
+@!@!@ENDMSG 2193 @!@!@
+@!@!@STARTMSG 2201:0 @!@!@
+The coverage statistics at 2025-09-17 15:20:59 (see https://explain.tlapl.us/module-coverage-statistics for how to interpret the following statistics).
+@!@!@ENDMSG 2201 @!@!@
+@!@!@STARTMSG 2779:0 @!@!@
+<week line 27, col 18 to line 27, col 21 of module ChimeraGuardianProof>: 52
+@!@!@ENDMSG 2779 @!@!@
+@!@!@STARTMSG 2779:0 @!@!@
+<price line 27, col 11 to line 27, col 15 of module ChimeraGuardianProof>: 10311
+@!@!@ENDMSG 2779 @!@!@
+@!@!@STARTMSG 2779:0 @!@!@
+<ad_spend line 27, col 24 to line 27, col 31 of module ChimeraGuardianProof>: 11
+@!@!@ENDMSG 2779 @!@!@
+@!@!@STARTMSG 2779:0 @!@!@
+<prev_ad line 27, col 34 to line 27, col 40 of module ChimeraGuardianProof>: 11
+@!@!@ENDMSG 2779 @!@!@
+@!@!@STARTMSG 2773:0 @!@!@
+<Init line 90, col 1 to line 90, col 4 of module ChimeraGuardianProof>: 1:1
+@!@!@ENDMSG 2773 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 91, col 3 to line 94, col 16 of module ChimeraGuardianProof: 1
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2772:0 @!@!@
+<Next line 101, col 1 to line 101, col 4 of module ChimeraGuardianProof (102 5 108 30)>: 7639418:173873736
+@!@!@ENDMSG 2772 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 102, col 8 to line 102, col 16 of module ChimeraGuardianProof: 7244739
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 102, col 8 to line 102, col 11 of module ChimeraGuardianProof: 7639419
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 105, col 15 to line 105, col 51 of module ChimeraGuardianProof: 173873736
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 105, col 24 to line 105, col 51 of module ChimeraGuardianProof: 173873736
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 65, col 9 to line 65, col 60 of module ChimeraGuardianProof: 173873736
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 65, col 12 to line 65, col 31 of module ChimeraGuardianProof: 173873736
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 65, col 38 to line 65, col 46 of module ChimeraGuardianProof: 33293544
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 65, col 53 to line 65, col 60 of module ChimeraGuardianProof: 140580192
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 57, col 9 to line 61, col 31 of module ChimeraGuardianProof: 173873736
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 57, col 12 to line 57, col 44 of module ChimeraGuardianProof: 173873736
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 58, col 14 to line 58, col 30 of module ChimeraGuardianProof: 43468434
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 59, col 14 to line 61, col 31 of module ChimeraGuardianProof: 130405302
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||||line 59, col 17 to line 59, col 55 of module ChimeraGuardianProof: 130405302
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||||line 60, col 20 to line 60, col 40 of module ChimeraGuardianProof: 43468434
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||||line 61, col 19 to line 61, col 31 of module ChimeraGuardianProof: 86936868
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 63, col 9 to line 63, col 52 of module ChimeraGuardianProof: 173873736
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 67, col 5 to line 69, col 15 of module ChimeraGuardianProof: 173873736
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 67, col 8 to line 67, col 42 of module ChimeraGuardianProof: 173873736
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 68, col 10 to line 68, col 35 of module ChimeraGuardianProof: 20600874
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 69, col 10 to line 69, col 15 of module ChimeraGuardianProof: 153272862
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 105, col 38 to line 105, col 42 of module ChimeraGuardianProof: 173873736
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 105, col 45 to line 105, col 50 of module ChimeraGuardianProof: 173873736
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 106, col 15 to line 106, col 64 of module ChimeraGuardianProof: 173873736
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 106, col 27 to line 106, col 64 of module ChimeraGuardianProof: 173873736
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 74, col 9 to line 74, col 32 of module ChimeraGuardianProof: 173873736
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 76, col 9 to line 76, col 62 of module ChimeraGuardianProof: 173873736
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 78, col 9 to line 80, col 23 of module ChimeraGuardianProof: 173873736
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 78, col 12 to line 78, col 48 of module ChimeraGuardianProof: 173873736
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 79, col 15 to line 79, col 36 of module ChimeraGuardianProof: 59013576
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |||line 80, col 14 to line 80, col 23 of module ChimeraGuardianProof: 114860160
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 81, col 6 to line 81, col 15 of module ChimeraGuardianProof: 173873736
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 106, col 43 to line 106, col 53 of module ChimeraGuardianProof: 173873736
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  ||line 106, col 56 to line 106, col 63 of module ChimeraGuardianProof: 173873736
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 107, col 15 to line 107, col 33 of module ChimeraGuardianProof: 173873736
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 108, col 15 to line 108, col 30 of module ChimeraGuardianProof: 173873736
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 104, col 29 to line 104, col 42 of module ChimeraGuardianProof: 28978956
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 103, col 22 to line 103, col 39 of module ChimeraGuardianProof: 7244739
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2772:0 @!@!@
+<Next line 101, col 1 to line 101, col 4 of module ChimeraGuardianProof (110 8 111 54)>: 0:394680
+@!@!@ENDMSG 2772 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 110, col 11 to line 110, col 20 of module ChimeraGuardianProof: 394680
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  |line 110, col 11 to line 110, col 14 of module ChimeraGuardianProof: 7639419
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 111, col 11 to line 111, col 54 of module ChimeraGuardianProof: 394680
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2774:0 @!@!@
+<Invariant_BufferedMargin line 118, col 1 to line 118, col 24 of module ChimeraGuardianProof>
+@!@!@ENDMSG 2774 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 118, col 29 to line 118, col 61 of module ChimeraGuardianProof: 7639419
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2774:0 @!@!@
+<Invariant_PriceCap line 119, col 1 to line 119, col 18 of module ChimeraGuardianProof>
+@!@!@ENDMSG 2774 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 119, col 23 to line 119, col 40 of module ChimeraGuardianProof: 7639419
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2774:0 @!@!@
+<Invariant_AdSpendAbsolute line 120, col 1 to line 120, col 25 of module ChimeraGuardianProof>
+@!@!@ENDMSG 2774 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 120, col 30 to line 120, col 47 of module ChimeraGuardianProof: 7639419
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2774:0 @!@!@
+<Invariant_AdSpendRelative line 121, col 1 to line 121, col 25 of module ChimeraGuardianProof>
+@!@!@ENDMSG 2774 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 121, col 30 to line 121, col 68 of module ChimeraGuardianProof: 7639419
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2777:0 @!@!@
+End of statistics (please note that for performance reasons large models
+are best checked with coverage and cost statistics disabled).
+@!@!@ENDMSG 2777 @!@!@
+@!@!@STARTMSG 2200:0 @!@!@
+Progress(52) at 2025-09-17 15:20:59: 174,268,417 states generated (20,771,132 s/min), 7,639,419 distinct states found (910,545 ds/min), 0 states left on queue.
+@!@!@ENDMSG 2200 @!@!@
+@!@!@STARTMSG 2199:0 @!@!@
+174268417 states generated, 7639419 distinct states found, 0 states left on queue.
+@!@!@ENDMSG 2199 @!@!@
+@!@!@STARTMSG 2194:0 @!@!@
+The depth of the complete state graph search is 52.
+@!@!@ENDMSG 2194 @!@!@
+@!@!@STARTMSG 2268:0 @!@!@
+The average outdegree of the complete state graph is 1 (minimum is 0, the maximum 20 and the 95th percentile is 6).
+@!@!@ENDMSG 2268 @!@!@
+@!@!@STARTMSG 2186:0 @!@!@
+Finished in 503419ms at (2025-09-17 15:20:59)
+@!@!@ENDMSG 2186 @!@!@
