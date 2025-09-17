@@ -320,7 +320,7 @@ class CausalEngineV6:
         generator_seed: int = 123,
         # UPDATE: Parameter to import the multiplier and set a default value
         trust_multiplier: float = DEFAULT_TRUST_VALUE_MULTIPLIER,
-        num_simulations: int = 2000,
+        num_simulations: int = 500,
     ):
         self.data_path = data_path
         self.model = None
