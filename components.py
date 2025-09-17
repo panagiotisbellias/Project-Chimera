@@ -349,7 +349,7 @@ class CausalEngineV6:
         self,
         simulator: EcommerceSimulatorV5,
         guardian: SymbolicGuardianV3,
-        num_simulations: int = 2000,
+        num_simulations: int = 500,
         num_steps: int = 50,
     ) -> pd.DataFrame:
         rows: List[Dict[str, Any]] = []
