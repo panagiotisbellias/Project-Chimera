@@ -320,6 +320,7 @@ class CausalEngineV6:
         generator_seed: int = 123,
         # UPDATE: Parameter to import the multiplier and set a default value
         trust_multiplier: float = DEFAULT_TRUST_VALUE_MULTIPLIER,
+        num_simulations: int = 2000,
     ):
         self.data_path = data_path
         self.model = None
@@ -348,7 +349,7 @@ class CausalEngineV6:
         self,
         simulator: EcommerceSimulatorV5,
         guardian: SymbolicGuardianV3,
-        num_simulations: int = 200,
+        num_simulations: int = 2000,
         num_steps: int = 50,
     ) -> pd.DataFrame:
         rows: List[Dict[str, Any]] = []
@@ -557,3 +558,161 @@ class CausalEngineV6:
         }
         
         return explanation
+    
+
+# ----------------------------
+# EcommerceSimulatorV7
+# ----------------------------
+
+class EcommerceSimulatorV7:
+    """
+    A multi-agent competitive market simulator.
+
+    This version evolves the simulator to handle multiple competing agents
+    operating within the same market. It manages individual agent states and
+    introduces competitive dynamics like market share.
+    """
+    def __init__(
+        self,
+        num_agents: int = 3,
+        seed: Optional[int] = None,
+        base_demand: float = 1000.0,
+        price_elasticity: float = 1.2,          # RE-BALANCED: Less punishing
+        ad_attraction_factor: float = 0.5,      # NEW: Direct impact of ads on attractiveness
+        ad_log_scale: float = 0.3,
+        trust_ad_gain: float = 0.015,           # RE-BALANCED: Slightly more effective
+        trust_decay: float = 0.002,
+        price_upper: float = 150.0,
+        price_lower: float = COST_PER_ITEM,
+        ad_min: float = 0.0,
+        ad_max: float = 5_000.0,
+        seasonality_amp: float = 0.2,
+        noise_sigma: float = 0.05,
+    ):
+        
+        
+        self.num_agents = num_agents
+        self.rng = np.random.default_rng(seed) if seed is not None else np.random.default_rng()
+        self.params = {
+            'base_demand': base_demand, 'price_elasticity': price_elasticity,
+            'ad_attraction_factor': ad_attraction_factor,
+            'ad_log_scale': ad_log_scale, 'trust_ad_gain': trust_ad_gain,
+            'trust_decay': trust_decay, 'price_upper': price_upper,
+            'price_lower': price_lower, 'ad_min': ad_min, 'ad_max': ad_max,
+            'seasonality_amp': seasonality_amp, 'noise_sigma': noise_sigma,
+        }
+        self.week = 1
+        self.season_phase = 0
+        self.agent_states = self.reset(seed)
+
+
+    def reset(self, seed: Optional[int] = None) -> List[Dict[str, Any]]:
+        """Resets the simulation for all agents to their initial state."""
+        if seed is not None:
+            self.rng = np.random.default_rng(seed)
+        
+        self.week = 1
+        self.season_phase = 0
+        self.agent_states = []
+        
+        default_initial_state = {
+            "price": 100.0,
+            "weekly_ad_spend": 500.0,
+            "brand_trust": 0.7,
+            "sales_volume": 0,
+            "profit": 0.0,
+            "market_share": 1.0 / self.num_agents,
+        }
+
+        for i in range(self.num_agents):
+            state = default_initial_state.copy()
+            state['agent_id'] = i
+            self.agent_states.append(state)
+            
+        return self.agent_states.copy()
+
+    def get_full_state(self) -> Dict[str, Any]:
+        """Returns the complete state of the simulation."""
+        return {
+            "week": self.week,
+            "season_phase": self.season_phase,
+            "agents": self.agent_states.copy()
+        }
+
+    def _apply_actions(self, actions: List[Dict[str, Any]]):
+        """Applies individual agent actions to update their internal states."""
+        p = self.params
+        for i, action in enumerate(actions):
+            state = self.agent_states[i]
+            
+            # --- Update price based on price_change ---
+            price_change = float(action.get("price_change", 0.0) or 0.0)
+            new_price = state["price"] * (1.0 + price_change)
+            state["price"] = float(np.clip(new_price, p['price_lower'], p['price_upper']))
+
+            # --- Update ad spend ---
+            state["weekly_ad_spend"] = float(np.clip(action.get("ad_spend", 0.0), p['ad_min'], p['ad_max']))
+
+            # --- Update brand trust based on actions ---
+            if price_change > 0.10: # Price hike penalty
+                state["brand_trust"] *= (1.0 - 0.02)
+            elif price_change < -0.05: # Discount bonus
+                state["brand_trust"] *= (1.0 + 0.03)
+            
+            if state["weekly_ad_spend"] > 0: # Ad spend bonus
+                state["brand_trust"] *= (1.0 + np.log1p(state["weekly_ad_spend"] / 1000.0) * p['trust_ad_gain'])
+            
+            state["brand_trust"] *= (1.0 - p['trust_decay']) # General decay
+            state["brand_trust"] = float(np.clip(state["brand_trust"], 0.2, 1.0))
+
+    def _update_market_and_sales(self):
+        """Calculates total demand and distributes it based on market share."""
+        p = self.params
+        
+        # --- 1. Calculate Total Market Attractiveness and Potential Demand ---
+        total_market_ad_spend = sum(s['weekly_ad_spend'] for s in self.agent_states)
+        avg_market_price = sum(s['price'] for s in self.agent_states) / self.num_agents
+        
+        season_factor = 1.0 + p['seasonality_amp'] * np.sin(2 * np.pi * self.season_phase / 52.0)
+        ad_multiplier = 1.0 + np.log1p(total_market_ad_spend / 1000.0) * p['ad_log_scale']
+        price_factor = (avg_market_price / 100.0) ** (-p['price_elasticity'])
+        noise = self.rng.normal(1.0, p['noise_sigma'])
+        
+        # Base total demand is now a function of the overall market activity
+        total_demand = int(p['base_demand'] * ad_multiplier * price_factor * season_factor * noise)
+        
+        # --- 2. Calculate Individual Agent Attractiveness (NEW RE-BALANCED FORMULA) ---
+        attractiveness_scores = []
+        for state in self.agent_states:
+            # Price component of attractiveness
+            price_attraction = state['price'] ** -p['price_elasticity']
+            # Ad spend component of attractiveness (direct effect)
+            ad_attraction = 1 + np.log1p(state['weekly_ad_spend'] / 1000.0) * p['ad_attraction_factor']
+            # Final score combines brand trust, price, and now direct ad effect
+            score = state['brand_trust'] * price_attraction * ad_attraction
+            attractiveness_scores.append(score)
+            
+        total_attractiveness = sum(attractiveness_scores)
+        if total_attractiveness == 0: total_attractiveness = 1.0
+
+        # --- 3. Assign Sales and Profit ---
+        for i, state in enumerate(self.agent_states):
+            state['market_share'] = attractiveness_scores[i] / total_attractiveness
+            state['sales_volume'] = int(total_demand * state['market_share'])
+            revenue = state['sales_volume'] * state['price']
+            cogs = state['sales_volume'] * COST_PER_ITEM
+            op_cost = state['weekly_ad_spend']
+            state['profit'] = revenue - (cogs + op_cost)
+
+    def take_action(self, actions: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        """Takes a list of actions and resolves the turn for the entire market."""
+        if len(actions) != self.num_agents:
+            raise ValueError(f"Expected {self.num_agents} actions, but received {len(actions)}.")
+            
+        self._apply_actions(actions)
+        self._update_market_and_sales()
+        
+        self.week += 1
+        self.season_phase = (self.season_phase + 1) % 52
+        
+        return self.agent_states.copy()
