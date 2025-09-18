@@ -43,7 +43,7 @@ The model is written in TLA+ and checked with the TLC model checker to provide m
 
 ## Results Summary (Run: 2025‑09‑17)
 
-![TLA+ Run Result](TLA+_verification/img/tla+_run_result.png)
+![TLA+ Run Result](img/tla+_run_result.png)
 
 - **Distinct states explored:** 7,639,419  
 - **Diameter reached:** 5  

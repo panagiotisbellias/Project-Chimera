@@ -103,7 +103,7 @@ The model is written in TLA+ and checked with the TLC model checker to provide m
 **Interpretation:**  
 Under the modeled nondeterminism over price and advertising proposals, TLC exhaustively explored millions of states without finding any violation of the defined safety properties. The observed collision probability is far below the calculated bound, supporting the reliability of the result.
 
-**For more information check ![V1.2.3 Release](https://github.com/akarlaraytu/Project-Chimera/releases/tag/v1.2.3 ) **
+For more information check [V1.2.3 Release](https://github.com/akarlaraytu/Project-Chimera/releases/tag/v1.2.3 )
 
 ---
 
