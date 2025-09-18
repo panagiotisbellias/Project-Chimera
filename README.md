@@ -78,6 +78,35 @@ See the Interactive 'What-If' Simulator in Action:
 
 ---
 
+# Chimera v1.2.3 - Formal Verification (TLA+)
+
+## Purpose
+SymbolicGuardianV4 introduces a configurable safety buffer above the minimum safe price threshold to eliminate rounding/precision edge‑case violations observed in formal analysis.  
+This verification ensures that the repair logic **always** enforces:
+- Buffered minimum profit margin
+- Maximum price cap
+- Absolute and relative advertising spend caps
+
+The model is written in TLA+ and checked with the TLC model checker to provide mathematical confidence in these safety guarantees.
+
+
+## Results Summary (Run: 2025‑09‑17)
+
+![TLA+ Run Result](TLA+_verification/img/tla+_run_result.png)
+
+- **Distinct states explored:** 7,639,419  
+- **Diameter reached:** 5  
+- **Invariant violations:** 0  
+- **Observed fingerprint collision probability:** ~1.85 × 10⁻⁹  
+- **Calculated upper bound:** 6.95 × 10⁻⁵
+
+**Interpretation:**  
+Under the modeled nondeterminism over price and advertising proposals, TLC exhaustively explored millions of states without finding any violation of the defined safety properties. The observed collision probability is far below the calculated bound, supporting the reliability of the result.
+
+**For more information check ![V1.2.3 Release](https://github.com/akarlaraytu/Project-Chimera/releases/tag/v1.2.3 ) **
+
+---
+
 ## 📊 Benchmark Results Across Strategic Scenarios
 
 ### 1. Brand Trust Focus
