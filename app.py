@@ -67,7 +67,7 @@ def get_decision_from_response(response: dict):
         json_string = m.group(0) if m else "{}"
         json_output = json.loads(json_string)
         json_output.setdefault('action', {'price_change': 0.0, 'ad_spend': 0.0})
-        json_output.setdefault('predicted_profit_change', 0.0) # For compatibility
+        json_output.setdefault('predicted_profit_change', 0.0)
         return json_output
     except (json.JSONDecodeError, AttributeError):
         return {
@@ -77,11 +77,14 @@ def get_decision_from_response(response: dict):
         }
 
 def apply_decision_and_prepare_experience(decision: dict):
+    """Applies the agent's decision to the simulator and records the outcome."""
     sim: EcommerceSimulatorV5 = st.session_state.simulator
     guardian: SymbolicGuardianV4 = st.session_state.guardian
-    before = sim.state.copy()
+    
+    before = sim.get_state() # MODIFIED: Use get_state()
     safe_action, report = guardian.repair_action(decision.get("action", {}), before)
-    after = sim.take_action(safe_action)
+    after = sim.step(safe_action) # MODIFIED: Use step()
+    
     exp = {
         "initial_price": float(before["price"]), "initial_brand_trust": float(before["brand_trust"]),
         "initial_ad_spend": float(before["weekly_ad_spend"]), "price_change": float(safe_action["price_change"]),
@@ -92,16 +95,16 @@ def apply_decision_and_prepare_experience(decision: dict):
     return {"safe_action": safe_action, "guardian_report": report, "before": before, "after": after, "experience": exp}
 
 def generate_feedback_on_last_action(last_decision_info: dict) -> str:
+    """Generates feedback for the agent if its last action was modified by the guardian."""
     if not last_decision_info or "safe_action_applied" not in last_decision_info: return ""
     proposed = last_decision_info.get("action", {})
     applied = last_decision_info.get("safe_action_applied", {})
     if proposed != applied:
-        return f"\n--- FEEDBACK ON LAST ACTION ---\nYou proposed: {json.dumps(proposed)}\nSystem applied: {json.dumps(applied)}\nPlease consider this adjustment.\n---------------------------\n"
+        return f"\n--- FEEDBACK ON YOUR LAST ACTION ---\nYou proposed: {json.dumps(proposed)}\nThe system applied: {json.dumps(applied)}\nPlease consider this adjustment in your reasoning.\n---------------------------\n"
     return "\n(Feedback: Your previous action was applied exactly as proposed.)\n"
 
 # --- 2. AGENT SETUP ---
 
-# @st.cache_resource
 def setup_agent_and_tools(agent_type: str):
     """Sets up the agent and its tools based on the selected type."""
     guardian: SymbolicGuardianV4 = st.session_state.guardian
@@ -111,20 +114,20 @@ def setup_agent_and_tools(agent_type: str):
     def check_business_rules(price_change: float = 0.0, ad_spend: float = 0.0) -> str:
         """Checks if a proposed action violates business rules."""
         action = {"price_change": price_change, "ad_spend": ad_spend}
-        result = guardian.validate_action(action, st.session_state.simulator.state)
+        current_state = st.session_state.simulator.get_state() # MODIFIED: Use get_state()
+        result = guardian.validate_action(action, current_state)
         return json.dumps(result)
 
     @tool
     def estimate_profit_impact(price_change: float = 0.0, ad_spend: float = 0.0) -> str:
         """Estimates the causal impact of an action on a long-term value score."""
         action = {"price_change": price_change, "ad_spend": ad_spend}
-        report = causal_engine.estimate_causal_effect(action, st.session_state.simulator.state)
+        current_state = st.session_state.simulator.get_state() # MODIFIED: Use get_state()
+        report = causal_engine.estimate_causal_effect(action, current_state)
         return json.dumps(report)
 
-    tools_map = {
-        "Full Neuro-Symbolic-Causal": [check_business_rules, estimate_profit_impact],
-        "LLM + Symbolic": [check_business_rules], "LLM-Only": []
-    }
+    # ... (Prompts are unchanged as they are already in English)
+    tools_map = {"Full Neuro-Symbolic-Causal": [check_business_rules, estimate_profit_impact], "LLM + Symbolic": [check_business_rules], "LLM-Only": []}
     tools = tools_map.get(agent_type, [])
     
     if agent_type == "LLM-Only":
@@ -185,12 +188,12 @@ def setup_agent_and_tools(agent_type: str):
         ```
         """
 
-
     prompt = ChatPromptTemplate.from_messages([("system", SYSTEM_PROMPT), ("human", "{input}"), MessagesPlaceholder(variable_name="agent_scratchpad")])
     llm = ChatOpenAI(model="gpt-4o", temperature=0, openai_api_key=st.session_state.openai_api_key)
     agent = create_openai_tools_agent(llm, tools, prompt)
     agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
     return agent_executor
+
 
 # --- 3. STREAMLIT APP LAYOUT ---
 st.set_page_config(page_title="Project Chimera", layout="wide")
@@ -201,7 +204,7 @@ if "app_initialized" not in st.session_state:
     st.session_state.guardian = SymbolicGuardianV4()
     st.session_state.simulator = EcommerceSimulatorV5(seed=123)
     st.session_state.causal_engine = CausalEngineV6(force_regenerate=False)
-    st.session_state.history = [st.session_state.simulator.state.copy()]
+    st.session_state.history = [st.session_state.simulator.get_state()] # MODIFIED: Use get_state()
     st.session_state.experience_history = []
     st.session_state.last_decision_info = None
     st.session_state.decision_cache = {}
@@ -222,7 +225,7 @@ with st.sidebar:
     st.header("Simulation Control")
     if st.button("Reset Simulation"):
         st.session_state.simulator = EcommerceSimulatorV5(seed=123)
-        st.session_state.history = [st.session_state.simulator.state.copy()]
+        st.session_state.history = [st.session_state.simulator.get_state()] # MODIFIED: Use get_state()
         st.session_state.experience_history = []
         st.session_state.last_decision_info = None
         st.session_state.decision_cache = {}
@@ -238,7 +241,7 @@ tab1, tab2, tab3, tab4 = st.tabs(["Strategy Lab", "Performance Dashboard", "Run 
 # --- TAB 1: STRATEGY LAB ---
 with tab1:
     st.header("Current Market State")
-    state = st.session_state.simulator.state
+    state = st.session_state.simulator.get_state() # MODIFIED: Use get_state()
     col1, col2, col3, col4, col5 = st.columns(5)
 
     if len(st.session_state.history) > 1:
@@ -406,7 +409,7 @@ with tab1:
                 metric_col1.metric("Final Price Change", f"{price_change * 100:+.1f}%")
                 metric_col2.metric("Final Ad Spend", f"${ad_spend:,.2f}")
 
-# --- TAB 2: PERFORMANCE PANEL ---
+# --- TAB 2: PERFORMANCE DASHBOARD ---
 with tab2:
     st.header("Historical Performance Dashboard")
     if len(st.session_state.history) > 1:
@@ -415,20 +418,20 @@ with tab2:
         col1, col2 = st.columns(2)
         with col1:
             st.markdown("<h5 style='text-align: center;'>Profit</h5>", unsafe_allow_html=True)
-            st.line_chart(history_df[['profit']], color='#00A36C') # Yeşil
+            st.line_chart(history_df[['profit']], color='#00A36C') # Green
 
         with col2:
             st.markdown("<h5 style='text-align: center;'>Brand Trust</h5>", unsafe_allow_html=True)
-            st.line_chart(history_df[['brand_trust']], color='#0072B2') # Mavi
+            st.line_chart(history_df[['brand_trust']], color='#0072B2') # Blue
 
         col3, col4 = st.columns(2)
         with col3:
             st.markdown("<h5 style='text-align: center;'>Price</h5>", unsafe_allow_html=True)
-            st.line_chart(history_df[['price']], color='#CC79A7') # Pembe/Mor
+            st.line_chart(history_df[['price']], color='#CC79A7') # Pink/Purple
             
         with col4:
             st.markdown("<h5 style='text-align: center;'>Ad Spend</h5>", unsafe_allow_html=True)
-            st.line_chart(history_df[['weekly_ad_spend']], color='#56B4E9') # Açık Mavi
+            st.line_chart(history_df[['weekly_ad_spend']], color='#56B4E9') # Light Blue
     else:
         st.info("At least one week must pass to see performance trends.")
 
@@ -452,7 +455,7 @@ with tab3:
         )
 
 
-# --- SEKME 4: WHAT-IF ANALYSIS ---
+# --- TAB 4: WHAT-IF ANALYSIS ---
 with tab4:
     st.header("Causal Engine's Mind: A What-If Scenario Simulator")
     st.info("""
@@ -463,7 +466,7 @@ with tab4:
 
     with col1:
         st.subheader("1. Define State & Action")
-        current_state = st.session_state.simulator.state
+        current_state = st.session_state.simulator.get_state() # MODIFIED: Use get_state()
         
         # Reset button
         if st.button("Reset to Current Market State"):
