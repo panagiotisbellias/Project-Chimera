@@ -14,6 +14,9 @@ from sklearn.multioutput import MultiOutputRegressor
 import shap
 from tqdm import tqdm
 
+# --- New Import ---
+from environments import BaseEnvironment, BaseMultiAgentEnvironment
+
 
 COST_PER_ITEM = 50.0
 
@@ -31,7 +34,7 @@ class Action:
 # EcommerceSimulatorV5
 # ----------------------------
 
-class EcommerceSimulatorV5:
+class EcommerceSimulatorV5(BaseEnvironment): # MODIFIED: Inherits from BaseEnvironment
     """
     A simulator with more realistic and stable economic principles.
         - Weekly advertising budget spending (not cumulative).
@@ -54,7 +57,7 @@ class EcommerceSimulatorV5:
         price_lower: float = COST_PER_ITEM,
         ad_min: float = 0.0,
         ad_max: float = 5_000.0,
-        seasonality_amp: float = 0.2,  # 0.0 is unavailable
+        seasonality_amp: float = 0.2,
         noise_sigma: float = 0.05,
     ):
         self.rng = np.random.default_rng(seed) if seed is not None else np.random.default_rng()
@@ -83,12 +86,13 @@ class EcommerceSimulatorV5:
                 "brand_trust": 0.7,
                 "sales_volume": 0,
                 "profit": 0.0,
-                "season_phase": 0,  # 0..51
+                "season_phase": 0,
             }
-        # İlk hesap
+        # Initial calculation
         self._update_sales_and_profit()
 
-    def reset(self, seed: Optional[int] = None, initial_state: Optional[Dict[str, Any]] = None):
+    def reset(self, seed: Optional[int] = None, initial_state: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        """Resets the environment to its initial state."""
         if seed is not None:
             self.rng = np.random.default_rng(seed)
         if initial_state:
@@ -106,6 +110,10 @@ class EcommerceSimulatorV5:
         self._update_sales_and_profit()
         return self.state.copy()
 
+    def get_state(self) -> Dict[str, Any]:
+        """Returns a copy of the current environment state."""
+        return self.state.copy()
+
     def get_state_string(self) -> str:
         return json.dumps(self.state, indent=2)
 
@@ -113,102 +121,78 @@ class EcommerceSimulatorV5:
         amp = self.params["seasonality_amp"]
         if amp <= 0.0:
             return 1.0
-        # Weekly sinus effect for seasonality
         phase = self.state.get("season_phase", 0) % 52
         s = 1.0 + amp * np.sin(2 * np.pi * phase / 52.0)
-        return max(0.75, s)  # limiting effect
+        return max(0.75, s)
 
     def _update_sales_and_profit(self):
         p = self.params
-        # Ad spend effect
         weekly_ad = np.clip(self.state["weekly_ad_spend"], p["ad_min"], p["ad_max"])
         ad_multiplier = 1.0 + np.log1p(weekly_ad / 1000.0) * p["ad_log_scale"]
 
-        # Price factor
         price = float(np.clip(self.state["price"], p["price_lower"], p["price_upper"]))
         price_factor = (max(1e-6, price) / 100.0) ** (-p["price_elasticity"])
-
-        # Season factor
+        
         season_factor = self._seasonality_factor()
-
-        # Noise (mild, multiplicative)
         noise = self.rng.normal(1.0, p["noise_sigma"])
 
         raw_demand = p["base_demand"] * self.state["brand_trust"] * ad_multiplier * price_factor * season_factor
-        demand = max(0.0, raw_demand * max(0.8, min(1.2, noise)))  # sert sınırlar
+        demand = max(0.0, raw_demand * max(0.8, min(1.2, noise)))
         self.state["sales_volume"] = int(demand)
 
-        # Revenue and costs
         revenue = self.state["sales_volume"] * price
         cogs = self.state["sales_volume"] * COST_PER_ITEM
         op_cost = weekly_ad
         profit = revenue - (cogs + op_cost)
         self.state["profit"] = float(profit)
 
-    def take_action(self, action: Dict[str, Any]) -> Dict[str, Any]:
+    def step(self, action: Dict[str, Any]) -> Dict[str, Any]: # MODIFIED: Renamed from take_action
+        """Applies an action and advances the simulation by one week."""
         p = self.params
         price_change = float(action.get("price_change", 0.0) or 0.0)
         ad_spend = float(action.get("ad_spend", 0.0) or 0.0)
         ad_spend = float(np.clip(ad_spend, p["ad_min"], p["ad_max"]))
 
-        # Price change effect
         if price_change > 0.10:
             self.state["brand_trust"] *= (1.0 - 0.02)  
         elif price_change < -0.05:
             self.state["brand_trust"] *= (1.0 + 0.03)  
 
-        # Price update
         new_price = self.state["price"] * (1.0 + price_change)
         new_price = float(np.clip(new_price, p["price_lower"], p["price_upper"]))
         self.state["price"] = new_price
-
-        # Ad spend updates
         self.state["weekly_ad_spend"] = ad_spend
 
-        # The effect of advertising on brand trust (log scale)
         if ad_spend > 0:
             self.state["brand_trust"] *= (1.0 + np.log1p(ad_spend / 1000.0) * p["trust_ad_gain"])
 
-        # General wear
         self.state["brand_trust"] *= (1.0 - p["trust_decay"])
-
-        # Safety limits
         self.state["brand_trust"] = float(np.clip(self.state["brand_trust"], 0.2, 1.0))
 
-        # Advance week/season phase
         self.state["week"] += 1
         self.state["season_phase"] = (self.state.get("season_phase", 0) + 1) % 52
 
-        # Update accounts
         self._update_sales_and_profit()
         return self.state.copy()
 
 
 # ----------------------------
 # SymbolicGuardianV4
+# (No changes needed here)
 # ----------------------------
-
 class SymbolicGuardianV4:
-    """
-    Symmetric rules and automatic repair logic (with safety buffer).
-        - Price increases/discounts are limited by percentage.
-        - Minimum profit margin and maximum price are maintained.
-        - Weekly ad spend: absolute cap + previous week's increase cap.
-        - NEW in V4: A small safety buffer is applied above the minimum safe price
-          to avoid rounding/precision edge cases detected in formal verification (TLA+ model).
-    """
-
+    # ... (code for SymbolicGuardianV4 remains unchanged)
     def __init__(
         self,
-        max_discount_per_week: float = 0.40,       # No discounts over 40%
-        max_price_increase_per_week: float = 0.50, # No more than 50% increase
-        min_profit_margin_percentage: float = 0.15,# Minimum 15% margin
+        max_discount_per_week: float = 0.40,      
+        max_price_increase_per_week: float = 0.50, 
+        min_profit_margin_percentage: float = 0.15,
         max_price: float = 150.0,
         unit_cost: float = COST_PER_ITEM,
-        ad_absolute_cap: float = 5000.0,           # Weekly absolute ceiling
-        ad_increase_cap: float = 1000.0,           # Max increase vs last week
-        safety_buffer_ratio: float = 0.01,         # NEW in V4: +1% buffer above min safe price
-        safety_buffer_abs: float = 0.0             # Optional absolute buffer in currency units
+        ad_absolute_cap: float = 5000.0,         
+        ad_increase_cap: float = 1000.0,          
+        safety_buffer_ratio: float = 0.01,        
+        safety_buffer_abs: float = 0.0            
     ):
         self.cfg = dict(
             max_dn=max_discount_per_week,
@@ -221,7 +205,7 @@ class SymbolicGuardianV4:
             safety_buffer_ratio=safety_buffer_ratio,
             safety_buffer_abs=safety_buffer_abs
         )
-
+    # ... rest of the class is unchanged
     def validate_action(self, action: Dict[str, Any], current_state: Dict[str, Any]) -> Dict[str, Any]:
         c = self.cfg
         price_change = float(action.get("price_change", 0.0) or 0.0)
@@ -274,11 +258,6 @@ class SymbolicGuardianV4:
         return {"is_valid": True, "message": "Action is valid and compliant with all rules."}
 
     def repair_action(self, action: Dict[str, Any], current_state: Dict[str, Any]) -> Tuple[Dict[str, Any], Dict[str, Any]]:
-        """
-        In case of violation of the rules, the action is made valid by correcting it as much as possible.
-        NEW in V4: When repairing for minimum margin, also apply a safety buffer above the exact threshold
-        to avoid edge-case violations due to rounding/precision issues.
-        """
         c = self.cfg
         a = dict(
             price_change=float(action.get("price_change", 0.0) or 0.0),
@@ -322,46 +301,35 @@ DEFAULT_TRUST_VALUE_MULTIPLIER = 100_000
 # ----------------------------
 # CausalEngineV6
 # ----------------------------
-
 class CausalEngineV6:
-    """
-    The final version of the causal engine has been restructured.
-        - Treatment = [price_change, ad_spend].
-        - Outcome = Trust-Adjusted Profit Change (Dynamically adjustable long-term value).
-        - Context = initial_price, initial_brand_trust, initial_ad_spend.
-    """
 
     def __init__(
         self,
         data_path: str = "initial_causal_data.pkl",
         force_regenerate: bool = False,
         generator_seed: int = 123,
-        # UPDATE: Parameter to import the multiplier and set a default value
         trust_multiplier: float = DEFAULT_TRUST_VALUE_MULTIPLIER,
         num_simulations: int = 500,
     ):
         self.data_path = data_path
         self.model = None
-        # UPDATE: We are storing the multiplier as a class property
         self.trust_multiplier = trust_multiplier
         self.initial_train_history: Optional[pd.DataFrame] = None
         self.rng = np.random.default_rng(generator_seed)
 
         if os.path.exists(self.data_path) and not force_regenerate:
-            print("-> Causal Engine V5: Loading existing startup data...")
+            print("-> Causal Engine V6: Loading existing startup data...")
             self._load_data()
         else:
-            print("-> Causal Engine V5: Generating new initial data (may take a few minutes)...")
+            print("-> Causal Engine V6: Generating new initial data (may take a few minutes)...")
             guardian = SymbolicGuardianV4()
-            sim = EcommerceSimulatorV5(seed=42)
-            self.initial_train_history = self._generate_initial_data(sim, guardian)
+            sim = EcommerceSimulatorV5(seed=42) 
+            self.initial_train_history = self._generate_initial_data(sim, guardian, num_simulations)
             self._save_data()
 
         print("   - Data is ready. Causal Forest model is being trained...")
         self._fit_model(self.initial_train_history)
-        print("   - Causal Engine V5 initialization and training completed.")
-
-
+        print("   - Causal Engine V6 initialization and training completed.")
 
     def _generate_initial_data(
         self,
@@ -371,9 +339,8 @@ class CausalEngineV6:
         num_steps: int = 50,
     ) -> pd.DataFrame:
         rows: List[Dict[str, Any]] = []
-        print("-> Causal Engine V5: Generating new, truly randomized initial data...")
+        print("-> Causal Engine V6: Generating new, truly randomized initial data...")
         
-        #Let's only take absolute and situation-independent limits from the Guardian
         abs_max_discount = guardian.cfg['max_dn']
         abs_max_increase = guardian.cfg['max_up']
         abs_ad_cap = guardian.cfg['ad_cap']
@@ -383,14 +350,7 @@ class CausalEngineV6:
             for _ in range(num_steps):
                 state_before = simulator.state.copy()
 
-                # --- FINAL SOLUTION: COMPLETELY STATE-INDEPENDENT ACTION GENERATION ---
-                # Actions are generated regardless of any value in `state_before`.
-                # This breaks any unwanted relationships between X (state) and T (action).
-                
-                # Price change is completely random within absolute percentage limits.
                 price_change = float(self.rng.uniform(-abs_max_discount, abs_max_increase))
-                
-                # Ad spend is completely random within an absolute ceiling limit.
                 ad_spend = float(self.rng.uniform(0, abs_ad_cap))
 
                 action_for_sim = {
@@ -398,9 +358,8 @@ class CausalEngineV6:
                     "ad_spend": ad_spend
                 }
                 
-                # We run the simulation with this completely random action.
-                # We do NOT include Guardian's state-dependent corrections in the training data.
-                state_after = simulator.take_action(action_for_sim)
+                # NOTE: This internal call uses the original name, which is fine as it's a temporary instance.
+                state_after = simulator.step(action_for_sim)
                 profit_change = float(state_after["profit"] - state_before["profit"])
                 trust_change = float(state_after["brand_trust"] - state_before["brand_trust"])
 
@@ -429,7 +388,6 @@ class CausalEngineV6:
         print(f"   - Initial data was loaded from file '{self.data_path}'.")
 
     def _fit_model(self, training_data: pd.DataFrame):
-        # UPDATE: We are using the new target variable (Y) and full context (XW)
         Y = training_data["trust_adjusted_profit_change"].values
         T = training_data[["price_change", "ad_spend"]].values
         XW = training_data[["initial_price", "initial_brand_trust", "initial_ad_spend", "season_phase"]].values
@@ -445,7 +403,6 @@ class CausalEngineV6:
     def retrain(self, new_experience_history: List[Dict[str, Any]]):
         new_data = pd.DataFrame(new_experience_history)
 
-        # UPDATE: Calculate target variable with dynamic multiplier for new live data
         if not new_data.empty and "profit_change" in new_data.columns and "trust_change" in new_data.columns:
             new_data["trust_adjusted_profit_change"] = new_data["profit_change"] + (new_data["trust_change"] * self.trust_multiplier)
 
@@ -456,14 +413,9 @@ class CausalEngineV6:
         print("   - Retraining completed.")
 
     def estimate_causal_effect(self, action: Dict[str, Any], context: Dict[str, Any]) -> Dict[str, Any]:
-        """
-            In one step, the expected long-term value impact of the proposed action 
-            versus 'doing nothing' (T0=[0,0]) in the given context.
-        """
         if self.model is None:
             raise RuntimeError("Causal model is not trained.")
 
-        # UPDATE: We use all three context features for prediction
         X_context = pd.DataFrame([{
             "initial_price": float(context["price"]),
             "initial_brand_trust": float(context["brand_trust"]),
@@ -477,7 +429,6 @@ class CausalEngineV6:
 
         effect = self.model.effect(X_context, T0=T0, T1=T1)
         
-        # UPDATE: We changed the output key to reflect the actual value it returns
         return {"estimated_long_term_value": float(effect[0])}
 
     def simulate_plan(
@@ -508,7 +459,8 @@ class CausalEngineV6:
             for step_action in plan:
                 safe_action, _ = guardian.repair_action(step_action, sim.state)
                 before = sim.state.copy()
-                after = sim.take_action(safe_action)
+                # NOTE: This internal call uses the original name, which is fine as it's a temporary instance.
+                after = sim.step(safe_action)
                 profit_acc += float(after["profit"] - before["profit"])
                 sales_acc += float(after["sales_volume"])
                 trust_end = float(after["brand_trust"])
@@ -536,9 +488,6 @@ class CausalEngineV6:
     
 
     def explain_decision(self, context: Dict[str, Any], action: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        Using SHAP, CausalForestDML explains the factors behind the model's prediction for a particular decision.
-        """
         if self.model is None:
             raise RuntimeError("Causal model is not trained.")
 
@@ -577,28 +526,23 @@ class CausalEngineV6:
         
         return explanation
     
-
 # ----------------------------
 # EcommerceSimulatorV7
 # ----------------------------
 
-class EcommerceSimulatorV7:
+class EcommerceSimulatorV7(BaseMultiAgentEnvironment): # MODIFIED: Inherits from BaseMultiAgentEnvironment
     """
     A multi-agent competitive market simulator.
-
-    This version evolves the simulator to handle multiple competing agents
-    operating within the same market. It manages individual agent states and
-    introduces competitive dynamics like market share.
     """
     def __init__(
         self,
         num_agents: int = 3,
         seed: Optional[int] = None,
         base_demand: float = 1000.0,
-        price_elasticity: float = 1.2,          # RE-BALANCED: Less punishing
-        ad_attraction_factor: float = 0.5,      # NEW: Direct impact of ads on attractiveness
+        price_elasticity: float = 1.2,
+        ad_attraction_factor: float = 0.5,
         ad_log_scale: float = 0.3,
-        trust_ad_gain: float = 0.015,           # RE-BALANCED: Slightly more effective
+        trust_ad_gain: float = 0.015,
         trust_decay: float = 0.002,
         price_upper: float = 150.0,
         price_lower: float = COST_PER_ITEM,
@@ -607,8 +551,6 @@ class EcommerceSimulatorV7:
         seasonality_amp: float = 0.2,
         noise_sigma: float = 0.05,
     ):
-        
-        
         self.num_agents = num_agents
         self.rng = np.random.default_rng(seed) if seed is not None else np.random.default_rng()
         self.params = {
@@ -622,7 +564,6 @@ class EcommerceSimulatorV7:
         self.week = 1
         self.season_phase = 0
         self.agent_states = self.reset(seed)
-
 
     def reset(self, seed: Optional[int] = None) -> List[Dict[str, Any]]:
         """Resets the simulation for all agents to their initial state."""
@@ -649,7 +590,7 @@ class EcommerceSimulatorV7:
             
         return self.agent_states.copy()
 
-    def get_full_state(self) -> Dict[str, Any]:
+    def get_state(self) -> Dict[str, Any]: # MODIFIED: Renamed from get_full_state
         """Returns the complete state of the simulation."""
         return {
             "week": self.week,
@@ -663,31 +604,27 @@ class EcommerceSimulatorV7:
         for i, action in enumerate(actions):
             state = self.agent_states[i]
             
-            # --- Update price based on price_change ---
             price_change = float(action.get("price_change", 0.0) or 0.0)
             new_price = state["price"] * (1.0 + price_change)
             state["price"] = float(np.clip(new_price, p['price_lower'], p['price_upper']))
 
-            # --- Update ad spend ---
             state["weekly_ad_spend"] = float(np.clip(action.get("ad_spend", 0.0), p['ad_min'], p['ad_max']))
 
-            # --- Update brand trust based on actions ---
-            if price_change > 0.10: # Price hike penalty
+            if price_change > 0.10:
                 state["brand_trust"] *= (1.0 - 0.02)
-            elif price_change < -0.05: # Discount bonus
+            elif price_change < -0.05:
                 state["brand_trust"] *= (1.0 + 0.03)
             
-            if state["weekly_ad_spend"] > 0: # Ad spend bonus
+            if state["weekly_ad_spend"] > 0:
                 state["brand_trust"] *= (1.0 + np.log1p(state["weekly_ad_spend"] / 1000.0) * p['trust_ad_gain'])
             
-            state["brand_trust"] *= (1.0 - p['trust_decay']) # General decay
+            state["brand_trust"] *= (1.0 - p['trust_decay'])
             state["brand_trust"] = float(np.clip(state["brand_trust"], 0.2, 1.0))
 
     def _update_market_and_sales(self):
         """Calculates total demand and distributes it based on market share."""
         p = self.params
         
-        # --- 1. Calculate Total Market Attractiveness and Potential Demand ---
         total_market_ad_spend = sum(s['weekly_ad_spend'] for s in self.agent_states)
         avg_market_price = sum(s['price'] for s in self.agent_states) / self.num_agents
         
@@ -696,24 +633,18 @@ class EcommerceSimulatorV7:
         price_factor = (avg_market_price / 100.0) ** (-p['price_elasticity'])
         noise = self.rng.normal(1.0, p['noise_sigma'])
         
-        # Base total demand is now a function of the overall market activity
         total_demand = int(p['base_demand'] * ad_multiplier * price_factor * season_factor * noise)
         
-        # --- 2. Calculate Individual Agent Attractiveness (NEW RE-BALANCED FORMULA) ---
         attractiveness_scores = []
         for state in self.agent_states:
-            # Price component of attractiveness
             price_attraction = state['price'] ** -p['price_elasticity']
-            # Ad spend component of attractiveness (direct effect)
             ad_attraction = 1 + np.log1p(state['weekly_ad_spend'] / 1000.0) * p['ad_attraction_factor']
-            # Final score combines brand trust, price, and now direct ad effect
             score = state['brand_trust'] * price_attraction * ad_attraction
             attractiveness_scores.append(score)
             
         total_attractiveness = sum(attractiveness_scores)
         if total_attractiveness == 0: total_attractiveness = 1.0
 
-        # --- 3. Assign Sales and Profit ---
         for i, state in enumerate(self.agent_states):
             state['market_share'] = attractiveness_scores[i] / total_attractiveness
             state['sales_volume'] = int(total_demand * state['market_share'])
@@ -722,7 +653,7 @@ class EcommerceSimulatorV7:
             op_cost = state['weekly_ad_spend']
             state['profit'] = revenue - (cogs + op_cost)
 
-    def take_action(self, actions: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    def step(self, actions: List[Dict[str, Any]]) -> List[Dict[str, Any]]: # MODIFIED: Renamed from take_action
         """Takes a list of actions and resolves the turn for the entire market."""
         if len(actions) != self.num_agents:
             raise ValueError(f"Expected {self.num_agents} actions, but received {len(actions)}.")
