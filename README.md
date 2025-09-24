@@ -8,6 +8,31 @@
 
 ---
 
+### 🚀 v1.4.0: The Colosseum is LIVE!
+
+![The Chimera Colosseum](assets/the_chimera_colosseum.png)
+
+**The arena is open!** Our most ambitious update transforms Project Chimera into a dynamic, multi-agent competitive ecosystem. You can now assemble a team of AI gladiators and watch them battle for supremacy in a live simulation.
+
+This is an exclusive **Closed Beta** for our early supporters. To learn more and find out how to join, check out the **[latest release notes](https://github.com/akarlaraytu/Project-Chimera/releases/tag/v1.4.0)**!
+
+---
+
+### 🎟️ How to Join the Closed Beta
+
+This exclusive closed beta is a thank you to our earliest supporters. Access will be granted on **October 7th** to:
+
+* **⭐ GitHub Stargazers:** If you've starred our repository, you're on the list!
+* **📖 Medium Followers:** If you subscribe our publications, you're on the list!
+
+If you haven't yet, it's not too late to secure your spot:
+1.  **Star the Repo:** [Click here to go to the GitHub Repository](https://github.com/akarlaraytu/Project-Chimera-FINAL)
+2.  **Follow on Medium:** [Click here to go to our Medium Page](https://medium.com/@your_handle)
+
+Invitations and access details will be shared with the community on launch day!
+
+---
+
 ## ❗ The Problem: Why Raw LLMs are Dangerous for Business
 
 Modern LLMs are powerful, but when entrusted with critical business decisions, they can be dangerously naive and unpredictable. Without proper guardrails, they can make catastrophic mistakes. Our benchmark experiment proves this: we tasked a pure `LLM-Only` agent with managing a simulated e-commerce business for one year. Lacking an understanding of rules or the causal consequences of its actions, it drove the company into a **multi-billion dollar loss**.
