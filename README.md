@@ -9,13 +9,11 @@
 
 This project exists thanks to all the amazing people who contribute their time and expertise. From code and documentation to design and feedback, every contribution helps us build the future of strategic AI.
 
-A huge thank you to our growing community!
-
 <a href="https://github.com/akarlaraytu/Project-Chimera/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=akarlaraytu/Project-Chimera" />
 </a>
 
-*Made with [contrib.rocks](https://contrib.rocks).*
+A huge thank you to our growing community!
 
 ---
 
