@@ -4,6 +4,21 @@
 [![Python Version](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
+
+### ❤️ Our Contributors
+
+This project exists thanks to all the amazing people who contribute their time and expertise. From code and documentation to design and feedback, every contribution helps us build the future of strategic AI.
+
+A huge thank you to our growing community!
+
+<a href="https://github.com/akarlaraytu/Project-Chimera/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=akarlaraytu/Project-Chimera" />
+</a>
+
+*Made with [contrib.rocks](https://contrib.rocks).*
+
+---
+
 **Project Chimera is an advanced AI agent designed to overcome the critical limitations of standard Large Language Models (LLMs) in strategic business environments. By integrating a hybrid Neuro-Symbolic-Causal architecture, this agent makes decisions that are not only intelligent but also safe, explainable, and provably profitable.**
 
 ---
