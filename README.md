@@ -89,24 +89,6 @@ You can try a **live demo** of the Strategy Lab here:
 
 ---
 
-## 📈 Evolution & Development Report (Release v1.2.1)
-This version represents a major leap forward, transforming Project Chimera from a powerful prototype into a robust, transparent, and interactive analysis platform.
-
-- **🧠 Core Intelligence Upgrade (CausalEngineV6):** Fixed a fundamental statistical flaw ("data leakage") in the training data generation process. The Causal Engine now produces live, dynamic, and meaningful predictions, moving from a "dead brain" to a fully operational one.
-
-- **🔬 Explainability (XAI) Suite:**
-    * **Static SHAP Panel:** Integrated a panel to display the positive and negative factors for each decision, turning the "black box" into a "glass box."
-    * **Interactive 'What-If' Simulator:** Added a new tab where users can tweak market conditions and proposed actions with sliders to see the Causal Engine's predictions and explanations update in real-time.
-
-- ✨ **UI/UX Overhaul:**
-    * **Tabbed Interface:** Re-organized the app into logical tabs: Strategy Lab, Performance Dashboard, and Run History.
-    * **Focused Dashboard:** Redesigned the performance dashboard into a cleaner 2x2 layout for the most critical metrics.
-    * **Delta Metrics & Run Log:** Added week-over-week change indicators and a professional log table for detailed analysis of past runs.
-
-- 🛠 **Code Health & Bug Squashing:** Resolved numerous bugs, including library versioning conflicts with LangChain and UI state issues, to create a more stable and reliable application.
-
----
-
 ## 🔬Advanced XAI: From Glass Box to Interactive Simulator
 Version 1.2.1 introduces a full suite of XAI tools. We didn't just want to see why the agent made a decision; we wanted to interact with its reasoning. The new **"What-If Analysis"** tab allows you to do exactly that—explore the agent's mind by testing counterfactual scenarios live.
 
