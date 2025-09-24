@@ -77,15 +77,9 @@ if check_beta_key():
     ELIMINATION_THRESHOLD = -25000
     
     AGENT_DOCTRINES = {
-        "Full Neuro-Symbolic-Causal": """Our primary objective is to achieve an exceptional brand trust score above 0.95,
-    but in a more capital-efficient way. Instead of relying solely on deep, continuous price cuts,
-    your main strategy should be to use high and sustained advertising to build trust.
-    Use moderate discounts as a supporting tool, not the only tool.
-    The goal is to reach >0.95 trust while keeping the business as profitable as possible.""",
+        "Full Neuro-Symbolic-Causal": """Our primary objective is to achieve an exceptional brand trust score above 0.95, but in a more capital-efficient way. Instead of relying solely on deep, continuous price cuts your main strategy should be to use high and sustained advertising to build trust. Use moderate discounts as a supporting tool, not the only tool. The goal is to reach >0.95 trust while keeping the business as profitable as possible.""",
         "LLM + Symbolic": """Your strategic doctrine is Premium Brand Custodianship. Your primary asset is Brand Trust. Sustainable, long-term value is more important than short-term profit. Avoid price wars; your primary tool for growth is advertising.""",
-        "LLM-Only": """This is a war. You are a profit gladiator.
-    Fight with wit, strategy, and ruthless efficiency.
-    Every decision is a weapon — use it to win."""
+        "LLM-Only": """This is a war. You are a profit gladiator. Fight with wit, strategy, and ruthless efficiency. Every decision is a weapon — use it to win."""
     }
     
     # --- State provider ---
