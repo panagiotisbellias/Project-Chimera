@@ -22,6 +22,7 @@ import sys
 import json
 import re
 from typing import Optional, Dict, Any, List, Tuple
+import argparse
 
 import pandas as pd
 from tqdm import tqdm
@@ -36,12 +37,12 @@ from langchain.agents import tool
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from src.components import EcommerceSimulatorV7, CausalEngineV6, SymbolicGuardianV4
-
+from default_test_config import multi_agent as config
 
 # --- Global Configuration & Prompts ---
 
-NUM_AGENTS = 3
-NUM_WEEKS = 52
+NUM_AGENTS = config["NUM_AGENTS"]
+NUM_WEEKS = config["NUM_WEEKS"]
 
 # REFACTOR: Moved from create_competitive_agent_executor for better readability.
 HUMAN_PROMPT_TEMPLATE = """
@@ -355,6 +356,21 @@ def main():
     if not openai_api_key:
         print("Error: Please set the OPENAI_API_KEY environment variable.")
         return
+
+    arg_parser = argparse.ArgumentParser(
+        prog=sys.argv[0],
+        description="The main benchmark script that runs multiple scenarios.",
+    )
+    global NUM_WEEKS
+    arg_parser.add_argument(
+        "-w",
+        "--weeks",
+        help="Number of weeks to simulate during benchmark.",
+        type=int,
+        default=NUM_WEEKS,
+    )
+    args = arg_parser.parse_args()
+    NUM_WEEKS = args.weeks
 
     simulator, agents, agent_names, agent_goals = setup_competition(openai_api_key)
     results_df = run_competition_loop(simulator, agents, agent_names, agent_goals)
