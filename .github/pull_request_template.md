@@ -1,3 +1,9 @@
+<!-- 
+IMPORTANT: Please update the PR title to be descriptive of your changes.
+Default title "Pull Request Template" is just a placeholder.
+Example: "[Feature] Add user login functionality"
+-->
+
 # Pull Request Template
 
 ## Description
