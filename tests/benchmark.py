@@ -19,6 +19,7 @@ import sys
 import json
 import re
 from typing import Optional, Dict, Any
+import argparse
 
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -37,11 +38,12 @@ from src.components import (
     CausalEngineV6,
     DEFAULT_TRUST_VALUE_MULTIPLIER
 )
+from default_test_config import basic as config
 
 # --- Global Benchmark Configuration ---
 # REFACTOR: Moved from main() to be a global constant for easier configuration.
-NUM_WEEKS_TO_SIMULATE = 52
-AGENT_TYPES_TO_TEST = ["Full Neuro-Symbolic-Causal", "LLM + Symbolic", "LLM-Only"]
+NUM_WEEKS_TO_SIMULATE = config["NUM_WEEKS_TO_SIMULATE"]
+AGENT_TYPES_TO_TEST = config["AGENT_TYPES_TO_TEST"]
 
 
 # --- Helper Classes and Functions ---
@@ -298,6 +300,19 @@ def main():
         print("Error: Please set the OPENAI_API_KEY environment variable.")
         return
 
+    arg_parser = argparse.ArgumentParser(
+        prog=sys.argv[0],
+        description="The main benchmark script that runs multiple scenarios.",
+    )
+    arg_parser.add_argument(
+        "-w",
+        "--weeks",
+        help="Number of weeks to simulate during benchmark.",
+        type=int,
+        default=NUM_WEEKS_TO_SIMULATE,
+    )
+    args = arg_parser.parse_args()
+
     # CLEANUP: Rewrote multiline goal strings with triple quotes for better readability.
     scenarios = {
         "1_Brand_Trust_Focus": {
@@ -341,7 +356,7 @@ Aim for a final brand trust score between 0.70 and 0.80.""",
         for agent_type in AGENT_TYPES_TO_TEST:
             results[agent_type] = run_simulation(
                 agent_type=agent_type,
-                num_weeks=NUM_WEEKS_TO_SIMULATE,
+                num_weeks=args.weeks,
                 openai_api_key=openai_api_key,
                 goal=config["goal"],
                 trust_multiplier=dynamic_multiplier if agent_type == "Full Neuro-Symbolic-Causal" else None
@@ -349,7 +364,7 @@ Aim for a final brand trust score between 0.70 and 0.80.""",
 
         plt.style.use('seaborn-v0_8-whitegrid')
         fig, axes = plt.subplots(2, 2, figsize=(20, 14))
-        fig.suptitle(f'Scenario: {scenario_name}\nAgent Performance Over {NUM_WEEKS_TO_SIMULATE} Weeks', fontsize=18)
+        fig.suptitle(f'Scenario: {scenario_name}\nAgent Performance Over {args.weeks} Weeks', fontsize=18)
         ax = axes.flatten()
 
         for agent_type, history_df in results.items():

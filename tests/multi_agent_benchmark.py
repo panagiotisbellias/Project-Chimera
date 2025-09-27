@@ -22,6 +22,7 @@ import sys
 import json
 import re
 from typing import Optional, Dict, Any, List, Tuple
+import argparse
 
 import pandas as pd
 from tqdm import tqdm
@@ -36,12 +37,11 @@ from langchain.agents import tool
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from src.components import EcommerceSimulatorV7, CausalEngineV6, SymbolicGuardianV4
-
+from default_test_config import multi_agent as config
 
 # --- Global Configuration & Prompts ---
 
-NUM_AGENTS = 3
-NUM_WEEKS = 52
+NUM_AGENTS = config["NUM_AGENTS"]
 
 # REFACTOR: Moved from create_competitive_agent_executor for better readability.
 HUMAN_PROMPT_TEMPLATE = """
@@ -157,9 +157,12 @@ def create_competitive_agent_executor(
 
 # --- Core Script Functions ---
 
-def setup_competition(openai_api_key: str) -> Tuple:
+
+def setup_competition(openai_api_key: str, num_weeks: int) -> Tuple:
     """Initializes all components required for the simulation."""
-    print(f"--- Setting up a {NUM_AGENTS}-agent, {NUM_WEEKS}-week competitive simulation ---")
+    print(
+        f"--- Setting up a {NUM_AGENTS}-agent, {num_weeks}-week competitive simulation ---"
+    )
 
     model_data_path = "models/initial_causal_data.pkl"
     if os.path.exists(model_data_path):
@@ -197,19 +200,20 @@ def run_competition_loop(
     simulator: EcommerceSimulatorV7,
     agents: list,
     agent_names: list,
-    agent_goals: list
+    agent_goals: list,
+    num_weeks: int,
 ) -> pd.DataFrame:
     """Executes the main simulation loop and returns the complete history."""
     full_history = []
-    with tqdm(total=NUM_WEEKS, desc="Simulating Competitive Weeks") as pbar:
-        for week in range(NUM_WEEKS):
+    with tqdm(total=num_weeks, desc="Simulating Competitive Weeks") as pbar:
+        for week in range(num_weeks):
             actions_for_turn = []
             current_states = simulator.get_state()['agents']
 
             for i in range(NUM_AGENTS):
                 agent_executor, state_provider = agents[i]
                 my_current_state = current_states[i]
-                
+
                 competitor_info = [
                     {"agent_id": s['agent_id'], "price": s['price'], "brand_trust": s['brand_trust']}
                     for s in current_states if s['agent_id'] != i
@@ -231,8 +235,8 @@ def run_competition_loop(
 
             actual_actions = [d['action'] for d in actions_for_turn]
             new_states = simulator.step(actual_actions)
-            
-            tqdm.write(f"--- Week {week+1}/{NUM_WEEKS} Results ---")
+
+            tqdm.write(f"--- Week {week+1}/{num_weeks} Results ---")
             for i, state in enumerate(new_states):
                 agent_name = agent_names[i]
                 action_taken = actions_for_turn[i]['action']
@@ -248,16 +252,18 @@ def run_competition_loop(
                 state_copy = state.copy()
                 state_copy['week'] = week + 1
                 full_history.append(state_copy)
-            
+
             pbar.update(1)
 
     return pd.DataFrame(full_history)
 
 
-def analyze_and_visualize_results(df: pd.DataFrame, agent_names: List[str]):
+def analyze_and_visualize_results(
+    df: pd.DataFrame, agent_names: List[str], num_weeks: int
+):
     """Analyzes the simulation results and generates all plots and summaries."""
     print("\n--- Competition Finished! Analyzing Results... ---")
-    
+
     results_dir = "results"
     if not os.path.exists(results_dir):
         os.makedirs(results_dir)
@@ -282,17 +288,17 @@ def analyze_and_visualize_results(df: pd.DataFrame, agent_names: List[str]):
     summary_df = pd.DataFrame(summary_data)
     sort_key = summary_df['Total Cumulative Profit'].replace({r'\$': '', ',': ''}, regex=True).astype(float)
     summary_df = summary_df.iloc[sort_key.argsort()[::-1]]
-    
+
     print("\n--- COMPETITION SUMMARY (Sorted by Profit) ---")
     print(summary_df.to_string(index=False))
 
     # --- Main 2x2 Benchmark Plot ---
     fig, axes = plt.subplots(2, 2, figsize=(20, 14))
-    fig.suptitle(f'{NUM_AGENTS}-Agent Competition Over {NUM_WEEKS} Weeks', fontsize=18)
+    fig.suptitle(f"{NUM_AGENTS}-Agent Competition Over {num_weeks} Weeks", fontsize=18)
     metrics = ['profit', 'brand_trust', 'price', 'market_share']
     titles = ['Weekly Profit', 'Brand Trust', 'Price', 'Market Share']
     y_labels = ['Profit ($)', 'Brand Trust Score', 'Price ($)', 'Market Share']
-    
+
     for i, metric in enumerate(metrics):
         ax = axes.flatten()[i]
         sns.lineplot(ax=ax, data=df, x='week', y=metric, hue='agent', linewidth=2.5)
@@ -301,8 +307,10 @@ def analyze_and_visualize_results(df: pd.DataFrame, agent_names: List[str]):
         ax.set_ylabel(y_labels[i])
         ax.legend(title='Agent')
         ax.grid(True)
-    
-    graph_filename = os.path.join(results_dir, f'multi_agent_main_dashboard_{NUM_WEEKS}weeks.png')
+
+    graph_filename = os.path.join(
+        results_dir, f"multi_agent_main_dashboard_{num_weeks}weeks.png"
+    )
     plt.tight_layout(rect=[0, 0.03, 1, 0.95])
     plt.savefig(graph_filename)
     plt.close(fig)
@@ -327,7 +335,7 @@ def analyze_and_visualize_results(df: pd.DataFrame, agent_names: List[str]):
     plt.savefig(os.path.join(results_dir, 'analysis_strategy_map.png'))
     plt.close()
     print("Saved strategy map graph.")
-    
+
     # 3. Market Share Evolution
     market_share_pivot = df.pivot_table(index='week', columns='agent', values='market_share')
     market_share_pivot.plot(kind='area', stacked=True, figsize=(12, 8), alpha=0.7)
@@ -356,9 +364,26 @@ def main():
         print("Error: Please set the OPENAI_API_KEY environment variable.")
         return
 
-    simulator, agents, agent_names, agent_goals = setup_competition(openai_api_key)
-    results_df = run_competition_loop(simulator, agents, agent_names, agent_goals)
-    analyze_and_visualize_results(results_df, agent_names)
+    arg_parser = argparse.ArgumentParser(
+        prog=sys.argv[0],
+        description="The main benchmark script that runs multiple scenarios.",
+    )
+    arg_parser.add_argument(
+        "-w",
+        "--weeks",
+        help="Number of weeks to simulate during benchmark.",
+        type=int,
+        default=config["NUM_WEEKS"],
+    )
+    args = arg_parser.parse_args()
+
+    simulator, agents, agent_names, agent_goals = setup_competition(
+        openai_api_key, num_weeks=args.weeks
+    )
+    results_df = run_competition_loop(
+        simulator, agents, agent_names, agent_goals, num_weeks=args.weeks
+    )
+    analyze_and_visualize_results(results_df, agent_names, num_weeks=args.weeks)
 
 
 if __name__ == "__main__":
