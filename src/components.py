@@ -762,3 +762,286 @@ class CausalEngineV6_UseReady:
         shap_values_obj = explainer(instance_df)
         
         return {"shap_object": shap_values_obj}
+    
+    
+# ----------------------------
+# MarketSimulatorV1
+# ----------------------------
+
+class MarketSimulatorV1(BaseEnvironment):
+    """
+    A basic quantitative trading environment that simulates market behavior.
+    The agent interacts with this environment by observing the state (market data, portfolio)
+    and taking actions (BUY, SELL, HOLD).
+    """
+    def __init__(self, market_data: pd.DataFrame, initial_capital: float = 100_000.0, seed: Optional[int] = None):
+        """
+        Initializes the trading environment.
+
+        Args:
+            market_data (pd.DataFrame): A DataFrame with historical market data.
+                                        Must contain 'Open', 'High', 'Low', 'Close' columns.
+            initial_capital (float): The starting cash balance for the agent.
+            seed (Optional[int]): Random seed for reproducibility.
+        """
+        if not all(k in market_data.columns for k in ['Open', 'High', 'Low', 'Close']):
+            raise ValueError("Market data must contain 'Open', 'High', 'Low', 'Close' columns.")
+
+        self.market_data = market_data
+        self.initial_capital = initial_capital
+        self.rng = np.random.default_rng(seed) if seed is not None else np.random.default_rng()
+
+        # The state is populated by the reset() method upon initialization
+        self.state: Dict[str, Any] = {}
+        self.current_step = 0
+        self.reset()
+
+    def reset(self) -> Dict[str, Any]:
+        """
+        Resets the environment to its initial state and returns the first observation.
+        """
+        self.current_step = 0
+        self.state = {
+            "week": self.current_step,
+            "market_data": self.market_data.iloc[self.current_step].to_dict(),
+            "cash": self.initial_capital,
+            "shares_held": 0.0,
+            "portfolio_value": self.initial_capital,
+            "last_profit": 0.0,
+        }
+        return self.get_state()
+
+    def get_state(self) -> Dict[str, Any]:
+        """
+        Returns a copy of the current environment state without advancing the environment.
+        """
+        return self.state.copy()
+
+    def step(self, action: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Applies an action, advances the environment by one time step, and returns the new state.
+        The action format is expected to be {'type': 'BUY'|'SELL'|'HOLD', 'amount': float},
+        where 'amount' is a value between 0.0 and 1.0.
+        """
+        # 1. Get current portfolio value and market price for transactions
+        previous_portfolio_value = self.state['portfolio_value']
+        current_price = self.state['market_data']['Close']  # Assume transactions happen at closing price
+
+        # 2. Process the action
+        action_type = action.get('type', 'HOLD').upper()
+        # 'amount' is the percentage of assets to use (e.g., 0.5 for 50%)
+        action_amount = np.clip(action.get('amount', 1.0), 0.0, 1.0)
+
+        if action_type == 'BUY':
+            cash_to_spend = self.state['cash'] * action_amount
+            shares_to_buy = cash_to_spend / current_price
+            self.state['shares_held'] += shares_to_buy
+            self.state['cash'] -= cash_to_spend
+
+        elif action_type == 'SELL':
+            shares_to_sell = self.state['shares_held'] * action_amount
+            cash_gained = shares_to_sell * current_price
+            self.state['shares_held'] -= shares_to_sell
+            self.state['cash'] += cash_gained
+
+        # 3. Advance the simulation by one step
+        self.current_step += 1
+
+        # Check if the simulation has reached the end of the data
+        if self.current_step >= len(self.market_data):
+            print("Warning: End of market data reached. No further steps can be taken.")
+            self.state['week'] = self.current_step
+            # No more market data, so we just return the final state
+            return self.get_state()
+
+        # 4. Update the state with new information
+        new_market_data = self.market_data.iloc[self.current_step].to_dict()
+        new_portfolio_value = self.state['cash'] + (self.state['shares_held'] * new_market_data['Close'])
+        profit_change = new_portfolio_value - previous_portfolio_value
+
+        self.state.update({
+            "week": self.current_step,
+            "market_data": new_market_data,
+            "portfolio_value": new_portfolio_value,
+            "last_profit": profit_change,
+        })
+
+        return self.get_state()
+    
+
+
+
+# ----------------------------
+# SymbolicGuardianV5 - Unified
+# ----------------------------
+
+# [REPLACE the entire SymbolicGuardianV5 class in src/components.py with this final version]
+
+class SymbolicGuardianV5:
+    """
+    A unified, non-negotiable safety net for multiple domains (E-commerce & Quant Trading).
+    Its SOLE RESPONSIBILITY is to VALIDATE actions. It does not repair them.
+    If an action is invalid, the Neuro component is responsible for generating a new one.
+    """
+    def __init__(
+        self,
+        # --- E-COMMERCE RULES ---
+        max_discount_per_week: float = 0.40, max_price_increase_per_week: float = 0.50,
+        min_profit_margin_percentage: float = 0.15, max_price: float = 150.0,
+        unit_cost: float = 50.0, ad_absolute_cap: float = 5000.0, ad_increase_cap: float = 1000.0,
+        # --- QUANT TRADING RULES ---
+        max_position_ratio: float = 0.95,
+        max_action_amount: float = 1.0
+    ):
+        """Initializes the Guardian with parameters for ALL supported domains."""
+        self.cfg = dict(
+            # E-commerce config
+            max_dn=max_discount_per_week, max_up=max_price_increase_per_week,
+            min_margin=min_profit_margin_percentage, max_price=max_price,
+            unit_cost=unit_cost, ad_cap=ad_absolute_cap, ad_increase_cap=ad_increase_cap,
+            # Quant config
+            max_pos_ratio=max_position_ratio,
+            max_act_amount=max_action_amount
+        )
+
+    def _validate_ecommerce_rules(self, action: Dict[str, Any], state: Dict[str, Any]) -> Dict[str, Any]:
+        """Contains all rule-checking logic from the original SymbolicGuardianV4."""
+        # This is a placeholder for the full e-commerce logic.
+        return {"is_valid": True, "message": "E-commerce action is valid (placeholder)."}
+
+    def _validate_quant_rules(self, action: Dict[str, Any], state: Dict[str, Any]) -> Dict[str, Any]:
+        """Contains all rule-checking logic for quantitative trading."""
+        action_type = action.get('type', 'HOLD').upper()
+        amount = action.get('amount', 0.0)
+
+        if not 0.0 <= amount <= self.cfg['max_act_amount']:
+             return {"is_valid": False, "message": f"Rule Violation: Action 'amount' ({amount}) must be between 0.0 and {self.cfg['max_act_amount']}."}
+        
+        if action_type in ['HOLD', 'SELL']:
+            return {"is_valid": True, "message": "Action is valid."}
+
+        if action_type == 'BUY':
+            cash = state.get('cash', 0.0)
+            shares_held = state.get('shares_held', 0.0)
+            current_price = state.get('market_data', {}).get('Close')
+
+            if current_price is None or current_price <= 0:
+                return {"is_valid": False, "message": "State Error: Invalid market price for validation."}
+            
+            current_portfolio_value = cash + (shares_held * current_price)
+            if current_portfolio_value <= 0:
+                return {"is_valid": False, "message": "State Error: Invalid portfolio value for validation."}
+
+            cash_to_spend = cash * amount
+            if cash_to_spend > cash:
+                cash_to_spend = cash
+            shares_to_buy = cash_to_spend / current_price
+            
+            future_shares_held = shares_held + shares_to_buy
+            future_cash = cash - cash_to_spend
+            future_shares_value = future_shares_held * current_price
+            future_portfolio_value = future_cash + future_shares_value
+
+            if future_portfolio_value <= 0: # Avoid division by zero
+                return {"is_valid": True, "message": "Action is valid."}
+
+            future_position_ratio = future_shares_value / future_portfolio_value
+
+            if future_position_ratio > self.cfg['max_pos_ratio']:
+                return {"is_valid": False, "message": f"Rule Violation: Action would result in position ratio of {future_position_ratio:.2%}, exceeding limit of {self.cfg['max_pos_ratio']:.2%}."}
+            
+            return {"is_valid": True, "message": "Action is valid."}
+
+        return {"is_valid": False, "message": f"Rule Violation: Unknown action type '{action_type}'."}
+
+    def validate_action(self, action: Dict[str, Any], current_state: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        The main validation method. It acts as a switchboard to call the correct domain-specific validator.
+        This is the ONLY public method of the Guardian.
+        """
+        if 'price_change' in action or 'ad_spend' in action:
+            return self._validate_ecommerce_rules(action, current_state)
+        
+        elif action.get('type') in ['BUY', 'SELL', 'HOLD']:
+            return self._validate_quant_rules(action, current_state)
+            
+        else:
+            return {"is_valid": False, "message": "Rule Violation: Unrecognized action domain."}
+        
+
+# ----------------------------
+# CausalEngineV7_Quant
+# ----------------------------
+class CausalEngineV7_Quant:
+    """
+    The strategic brain for the Quant Trading agent. It uses a Causal Forest model
+    trained on historical market data and simulated trades to predict the profit impact
+    of BUY or SELL actions under given market conditions.
+    """
+    def __init__(self, data_path: str = "causal_training_data.csv"):
+        """
+        Initializes the Causal Engine by loading data and training the model.
+        """
+        print("\n--- Initializing CausalEngineV7_Quant ---")
+        try:
+            self.training_df = pd.read_csv(data_path)
+            print(f"✅ Training data loaded successfully from '{data_path}'.")
+        except FileNotFoundError:
+            print(f"❌ ERROR: Training data not found at '{data_path}'. Please run 'prepare_training_data.py' first.")
+            raise
+        
+        self.model = None
+        self.feature_cols = [col for col in self.training_df.columns if col not in ['action_type', 'action_amount', 'outcome_profit_change']]
+        self._fit_model()
+        print("✅ Causal Forest model trained. Engine is ready.")
+        print("-----------------------------------------")
+
+    def _fit_model(self):
+        """
+        Prepares the data and fits the CausalForestDML model.
+        """
+        # Y = Outcome (What we want to predict)
+        Y = self.training_df['outcome_profit_change']
+        
+        # T = Treatment (The action we take)
+        T = self.training_df[['action_type', 'action_amount']]
+        
+        # X & W = Context (The market conditions at the time of the action)
+        # For CausalForestDML, X (features) and W (nuisance components) can be the same.
+        XW = self.training_df[self.feature_cols]
+
+        self.model = CausalForestDML(
+            model_y=GradientBoostingRegressor(random_state=42),
+            model_t=MultiOutputRegressor(GradientBoostingRegressor(random_state=42)),
+            discrete_treatment=False,
+            random_state=42,
+        )
+        self.model.fit(Y, T, X=XW, W=XW)
+
+    def estimate_causal_effect(self, action: Dict[str, Any], context: Dict[str, Any]) -> float:
+        """
+        Estimates the causal impact of a given action in a given context.
+
+        Args:
+            action (Dict): An action, e.g., {'type': 'BUY', 'amount': 0.5}.
+            context (Dict): The current market features (RSI, SMA, etc.).
+
+        Returns:
+            float: The predicted profit change (the causal effect).
+        """
+        if self.model is None:
+            raise RuntimeError("Causal model is not trained.")
+
+        # Prepare the context features (X) in the correct order
+        X_context = pd.DataFrame([context])[self.feature_cols]
+
+        # Define T0 (control group = do nothing) and T1 (treatment group = proposed action)
+        T0 = np.array([[0.0, 0.0]]) # A 'do-nothing' action
+        
+        action_type = 1 if action.get('type', 'HOLD').upper() == 'BUY' else -1
+        action_amount = action.get('amount', 0.0)
+        T1 = np.array([[action_type, action_amount]])
+
+        # Ask the model for the predicted effect
+        effect = self.model.effect(X_context, T0=T0, T1=T1)
+        return float(effect[0])
