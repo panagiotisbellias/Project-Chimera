@@ -5,21 +5,14 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
 
-### ❤️ Our Contributors
+## ❤️ Contributors
 
-This project exists thanks to all the amazing people who contribute their time and expertise. From code and documentation to design and feedback, every contribution helps us build the future of strategic AI.
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
-<table>
-  <tbody>
-    <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/akarlaraytug"><img src="https://avatars.githubusercontent.com/u/100737482?v=4?s=100" width="100px;" alt="Aytuğ Akarlar"/><br /><sub><b>Aytuğ Akarlar</b></sub></a><br /><a href="https://github.com/akarlaraytu/Project-Chimera/commits?author=akarlaraytug" title="Code">💻</a> <a href="#ideas-akarlaraytug" title="Ideas, Planning, & Feedback">🤔</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/panagiotisbellias"><img src="https://avatars.githubusercontent.com/u/36828549?v=4?s=100" width="100px;" alt="Panagiotis Bellias"/><br /><sub><b>Panagiotis Bellias</b></sub></a><br /><a href="httpshttps://github.com/akarlaraytu/Project-Chimera/commits?author=panagiotisbellias" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Rapteon"><img src="https://avatars.githubusercontent.com/u/25525358?v=4?s=100" width="100px;" alt="Rapteon"/><br /><sub><b>Rapteon</b></sub></a><br /><a href="https://github.com/akarlaraytu/Project-Chimera/commits?author=Rapteon" title="Code">💻</a></td>
-    </tr>
-  </tbody>
-</table>
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- ALL-CONTRIBUTORS-LIST:END -->
 
-A huge thank you to our growing community!
+This project follows the [all-contributors](https://allcontributors.org) specification.
 
 ---
 
