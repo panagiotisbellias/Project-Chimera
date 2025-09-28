@@ -9,9 +9,15 @@
 
 This project exists thanks to all the amazing people who contribute their time and expertise. From code and documentation to design and feedback, every contribution helps us build the future of strategic AI.
 
-<a href="https://github.com/akarlaraytu/Project-Chimera/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=akarlaraytu/Project-Chimera" />
-</a>
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/akarlaraytug"><img src="https://avatars.githubusercontent.com/u/100737482?v=4?s=100" width="100px;" alt="Aytuğ Akarlar"/><br /><sub><b>Aytuğ Akarlar</b></sub></a><br /><a href="https://github.com/akarlaraytu/Project-Chimera/commits?author=akarlaraytug" title="Code">💻</a> <a href="#ideas-akarlaraytug" title="Ideas, Planning, & Feedback">🤔</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/panagiotisbellias"><img src="https://avatars.githubusercontent.com/u/36828549?v=4?s=100" width="100px;" alt="Panagiotis Bellias"/><br /><sub><b>Panagiotis Bellias</b></sub></a><br /><a href="httpshttps://github.com/akarlaraytu/Project-Chimera/commits?author=panagiotisbellias" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Rapteon"><img src="https://avatars.githubusercontent.com/u/25525358?v=4?s=100" width="100px;" alt="Rapteon"/><br /><sub><b>Rapteon</b></sub></a><br /><a href="https://github.com/akarlaraytu/Project-Chimera/commits?author=Rapteon" title="Code">💻</a></td>
+    </tr>
+  </tbody>
+</table>
 
 A huge thank you to our growing community!
 

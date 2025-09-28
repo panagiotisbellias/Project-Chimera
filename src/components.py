@@ -17,9 +17,12 @@ import streamlit as st
 
 from .environments import BaseEnvironment, BaseMultiAgentEnvironment
 
+from .config import FEATURE_COLS_DEFAULT
+
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
 COST_PER_ITEM = 50.0
+
 
 # ----------------------------
 # Data types
@@ -765,44 +768,41 @@ class CausalEngineV6_UseReady:
     
     
 # ----------------------------
-# MarketSimulatorV1
+# MarketSimulatorV2
 # ----------------------------
 
-class MarketSimulatorV1(BaseEnvironment):
+class MarketSimulatorV2(BaseEnvironment):
     """
-    A basic quantitative trading environment that simulates market behavior.
-    The agent interacts with this environment by observing the state (market data, portfolio)
-    and taking actions (BUY, SELL, HOLD).
+    An advanced, standalone quantitative trading environment that supports both
+    long and short positions. It includes mechanics for borrowing costs on short sales.
     """
-    def __init__(self, market_data: pd.DataFrame, initial_capital: float = 100_000.0, seed: Optional[int] = None):
+    def __init__(self, market_data: pd.DataFrame, initial_capital: float = 100_000.0, seed: Optional[int] = None, borrowing_rate_daily: float = 0.0005):
         """
         Initializes the trading environment.
 
         Args:
-            market_data (pd.DataFrame): A DataFrame with historical market data.
-                                        Must contain 'Open', 'High', 'Low', 'Close' columns.
-            initial_capital (float): The starting cash balance for the agent.
+            market_data (pd.DataFrame): DataFrame with historical market data ('Open', 'High', 'Low', 'Close').
+            initial_capital (float): The starting cash balance.
             seed (Optional[int]): Random seed for reproducibility.
+            borrowing_rate_daily (float): The daily interest rate charged for holding a short position.
         """
         if not all(k in market_data.columns for k in ['Open', 'High', 'Low', 'Close']):
             raise ValueError("Market data must contain 'Open', 'High', 'Low', 'Close' columns.")
-
+            
         self.market_data = market_data
         self.initial_capital = initial_capital
+        self.borrowing_rate = borrowing_rate_daily
         self.rng = np.random.default_rng(seed) if seed is not None else np.random.default_rng()
-
-        # The state is populated by the reset() method upon initialization
+        
         self.state: Dict[str, Any] = {}
         self.current_step = 0
         self.reset()
 
     def reset(self) -> Dict[str, Any]:
-        """
-        Resets the environment to its initial state and returns the first observation.
-        """
+        """Resets the environment to its initial state."""
         self.current_step = 0
         self.state = {
-            "week": self.current_step,
+            "week": self.current_step, # Retaining 'week' for consistency
             "market_data": self.market_data.iloc[self.current_step].to_dict(),
             "cash": self.initial_capital,
             "shares_held": 0.0,
@@ -812,85 +812,96 @@ class MarketSimulatorV1(BaseEnvironment):
         return self.get_state()
 
     def get_state(self) -> Dict[str, Any]:
-        """
-        Returns a copy of the current environment state without advancing the environment.
-        """
+        """Returns a copy of the current environment state."""
         return self.state.copy()
 
     def step(self, action: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        Applies an action, advances the environment by one time step, and returns the new state.
-        The action format is expected to be {'type': 'BUY'|'SELL'|'HOLD', 'amount': float},
-        where 'amount' is a value between 0.0 and 1.0.
-        """
-        # 1. Get current portfolio value and market price for transactions
+        """Applies an action, advances the environment by one time step, and returns the new state."""
+        # 1) Snapshot
         previous_portfolio_value = self.state['portfolio_value']
-        current_price = self.state['market_data']['Close']  # Assume transactions happen at closing price
-
-        # 2. Process the action
-        action_type = action.get('type', 'HOLD').upper()
-        # 'amount' is the percentage of assets to use (e.g., 0.5 for 50%)
-        action_amount = np.clip(action.get('amount', 1.0), 0.0, 1.0)
-
+        current_price = float(self.state['market_data']['Close'])
+        action_type = str(action.get('type', 'HOLD')).upper()
+        action_amount = float(np.clip(action.get('amount', 1.0), 0.0, 1.0))
+    
+        # 2) Apply action
         if action_type == 'BUY':
+            # Buy with a fraction of cash; if short, this reduces negative shares
             cash_to_spend = self.state['cash'] * action_amount
             shares_to_buy = cash_to_spend / current_price
             self.state['shares_held'] += shares_to_buy
             self.state['cash'] -= cash_to_spend
-
+    
         elif action_type == 'SELL':
-            shares_to_sell = self.state['shares_held'] * action_amount
-            cash_gained = shares_to_sell * current_price
-            self.state['shares_held'] -= shares_to_sell
-            self.state['cash'] += cash_gained
-
-        # 3. Advance the simulation by one step
+            # SELL only reduces existing long positions; no new shorts here
+            if self.state['shares_held'] > 0:
+                shares_to_sell = self.state['shares_held'] * action_amount
+                cash_gained = shares_to_sell * current_price
+                self.state['shares_held'] -= shares_to_sell
+                self.state['cash'] += cash_gained
+            # If no long, SELL does nothing (you can warn/log if desired)
+    
+        elif action_type == 'SHORT':
+            # Open/increase a short using a fraction of equity (portfolio value)
+            value_to_short = self.state['portfolio_value'] * action_amount
+            if value_to_short > 0:
+                shares_to_short = value_to_short / current_price
+                self.state['shares_held'] -= shares_to_short  # more negative = larger short
+                self.state['cash'] += value_to_short          # short sale proceeds increase cash
+    
+        # HOLD: do nothing
+    
+        # 3) Daily borrowing cost for shorts
+        if self.state['shares_held'] < 0:
+            short_position_value = abs(self.state['shares_held']) * current_price
+            cost = short_position_value * self.borrowing_rate
+            self.state['cash'] -= cost
+    
+        # 4) Advance time
         self.current_step += 1
-
-        # Check if the simulation has reached the end of the data
         if self.current_step >= len(self.market_data):
-            print("Warning: End of market data reached. No further steps can be taken.")
+            # End of data: keep last market_data and mark week
             self.state['week'] = self.current_step
-            # No more market data, so we just return the final state
             return self.get_state()
-
-        # 4. Update the state with new information
+    
+        # 5) Update state for next day
         new_market_data = self.market_data.iloc[self.current_step].to_dict()
-        new_portfolio_value = self.state['cash'] + (self.state['shares_held'] * new_market_data['Close'])
+        new_price = float(new_market_data['Close'])
+        new_portfolio_value = self.state['cash'] + (self.state['shares_held'] * new_price)
         profit_change = new_portfolio_value - previous_portfolio_value
-
+    
         self.state.update({
             "week": self.current_step,
             "market_data": new_market_data,
             "portfolio_value": new_portfolio_value,
             "last_profit": profit_change,
         })
-
         return self.get_state()
+
     
 
 
 
 # ----------------------------
-# SymbolicGuardianV5 - Unified
+# SymbolicGuardianV6
 # ----------------------------
 
-# [REPLACE the entire SymbolicGuardianV5 class in src/components.py with this final version]
+class SymbolicGuardianV6:
+    """
+    A unified, non-negotiable safety net for multiple domains, with support
+    for validating short-selling actions in the quantitative trading domain.
+    Includes auto-clipping of BUY/SHORT amounts to respect max ratios.
+    """
 
-class SymbolicGuardianV5:
-    """
-    A unified, non-negotiable safety net for multiple domains (E-commerce & Quant Trading).
-    Its SOLE RESPONSIBILITY is to VALIDATE actions. It does not repair them.
-    If an action is invalid, the Neuro component is responsible for generating a new one.
-    """
     def __init__(
         self,
         # --- E-COMMERCE RULES ---
         max_discount_per_week: float = 0.40, max_price_increase_per_week: float = 0.50,
         min_profit_margin_percentage: float = 0.15, max_price: float = 150.0,
         unit_cost: float = 50.0, ad_absolute_cap: float = 5000.0, ad_increase_cap: float = 1000.0,
-        # --- QUANT TRADING RULES ---
-        max_position_ratio: float = 0.95,
+        # --- QUANT TRADING RULES (V6) ---
+        allow_shorting: bool = True,
+        max_position_ratio: float = 0.95,  # For long positions
+        max_short_ratio: float = 0.50,     # For short positions
         max_action_amount: float = 1.0
     ):
         """Initializes the Guardian with parameters for ALL supported domains."""
@@ -900,88 +911,175 @@ class SymbolicGuardianV5:
             min_margin=min_profit_margin_percentage, max_price=max_price,
             unit_cost=unit_cost, ad_cap=ad_absolute_cap, ad_increase_cap=ad_increase_cap,
             # Quant config
+            allow_shorting=allow_shorting,
             max_pos_ratio=max_position_ratio,
+            max_short_ratio=max_short_ratio,
             max_act_amount=max_action_amount
         )
 
+    # ----------------------------
+    # E-commerce domain (placeholder)
+    # ----------------------------
     def _validate_ecommerce_rules(self, action: Dict[str, Any], state: Dict[str, Any]) -> Dict[str, Any]:
-        """Contains all rule-checking logic from the original SymbolicGuardianV4."""
-        # This is a placeholder for the full e-commerce logic.
         return {"is_valid": True, "message": "E-commerce action is valid (placeholder)."}
 
-    def _validate_quant_rules(self, action: Dict[str, Any], state: Dict[str, Any]) -> Dict[str, Any]:
-        """Contains all rule-checking logic for quantitative trading."""
-        action_type = action.get('type', 'HOLD').upper()
-        amount = action.get('amount', 0.0)
+    # ----------------------------
+    # Helpers for quant domain
+    # ----------------------------
 
-        if not 0.0 <= amount <= self.cfg['max_act_amount']:
-             return {"is_valid": False, "message": f"Rule Violation: Action 'amount' ({amount}) must be between 0.0 and {self.cfg['max_act_amount']}."}
+    def _max_buy_amount(self, cash: float, shares_held: float, price: float) -> float:
+        """
+        Computes the maximum BUY amount. If already short, this represents the
+        amount of cash to use to buy back shares. If long or flat, it respects
+        the max_pos_ratio to prevent over-leveraging.
+        """
+        # --- THE FIX IS HERE ---
+        # We REMOVED 'shares_held < 0' from this condition. An agent MUST be
+        # able to BUY even if it is short, in order to close its position.
+        if price <= 0 or cash < 0:
+            return 0.0
         
-        if action_type in ['HOLD', 'SELL']:
+        # If we are short, any BUY action is valid as it reduces risk.
+        # We can use up to 100% of our cash to close the short position.
+        if shares_held < 0:
+            return 1.0
+        # --- END OF FIX ---
+
+        # If we are not short, the original logic to prevent too large
+        # long positions still applies.
+        target = self.cfg['max_pos_ratio']
+
+        def ratio_for_amt(amt: float) -> float:
+            cash_spend = cash * amt
+            if price <= 0: return float('inf')
+            sh_buy = cash_spend / price
+            f_sh = shares_held + sh_buy
+            f_cash = cash - cash_spend
+            f_pv = f_cash + f_sh * price
+            if f_pv <= 0: return float('inf')
+            return (f_sh * price) / f_pv
+
+        lo, hi = 0.0, 1.0
+        for _ in range(24): # Binary search for precision
+            mid = (lo + hi) / 2
+            if ratio_for_amt(mid) <= target:
+                lo = mid
+            else:
+                hi = mid
+        
+        return min(lo, self.cfg['max_act_amount'])
+
+    def _max_short_amount(self, cash: float, shares_held: float, price: float, current_portfolio_value: float) -> float:
+        """
+        Compute a conservative maximum SHORT amount in [0,1] such that future short ratio
+        does not exceed cfg['max_short_ratio'].
+        For initial states with only cash: short_ratio ≈ (PV*amt)/PV = amt; clip to target.
+        If cash < PV (has long exposure), keep conservative clip based on PV.
+        """
+        target = self.cfg['max_short_ratio']
+        if not self.cfg['allow_shorting'] or price <= 0 or current_portfolio_value <= 0:
+            return 0.0
+
+        # Conservative cap: respect target directly relative to PV
+        base_cap = target
+        # If cash is a fraction of PV, optionally tighten cap
+        if cash > 0 and cash < current_portfolio_value:
+            # Tighten proportional to cash share (more conservative)
+            base_cap = max(0.0, min(target * (cash / current_portfolio_value), target))
+
+        return max(0.0, min(base_cap, self.cfg['max_act_amount']))
+
+    # ----------------------------
+    # Quant domain validation
+    # ----------------------------
+    def _validate_quant_rules(self, action: Dict[str, Any], state: Dict[str, Any]) -> Dict[str, Any]:
+        action_type = str(action.get('type', 'HOLD')).upper()
+        amount = float(action.get('amount', 0.0))
+
+        # Global amount bounds
+        if not 0.0 <= amount <= self.cfg['max_act_amount']:
+            return {"is_valid": False, "message": f"Rule Violation: Action 'amount' ({amount:.2f}) must be between 0.00 and {self.cfg['max_act_amount']:.2f}."}
+
+        if action_type == 'HOLD':
             return {"is_valid": True, "message": "Action is valid."}
 
+        # Extract portfolio state
+        cash = float(state.get('cash', 0.0))
+        shares_held = float(state.get('shares_held', 0.0))
+        current_price = state.get('market_data', {}).get('Close')
+
+        if current_price is None or current_price <= 0:
+            return {"is_valid": False, "message": "State Error: Invalid market price for validation."}
+
+        current_portfolio_value = cash + (shares_held * current_price)
+        if current_portfolio_value <= 0:
+            # No equity: only HOLD is safe
+            return {"is_valid": False, "message": "State Error: Non-positive portfolio value."}
+
+        # BUY validation with auto-clip
         if action_type == 'BUY':
-            cash = state.get('cash', 0.0)
-            shares_held = state.get('shares_held', 0.0)
-            current_price = state.get('market_data', {}).get('Close')
-
-            if current_price is None or current_price <= 0:
-                return {"is_valid": False, "message": "State Error: Invalid market price for validation."}
-            
-            current_portfolio_value = cash + (shares_held * current_price)
-            if current_portfolio_value <= 0:
-                return {"is_valid": False, "message": "State Error: Invalid portfolio value for validation."}
-
-            cash_to_spend = cash * amount
-            if cash_to_spend > cash:
-                cash_to_spend = cash
-            shares_to_buy = cash_to_spend / current_price
-            
-            future_shares_held = shares_held + shares_to_buy
-            future_cash = cash - cash_to_spend
-            future_shares_value = future_shares_held * current_price
-            future_portfolio_value = future_cash + future_shares_value
-
-            if future_portfolio_value <= 0: # Avoid division by zero
-                return {"is_valid": True, "message": "Action is valid."}
-
-            future_position_ratio = future_shares_value / future_portfolio_value
-
-            if future_position_ratio > self.cfg['max_pos_ratio']:
-                return {"is_valid": False, "message": f"Rule Violation: Action would result in position ratio of {future_position_ratio:.2%}, exceeding limit of {self.cfg['max_pos_ratio']:.2%}."}
-            
+            max_amt = self._max_buy_amount(cash, shares_held, current_price)
+            if max_amt <= 0.0:
+                return {"is_valid": False, "message": f"Rule Violation: BUY not allowed given max long ratio {self.cfg['max_pos_ratio']:.0%}."}
+            if amount > max_amt:
+                return {
+                    "is_valid": True,
+                    "message": f"BUY clipped to {max_amt:.2f} to respect max long ratio {self.cfg['max_pos_ratio']:.0%}.",
+                    "adjusted_amount": max_amt
+                }
             return {"is_valid": True, "message": "Action is valid."}
 
+        # SELL validation
+        if action_type == 'SELL':
+            # SELL reduces existing long only; cannot sell if no long
+            if shares_held > 0:
+                return {"is_valid": True, "message": "Action is valid."}
+            return {"is_valid": False, "message": "Rule Violation: No long position to SELL."}
+
+        # SHORT validation with auto-clip
+        if action_type == 'SHORT':
+            if not self.cfg['allow_shorting']:
+                return {"is_valid": False, "message": "Rule Violation: Short-selling is disabled."}
+            max_amt = self._max_short_amount(cash, shares_held, current_price, current_portfolio_value)
+            if max_amt <= 0.0:
+                return {"is_valid": False, "message": "Rule Violation: SHORT not allowed given current cash/equity."}
+            if amount > max_amt:
+                return {
+                    "is_valid": True,
+                    "message": f"SHORT clipped to {max_amt:.2f} to respect max short ratio {self.cfg['max_short_ratio']:.0%}.",
+                    "adjusted_amount": max_amt
+                }
+            return {"is_valid": True, "message": "Action is valid."}
+
+        # Unknown action
         return {"is_valid": False, "message": f"Rule Violation: Unknown action type '{action_type}'."}
 
+    # ----------------------------
+    # Domain switchboard
+    # ----------------------------
     def validate_action(self, action: Dict[str, Any], current_state: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        The main validation method. It acts as a switchboard to call the correct domain-specific validator.
-        This is the ONLY public method of the Guardian.
-        """
+        """Route action to correct domain validator."""
+        # Minimal domain detection: e-commerce uses price_change/ad_spend keys
         if 'price_change' in action or 'ad_spend' in action:
             return self._validate_ecommerce_rules(action, current_state)
-        
-        elif action.get('type') in ['BUY', 'SELL', 'HOLD']:
+        # Quant trading actions
+        elif str(action.get('type', '')).upper() in ['BUY', 'SELL', 'HOLD', 'SHORT']:
             return self._validate_quant_rules(action, current_state)
-            
-        else:
-            return {"is_valid": False, "message": "Rule Violation: Unrecognized action domain."}
-        
+        # Unknown domain
+        return {"is_valid": False, "message": f"Rule Violation: Unrecognized action domain '{action.get('type')}'."}
 
+        
 # ----------------------------
-# CausalEngineV7_Quant
+# CausalEngineV7_Quant (Final)
 # ----------------------------
 class CausalEngineV7_Quant:
     """
-    The strategic brain for the Quant Trading agent. It uses a Causal Forest model
-    trained on historical market data and simulated trades to predict the profit impact
-    of BUY or SELL actions under given market conditions.
+    Strategic causal reasoning engine for quantitative trading.
+    Uses a Causal Forest model trained on historical data to estimate
+    the profit impact of BUY, SELL, SHORT, or HOLD actions under given market conditions.
     """
+
     def __init__(self, data_path: str = "causal_training_data.csv"):
-        """
-        Initializes the Causal Engine by loading data and training the model.
-        """
         print("\n--- Initializing CausalEngineV7_Quant ---")
         try:
             self.training_df = pd.read_csv(data_path)
@@ -989,25 +1087,26 @@ class CausalEngineV7_Quant:
         except FileNotFoundError:
             print(f"❌ ERROR: Training data not found at '{data_path}'. Please run 'prepare_training_data.py' first.")
             raise
-        
+
+        # Explicit feature set to avoid drift
+        self.feature_cols = FEATURE_COLS_DEFAULT
+        # Keep only those present in training data
+        self.feature_cols = [c for c in self.feature_cols if c in self.training_df.columns]
+
+        # Ensure action_type is numeric directional code
+        action_map = {'BUY': 1, 'SHORT': -1, 'SELL': 0, 'HOLD': 0}
+        if self.training_df['action_type'].dtype == object:
+            self.training_df['action_type'] = self.training_df['action_type'].map(action_map).fillna(0)
+
         self.model = None
-        self.feature_cols = [col for col in self.training_df.columns if col not in ['action_type', 'action_amount', 'outcome_profit_change']]
         self._fit_model()
         print("✅ Causal Forest model trained. Engine is ready.")
         print("-----------------------------------------")
 
     def _fit_model(self):
-        """
-        Prepares the data and fits the CausalForestDML model.
-        """
-        # Y = Outcome (What we want to predict)
+        """Fit the Causal Forest model on training data."""
         Y = self.training_df['outcome_profit_change']
-        
-        # T = Treatment (The action we take)
         T = self.training_df[['action_type', 'action_amount']]
-        
-        # X & W = Context (The market conditions at the time of the action)
-        # For CausalForestDML, X (features) and W (nuisance components) can be the same.
         XW = self.training_df[self.feature_cols]
 
         self.model = CausalForestDML(
@@ -1020,28 +1119,30 @@ class CausalEngineV7_Quant:
 
     def estimate_causal_effect(self, action: Dict[str, Any], context: Dict[str, Any]) -> float:
         """
-        Estimates the causal impact of a given action in a given context.
+        Estimate the causal profit impact of a given action in a given context.
 
         Args:
-            action (Dict): An action, e.g., {'type': 'BUY', 'amount': 0.5}.
-            context (Dict): The current market features (RSI, SMA, etc.).
+            action (Dict): e.g., {'type': 'BUY', 'amount': 0.5}
+            context (Dict): market features (RSI, SMA, BBands, OHLC)
 
         Returns:
-            float: The predicted profit change (the causal effect).
+            float: predicted profit change
         """
         if self.model is None:
             raise RuntimeError("Causal model is not trained.")
 
-        # Prepare the context features (X) in the correct order
-        X_context = pd.DataFrame([context])[self.feature_cols]
+        # Prepare context with all required features
+        x = {col: context.get(col, np.nan) for col in self.feature_cols}
+        X_context = pd.DataFrame([x], columns=self.feature_cols)
 
-        # Define T0 (control group = do nothing) and T1 (treatment group = proposed action)
-        T0 = np.array([[0.0, 0.0]]) # A 'do-nothing' action
-        
-        action_type = 1 if action.get('type', 'HOLD').upper() == 'BUY' else -1
-        action_amount = action.get('amount', 0.0)
-        T1 = np.array([[action_type, action_amount]])
+        # Control: do-nothing baseline
+        T0 = np.array([[0.0, 0.0]])
 
-        # Ask the model for the predicted effect
+        # Treatment: directional code + amount
+        t = str(action.get('type', 'HOLD')).upper()
+        amt = float(action.get('amount', 0.0))
+        type_code = 1.0 if t == 'BUY' else (-1.0 if t == 'SHORT' else 0.0)
+        T1 = np.array([[type_code, amt]])
+
         effect = self.model.effect(X_context, T0=T0, T1=T1)
         return float(effect[0])
