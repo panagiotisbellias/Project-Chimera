@@ -8,18 +8,25 @@
   "commitConvention": "angular",
   "contributors": [
     {
+      "login": "aytugakarlar",
+      "name": "Aytug Akarlar",
+      "avatar_url": "https://images.weserv.nl/?url=avatars.githubusercontent.com/u/118820543?v=4&shape=circle&w=100",
+      "profile": "https://www.linkedin.com/in/aytuakarlar/",
+      "contributions": []
+    },
+    {
       "login": "panagiotisbellias",
       "name": "Panagiotis Bellias",
-      "avatar_url": "https://avatars.githubusercontent.com/u/68272816?v=4",
+      "avatar_url": "https://images.weserv.nl/?url=avatars.githubusercontent.com/u/68272816?v=4&shape=circle&w=100",
       "profile": "https://github.com/panagiotisbellias",
-      "contributions": [
-        "code",
-        "doc",
-        "design",
-        "ideas",
-        "bug",
-        "test"
-      ]
+      "contributions": []
+    },
+    {
+      "login": "Rapteon",
+      "name": "Rapteon",
+      "avatar_url": "https://images.weserv.nl/?url=avatars.githubusercontent.com/u/42870679?v=4&shape=circle&w=100",
+      "profile": "https://rapteon.github.io",
+      "contributions": []
     }
   ],
   "contributorsPerLine": 7,
