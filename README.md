@@ -6,7 +6,7 @@
 
 ## ❤️ Our Contributors!
 
-[![Contributors](https://contrib.rocks/image?repo=akarlaraytu/Project-Chimera)](https://github.com/akarlaraytu/Project-Chimera/graphs/contributors)
+[![Contributors](https://contrib.rocks/image?repo=akarlaraytu/Project-Chimera&cache_bust=1)](...)
 
 ---
 
