@@ -19,23 +19,25 @@ Thanks goes to these wonderful people
   <tbody>
     <tr>
       <td align="center" valign="top" width="14.28%">
-        <a href="https://rapteon.github.io">
-          <img src="https://avatars.githubusercontent.com/u/42870679?v=4?s=100" width="100px;" alt="Rapteon"/>
-          <br /><sub><b>Rapteon</b></sub>
-        </a>
-        <br />
-        </td>
-      <td align="center" valign="top" width="14.28%">
         <a href="https://www.linkedin.com/in/aytuakarlar/">
-          <img src="https://avatars.githubusercontent.com/u/118820543?v=4?s=100" width="100px;" alt="Aytug Akarlar"/>
-          <br /><sub><b>Aytug Akarlar</b></sub>
+          <img src="https://images.weserv.nl/?url=avatars.githubusercontent.com/u/118820543?v=4&shape=circle&w=100" width="100px;" alt="Aytug Akarlar"/>
+          <br />
+          <sub><b>Aytug Akarlar</b></sub>
         </a>
-        <br />
-        <a href="#code" title="Code">💻</a> 
-        <a href="#design" title="Design">🎨</a> 
-        <a href="#ideas" title="Ideas, Planning, & Feedback">💡</a> 
-        <a href="#bugs" title="Bug reports">🐛</a> 
-        <a href="#test" title="Tests">⚠️</a>
+      </td>
+      <td align="center" valign="top" width="14.28%">
+        <a href="https://github.com/panagiotisbellias">
+          <img src="https://images.weserv.nl/?url=avatars.githubusercontent.com/u/68272816?v=4&shape=circle&w=100" width="100px;" alt="Panagiotis Bellias"/>
+          <br />
+          <sub><b>Panagiotis Bellias</b></sub>
+        </a>
+      </td>
+      <td align="center" valign="top" width="14.28%">
+        <a href="https://rapteon.github.io">
+          <img src="https://images.weserv.nl/?url=avatars.githubusercontent.com/u/42870679?v=4&shape=circle&w=100" width="100px;" alt="Rapteon"/>
+          <br />
+          <sub><b>Rapteon</b></sub>
+        </a>
       </td>
     </tr>
   </tbody>
