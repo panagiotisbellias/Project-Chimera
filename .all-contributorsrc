@@ -8,7 +8,14 @@
   "commitConvention": "angular",
   "contributors": [
     {
-      "login": "akarlaraytu",
+      "login": "Rapteon",
+      "name": "Rapteon",
+      "avatar_url": "https://avatars.githubusercontent.com/u/42870679?v=4",
+      "profile": "https://rapteon.github.io",
+      "contributions": []
+    },
+    {
+      "login": "aytugakarlar",
       "name": "Aytug Akarlar",
       "avatar_url": "https://avatars.githubusercontent.com/u/118820543?v=4",
       "profile": "https://www.linkedin.com/in/aytuakarlar/",

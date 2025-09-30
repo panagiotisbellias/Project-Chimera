@@ -18,7 +18,25 @@ Thanks goes to these wonderful people
 <table>
   <tbody>
     <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://www.linkedin.com/in/aytuakarlar/"><img src="https://avatars.githubusercontent.com/u/118820543?v=4?s=100" width="100px;" alt="Aytug Akarlar"/><br /><sub><b>Aytug Akarlar</b></sub></a><br /><a href="https://github.com/akarlaraytu/Project-Chimera/commits?author=akarlaraytu" title="Code">💻</a> <a href="https://github.com/akarlaraytu/Project-Chimera/commits?author=akarlaraytu" title="Documentation">📖</a> <a href="#design-akarlaraytu" title="Design">🎨</a> <a href="#ideas-akarlaraytu" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/akarlaraytu/Project-Chimera/issues?q=author%3Aakarlaraytu" title="Bug reports">🐛</a> <a href="https://github.com/akarlaraytu/Project-Chimera/commits?author=akarlaraytu" title="Tests">⚠️</a></td>
+      <td align="center" valign="top" width="14.28%">
+        <a href="https://rapteon.github.io">
+          <img src="https://avatars.githubusercontent.com/u/42870679?v=4?s=100" width="100px;" alt="Rapteon"/>
+          <br /><sub><b>Rapteon</b></sub>
+        </a>
+        <br />
+        </td>
+      <td align="center" valign="top" width="14.28%">
+        <a href="https://www.linkedin.com/in/aytuakarlar/">
+          <img src="https://avatars.githubusercontent.com/u/118820543?v=4?s=100" width="100px;" alt="Aytug Akarlar"/>
+          <br /><sub><b>Aytug Akarlar</b></sub>
+        </a>
+        <br />
+        <a href="#code" title="Code">💻</a> 
+        <a href="#design" title="Design">🎨</a> 
+        <a href="#ideas" title="Ideas, Planning, & Feedback">💡</a> 
+        <a href="#bugs" title="Bug reports">🐛</a> 
+        <a href="#test" title="Tests">⚠️</a>
+      </td>
     </tr>
   </tbody>
 </table>
