@@ -88,6 +88,14 @@ You can try a **live demo** of the Strategy Lab here:
 
 ---
 
+## 📚 Documentation & Glossary
+
+For a quick reference of key Project-Chimera concepts, see our [Glossary](docs/GLOSSARY.md).
+
+You can also check the [latest release notes](https://github.com/akarlaraytu/Project-Chimera/releases) for detailed updates and changes.
+
+---
+
 ## 🔬Advanced XAI: From Glass Box to Interactive Simulator
 Version 1.2.1 introduces a full suite of XAI tools. We didn't just want to see why the agent made a decision; we wanted to interact with its reasoning. The new **"What-If Analysis"** tab allows you to do exactly that—explore the agent's mind by testing counterfactual scenarios live.
 
