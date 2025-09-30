@@ -1,0 +1,31 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "commitType": "docs",
+  "commitConvention": "angular",
+  "contributors": [
+    {
+      "login": "akarlaraytu",
+      "name": "Aytug Akarlar",
+      "avatar_url": "https://avatars.githubusercontent.com/u/118820543?v=4",
+      "profile": "https://www.linkedin.com/in/aytuakarlar/",
+      "contributions": [
+        "code",
+        "doc",
+        "design",
+        "ideas",
+        "bug",
+        "test"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "skipCi": true,
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "projectName": "Project-Chimera",
+  "projectOwner": "akarlaraytu"
+}
