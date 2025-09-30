@@ -6,7 +6,7 @@ import pandas as pd
 import time
 from typing import List, Dict, Any
 import altair as alt
-import textwrap
+import textwrap # remove it after approval
 import io
 import matplotlib.pyplot as plt
 
@@ -278,7 +278,7 @@ if check_beta_key():
                 st.success("The battle is over! Only one gladiator remains standing.")
                 break
     
-            actions_for_turn, rationales_for_turn = [], []
+            actions_for_turn, rationales_for_turn = [], [] # remove the second after approval
     
             if week == 0:
     
@@ -650,7 +650,7 @@ if check_beta_key():
         st.markdown("---")
     
         for i, (name, chest) in enumerate(final_standings):
-            trust = 0.0
+            trust = 0.0 # remove after approval
             if not final_trusts.empty and not final_trusts[final_trusts['agent_name'] == name].empty:
                 trust = final_trusts[final_trusts['agent_name'] == name]['brand_trust'].iloc[0]
             
@@ -760,7 +760,7 @@ if check_beta_key():
     
         # --- Share Results ---
         st.markdown("<br>", unsafe_allow_html=True)
-        col_share1, col_share2, col_share3 = st.columns([3, 2, 3])
+        col_share1, col_share2, col_share3 = st.columns([3, 2, 3]) # remove after approval
         with col_share2:
             if st.button("📤 Share Full Results", use_container_width=True):
                 img_buf = export_full_results_image(df, final_war_chests)
