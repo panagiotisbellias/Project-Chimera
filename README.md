@@ -1,8 +1,4 @@
 # Project Chimera: A Neuro-Symbolic-Causal AI Agent for Strategic Decision-Making
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
-
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python Version](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
@@ -10,45 +6,7 @@
 
 ## ❤️ Our Contributors!
 
-Thanks goes to these wonderful people
-
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
-<table>
-  <tbody>
-    <tr>
-      <td align="center" valign="top" width="14.28%">
-        <a href="https://www.linkedin.com/in/aytuakarlar/">
-          <img src="https://images.weserv.nl/?url=avatars.githubusercontent.com/u/118820543?v=4&shape=circle&w=100" width="100px;" alt="Aytug Akarlar"/>
-          <br />
-          <sub><b>Aytug Akarlar</b></sub>
-        </a>
-      </td>
-      <td align="center" valign="top" width="14.28%">
-        <a href="https://github.com/panagiotisbellias">
-          <img src="https://images.weserv.nl/?url=avatars.githubusercontent.com/u/68272816?v=4&shape=circle&w=100" width="100px;" alt="Panagiotis Bellias"/>
-          <br />
-          <sub><b>Panagiotis Bellias</b></sub>
-        </a>
-      </td>
-      <td align="center" valign="top" width="14.28%">
-        <a href="https://rapteon.github.io">
-          <img src="https://images.weserv.nl/?url=avatars.githubusercontent.com/u/42870679?v=4&shape=circle&w=100" width="100px;" alt="Rapteon"/>
-          <br />
-          <sub><b>Rapteon</b></sub>
-        </a>
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-<!-- markdownlint-restore -->
-<!-- prettier-ignore-end -->
-
-<!-- ALL-CONTRIBUTORS-LIST:END -->
-
-We are a growing community!
+[![Contributors](https://contrib.rocks/image?repo=akarlaraytu/Project-Chimera)](https://github.com/akarlaraytu/Project-Chimera/graphs/contributors)
 
 ---
 
