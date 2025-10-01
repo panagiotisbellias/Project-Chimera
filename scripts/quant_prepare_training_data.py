@@ -1,7 +1,5 @@
 # =============================================================================
-# scripts/quant_prepare_training_data.py (ULTIMATE ALPACA & PURE PANDAS VERSION)
-#
-# Author: Aytug Akarlar & Gemini
+# scripts/quant_prepare_training_data.py
 #
 # Description:
 #   This is the definitive data preparation script. It removes ALL dependencies
