@@ -90,6 +90,26 @@ if check_beta_key():
     
     # --- Parse agent JSON safely ---
     def get_decision_from_response(response: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Safely parses an agent's response dictionary to extract the action and rationale.
+
+        This function attempts to extract a JSON object from the 'output' field of the response.
+        If parsing fails or the action is incomplete, it provides default values to prevent errors.
+
+        Args:
+            response (Dict[str, Any]): The raw response from the agent. Expected to have an 'output' key
+                                    containing a JSON-like string.
+
+        Returns:
+            Dict[str, Any]: A dictionary containing:
+                - 'action' (dict): A dictionary with:
+                    - 'price_change' (float): Price change suggested by the agent (default 0.0).
+                    - 'ad_spend' (float): Advertising spend suggested by the agent (default 0.0).
+                - 'rationale' (str): Explanation from the agent, or a default message if missing.
+            Normal flow (try block) returns the parsed JSON with defaults applied.
+            Fallback flow (except block) returns {"action": {"price_change": 0.0, "ad_spend": 0.0},
+                                                "rationale": "Error parsing JSON output."}.
+        """
         output = response.get('output', '{}')
         m = re.search(r'\{[\s\S]*\}', output)
         try:
@@ -165,6 +185,17 @@ if check_beta_key():
     
     # --- UI helpers ---
     def render_colored_progress_bar(progress: float, color: str):
+        """
+        Renders a horizontal colored progress bar in Streamlit using HTML/CSS.
+
+        Args:
+            progress (float): The progress value between 0.0 and 1.0 representing
+                            the percentage of the bar to fill.
+            color (str): The CSS color value (e.g., '#FF0000' or 'green') for the filled portion of the bar.
+
+        Returns:
+            None: This function directly renders the progress bar in the Streamlit app.
+        """
         st.markdown(f"""
         <div style="background-color: #F0F2F6; border: 1px solid #E0E0E0; border-radius: 5px; height: 10px; width: 100%;">
             <div style="background-color: {color}; width: {progress * 100}%; border-radius: 5px; height: 100%;"></div>
@@ -172,6 +203,21 @@ if check_beta_key():
         """, unsafe_allow_html=True)
     
     def _normalize_agent_like(agent_like):
+        """
+        Normalizes an agent-like object to its configuration dictionary.
+
+        This function accepts either:
+            1. A dictionary with a 'config' key (e.g., {'config': {...}}), or
+            2. A bare agent dictionary without a 'config' wrapper.
+
+        Args:
+            agent_like (dict): The agent-like object to normalize.
+
+        Returns:
+            dict: The normalized configuration dictionary. If `agent_like` contains a
+                'config' key, its value is returned; otherwise, `agent_like` itself
+                is returned.
+        """
         # Accept both {'config': {...}} and bare gladiator dicts
         if isinstance(agent_like, dict) and 'config' in agent_like:
             return agent_like['config']
@@ -179,6 +225,35 @@ if check_beta_key():
     
     # --- Live battle ---
     def run_live_battle(config: Dict[str, Any]):
+        """
+        Runs a live gladiator battle simulation and updates the Streamlit interface in real time.
+
+        This function manages the entire lifecycle of the battle:
+            - Initializes the simulator, causal engine, guardian, and agents.
+            - Iteratively runs each week of the battle.
+            - Collects agent actions and rationales.
+            - Processes battle mechanics including war chests and eliminations.
+            - Updates live visualizations (cards, charts, combat logs) in Streamlit.
+            - Stores full battle history and final war chests in `st.session_state`.
+
+        Args:
+            config (Dict[str, Any]): Configuration dictionary containing:
+                - "gladiators" (list): A list of agent configuration dictionaries.
+                - "arena_settings" (dict): Contains settings such as "duration_weeks".
+
+        Returns:
+            None: The function directly interacts with Streamlit to render the live battle
+                and stores the final results in `st.session_state`:
+                    - `st.session_state.final_results_df` (pd.DataFrame): Full battle history.
+                    - `st.session_state.final_war_chests` (dict): Final war chest values per agent.
+
+        Notes:
+            - This function uses `time.sleep(0.2)` to pace the simulation for live viewing.
+            - The battle ends early if only one gladiator remains.
+            - Requires external classes/functions: `EcommerceSimulatorV7`, `CausalEngineV6_UseReady`,
+            `SymbolicGuardianV4`, `StateProvider`, `create_agent_executor`, `get_agent_decisions`,
+            `process_battle_mechanics`, `update_live_view`, and `CHART_COLORS`.
+        """
         num_agents = len(config["gladiators"])
         num_weeks = config["arena_settings"]["duration_weeks"]
         battle_colors = CHART_COLORS[:num_agents]
@@ -272,6 +347,35 @@ if check_beta_key():
     
     # --- Agent decisions ---
     def get_agent_decisions(agents, current_states, eliminated_agents, week):
+        """
+        Collects actions and rationales from all active agents for a given week.
+
+        Each agent receives its current state along with competitor information,
+        then generates a response through its executor. Eliminated agents are skipped
+        with default no-op actions.
+
+        Args:
+            agents (list): List of agent dictionaries, each containing:
+                - 'executor': The agent executor object with an `invoke` method.
+                - 'state_provider': The state provider for updating agent state.
+                - 'config': Agent configuration dictionary, must include 'name' and 'goal'.
+            current_states (list): Current states of all agents as dictionaries.
+            eliminated_agents (set): Names of agents that have been eliminated.
+            week (int): The current week index (0-based) of the battle.
+
+        Returns:
+            Tuple[List[Dict[str, float]], List[str]]: 
+                - actions_for_turn (list of dict): Each agent's action with keys:
+                    - 'price_change' (float)
+                    - 'ad_spend' (float)
+                - rationales_for_turn (list of str): Each agent's rationale or fallback message.
+                
+        Notes:
+            - If an agent is eliminated, a default no-op action is returned.
+            - If an agent raises an exception, a default action is returned and an error
+            message is displayed in Streamlit.
+            - Relies on `get_decision_from_response` to parse agent responses safely.
+        """
         actions_for_turn = []
         rationales_for_turn = []
         for i, agent in enumerate(agents):
@@ -311,6 +415,36 @@ if check_beta_key():
     
     # --- Battle mechanics ---
     def process_battle_mechanics(week, new_states, agents, war_chests, eliminated_agents):
+        """
+        Processes the battle mechanics for a given week, updating war chests, calculating
+        attack damage, and determining eliminations.
+
+        This function calculates weekly profits, identifies the week's winner, applies
+        attack bonuses based on market share, and adjusts other gladiators' war chests
+        considering their brand trust. Eliminations occur if a gladiator's war chest
+        falls below a defined threshold.
+
+        Args:
+            week (int): The current week index (0-based).
+            new_states (list of dict): The latest states for all agents, including 'profit',
+                                    'market_share', and 'brand_trust'.
+            agents (list of dict): List of agent dictionaries, each containing a 'config' key
+                                with at least a 'name'.
+            war_chests (dict): Current war chest values per agent (name -> float).
+            eliminated_agents (set): Set of agent names that have been eliminated.
+
+        Returns:
+            Tuple[List[str], dict, set]:
+                - combat_log_messages (list of str): Human-readable log messages for the week.
+                - war_chests (dict): Updated war chest values after attacks.
+                - eliminated_agents (set): Updated set of eliminated agent names.
+
+        Notes:
+            - The week's winner is the agent with the highest profit among non-eliminated gladiators.
+            - Attack damage is boosted by winner's market share and reduced by the target's brand trust.
+            - Eliminated agents are added to the `eliminated_agents` set and cannot be attacked further.
+            - Relies on a global `ELIMINATION_THRESHOLD` constant for elimination checks.
+        """
         combat_log_messages = [f"**Week {week+1}:**"]
         weekly_profits = {agents[i]['config']['name']: state['profit'] for i, state in enumerate(new_states)}
         active_gladiators_profit = {name: profit for name, profit in weekly_profits.items() if name not in eliminated_agents}
@@ -373,6 +507,39 @@ if check_beta_key():
         battle_colors,
         week_message: str = None
     ):
+        """
+        Updates the live Streamlit view for the gladiator battle, including status cards,
+        key metrics charts, and the combat log.
+
+        This function renders:
+            - Gladiator status cards with current war chest values and progress bars.
+            - Weekly profit, market share, and brand trust charts using Altair.
+            - The weekly combat log with all relevant actions and messages.
+
+        Args:
+            gladiator_cards_placeholder: Streamlit container placeholder for gladiator cards.
+            live_charts_placeholder: Streamlit container placeholder for charts.
+            live_log_placeholder: Streamlit container placeholder for the combat log.
+            history_df (pd.DataFrame): DataFrame containing full battle history with columns
+                                    like 'week', 'agent_name', 'profit', 'market_share', and 'brand_trust'.
+            war_chests (dict): Current war chest values per agent (name -> float).
+            eliminated_agents (set): Set of agent names that have been eliminated.
+            combat_log_messages (list of str): List of strings representing the combat log messages for the current week.
+            agents_or_gladiators (list): List of agent or gladiator dictionaries. Each can be a bare gladiator dict
+                                        or contain a 'config' key. Used for normalization.
+            battle_colors (list of str): List of CSS colors used for progress bars of active gladiators.
+            week_message (str, optional): Optional informational message about the current week. Defaults to None.
+
+        Returns:
+            None: The function directly renders UI elements in Streamlit.
+
+        Notes:
+            - Eliminated gladiators display a gray progress bar and a "ELIMINATED" label.
+            - Progress bars scale linearly with the agent's war chest above the elimination threshold.
+            - Charts are interactive and update weekly with the latest data.
+            - The combat log is overwritten each week instead of accumulating.
+            - Relies on `_normalize_agent_like` and `render_colored_progress_bar` helpers.
+        """
         normalized_gladiators = [_normalize_agent_like(a) for a in agents_or_gladiators]
         num_agents = len(normalized_gladiators)
     
@@ -458,6 +625,22 @@ if check_beta_key():
         st.markdown("<h4 style='text-align: center; font-weight: normal;'>Final Leaderboard</h4>", unsafe_allow_html=True)
         
         def agent_label(agent_type: str) -> str:
+            """
+            Returns a human-readable label for an agent type.
+
+            Args:
+                agent_type (str): The internal type of the agent.
+
+            Returns:
+                str: "Chimera Agent" if the agent_type is "Full Neuro-Symbolic-Causal",
+                    otherwise returns the original agent_type string.
+
+            Examples:
+                >>> agent_label("Full Neuro-Symbolic-Causal")
+                'Chimera Agent'
+                >>> agent_label("Simple Agent")
+                'Simple Agent'
+            """
             return "Chimera Agent" if agent_type == "Full Neuro-Symbolic-Causal" else agent_type
     
         gladiator_types = {g['name']: g['type'] for g in gladiators_config}
@@ -490,6 +673,34 @@ if check_beta_key():
     
         # --- Full Results ---
         def export_full_results_image(df, final_war_chests):
+            """
+            Generates a full results summary as a PNG image including final war chest, weekly profit,
+            market share, and brand trust charts.
+
+            The image consists of a 2x2 subplot layout:
+                - Top-left: Final War Chest bar chart with agent labels.
+                - Top-right: Weekly Profit line chart.
+                - Bottom-left: Market Share stacked area chart.
+                - Bottom-right: Brand Trust line chart.
+
+            Args:
+                df (pd.DataFrame): Full battle history containing columns:
+                    - 'week' (int): Week number.
+                    - 'agent_name' (str): Name of the agent.
+                    - 'profit' (float): Weekly profit for the agent.
+                    - 'market_share' (float): Market share value.
+                    - 'brand_trust' (float): Brand trust value.
+                final_war_chests (dict): Dictionary mapping agent names to their final war chest values.
+
+            Returns:
+                io.BytesIO: In-memory buffer containing the PNG image of the full results.
+
+            Notes:
+                - The function uses `gladiator_types` dictionary to map agent names to types for labeling.
+                - Agent colors are consistent across charts based on the weekly profit plot.
+                - Uses `agent_label` helper to display human-readable agent type labels.
+                - Figure background is set to light gray (#F8F9FA), and title includes a GitHub call-to-action.
+            """
             fig, axs = plt.subplots(2, 2, figsize=(12, 8))
             fig.patch.set_facecolor("#F8F9FA")
             fig.suptitle("Project Chimera – Colosseum / Give a Star on GitHub!", fontsize=18, fontweight="bold")
@@ -565,6 +776,25 @@ if check_beta_key():
     
     # --- Defaults ---
     def get_default_gladiator(number: int, agent_type: str = "Full Neuro-Symbolic-Causal") -> Dict[str, Any]:
+        """
+        Generates a default gladiator configuration dictionary.
+
+        Args:
+            number (int): Numerical identifier for the gladiator, used in its name.
+            agent_type (str, optional): Type of the agent. Defaults to "Full Neuro-Symbolic-Causal".
+
+        Returns:
+            dict: A dictionary containing:
+                - 'name' (str): Default name in the format "Gladiator {number}".
+                - 'type' (str): Agent type.
+                - 'goal' (Any): Doctrine or goal associated with the agent type, fetched from AGENT_DOCTRINES.
+
+        Examples:
+            >>> get_default_gladiator(1)
+            {'name': 'Gladiator 1', 'type': 'Full Neuro-Symbolic-Causal', 'goal': ...}
+            >>> get_default_gladiator(2, "Simple Agent")
+            {'name': 'Gladiator 2', 'type': 'Simple Agent', 'goal': ...}
+        """
         return {
             "name": f"Gladiator {number}",
             "type": agent_type,
