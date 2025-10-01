@@ -1,90 +1,112 @@
 # =============================================================================
-# quant_prepare_training_data.py
+# scripts/quant_prepare_training_data.py (ULTIMATE ALPACA & PURE PANDAS VERSION)
+#
+# Author: Aytug Akarlar & Gemini
+#
 # Description:
-# This script downloads data, engineers features, and generates a training set.
-# This version includes a robust, unified column name standardization process
-# to permanently fix all KeyError issues from library inconsistencies.
+#   This is the definitive data preparation script. It removes ALL dependencies
+#   on 'yfinance' and 'pandas-ta', sourcing data from Alpaca and calculating
+#   all features manually with pandas/numpy for maximum stability and consistency.
 # =============================================================================
 
 import pandas as pd
 import numpy as np
-import yfinance as yf
-import pandas_ta as ta
 from tqdm import tqdm
 import os
 import sys
 import random
+from datetime import datetime, timedelta
+import alpaca_trade_api as tradeapi
+from dotenv import load_dotenv
 
-# =========================
-# Configuration
-# =========================
+# --- Configuration ---
 TRAINING_HORIZON = 3
-
-# --- DYNAMIC PATH TO IMPORT FROM 'src' ---
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from src.config import FEATURE_COLS_DEFAULT
 
 # =========================
-# Feature Engineering
+# Feature Engineering (with Alpaca & Pure Pandas)
 # =========================
-def create_features(ticker="BTC-USD", start_date="2020-01-01", end_date="2025-01-01"):
+def create_features(ticker="BTC/USD", history_days=5*365):
     """
-    Downloads data and calculates all features with a robust standardization workflow.
+    (PURE PANDAS VERSION)
+    Downloads historical data from Alpaca and manually calculates all features
+    without relying on the pandas-ta library.
     """
-    print(f"Fetching data for {ticker} from {start_date} to {end_date}...")
-    df = yf.download(ticker, start=start_date, end=end_date, auto_adjust=True)
-    print(f"Original data shape: {df.shape}")
-
-    # --- STEP 1: ADD ALL RAW COLUMNS FIRST ---
-    # First, let yfinance and pandas_ta create all columns with their native names.
-    if isinstance(df.columns, pd.MultiIndex):
-        df.columns = df.columns.get_level_values(0)
+    print("--- Preparing data using Alpaca API & Pure Pandas ---")
     
-    print("Calculating all technical indicators...")
-    df.ta.rsi(length=14, append=True)
-    df.ta.sma(length=10, append=True)
-    df.ta.sma(length=50, append=True)
-    df.ta.roc(length=5, append=True)
-    df.ta.bbands(length=20, append=True)
-    df.ta.macd(fast=12, slow=26, signal=9, append=True)
+    load_dotenv()
+    API_KEY = os.getenv("ALPACA_API_KEY")
+    SECRET_KEY = os.getenv("ALPACA_SECRET_KEY")
+    if not API_KEY or not SECRET_KEY:
+        raise ValueError("FATAL ERROR: Alpaca API keys must be set in your .env file.")
 
-    # --- STEP 2: UNIFIED COLUMN NAME STANDARDIZATION (THE BULLETPROOF FIX) ---
-    # AFTER all columns are created, clean and standardize them all in one go.
-    print("Standardizing all column names for consistency...")
+    api = tradeapi.REST(API_KEY, SECRET_KEY, base_url="https://paper-api.alpaca.markets", api_version='v2')
     
-    # Create a mapping from old names to new, clean names
-    new_columns = {}
-    for col in df.columns:
-        new_col = str(col)
-        # Fix potential duplicate suffixes from libraries (e.g., '_2.0_2.0')
-        new_col = new_col.replace('_2.0_2.0', '_2.0')
-        # Capitalize every word for a consistent format (e.g., 'price_vs_sma10' -> 'Price_vs_sma10')
-        new_col = '_'.join([word.capitalize() for word in new_col.split('_')])
-        # Final capitalization for single-word columns like 'Open'
-        new_col = new_col.capitalize()
-        new_columns[col] = new_col
+    start_date = (datetime.now() - timedelta(days=history_days)).strftime('%Y-%m-%d')
     
-    df = df.rename(columns=new_columns)
-    print("Cleaned column names:", df.columns.tolist())
-    # --- END OF FIX ---
-        
-    print("Engineering relational features...")
-    # Now we can safely use the standardized, predictable names
-    try:
-        df['Price_vs_sma10'] = (df['Close'] - df['Sma_10']) / df['Sma_10']
-        df['Sma10_vs_sma50'] = (df['Sma_10'] - df['Sma_50']) / df['Sma_50']
-        df['Bb_position'] = (df['Close'] - df['Bbl_20_2.0']) / (df['Bbu_20_2.0'])
-    except KeyError as e:
-        print(f"FATAL ERROR: A required column is missing after standardization: {e}")
-        return None
+    print(f"Fetching daily data for {ticker} from {start_date} to today...")
+    df = api.get_crypto_bars(ticker, '1Day', start=start_date).df
 
-    df = df.dropna().copy()
+    if df.empty:
+        raise ValueError("Failed to fetch data from Alpaca.")
+    
+    print(f"Successfully fetched {len(df)} data points from Alpaca.")
+    df.rename(columns={'Close': 'close'}, inplace=True, errors='ignore')
+
+    # --- MANUAL FEATURE CALCULATION (NO PANDAS-TA) ---
+    print("Calculating SLOW features manually...")
+
+    # Feature 1: RSI (Rsi_14)
+    delta = df['close'].diff()
+    gain = (delta.where(delta > 0, 0)).ewm(alpha=1/14, adjust=False).mean()
+    loss = (-delta.where(delta < 0, 0)).ewm(alpha=1/14, adjust=False).mean()
+    rs = gain / loss
+    df['Rsi_14'] = 100 - (100 / (1 + rs))
+
+    # Feature 2: Rate of Change (Roc_15)
+    df['Roc_15'] = df['close'].pct_change(periods=15)
+
+    # Feature 3: MACD Histogram (Macdh_12_26_9)
+    ema_fast = df['close'].ewm(span=12, adjust=False).mean()
+    ema_slow = df['close'].ewm(span=26, adjust=False).mean()
+    macd_line = ema_fast - ema_slow
+    signal_line = macd_line.ewm(span=9, adjust=False).mean()
+    df['Macdh_12_26_9'] = macd_line - signal_line
+
+    # Features 4 & 5: SMAs and custom ratios
+    sma20 = df['close'].rolling(window=20).mean()
+    sma100 = df['close'].rolling(window=100).mean()
+    df['Price_vs_sma20'] = df['close'] / sma20
+    df['Sma20_vs_sma100'] = sma20 / sma100
+
+    # Feature 6: Bollinger Band Position (Bb_position)
+    std20 = df['close'].rolling(window=20).std()
+    bbu = sma20 + (std20 * 2)
+    bbl = sma20 - (std20 * 2)
+    bb_range = bbu - bbl
+    bb_range[bb_range == 0] = np.nan
+    df['Bb_position'] = (df['close'] - bbl) / bb_range
+    
+    # Feature 7: ATR_14  ---
+    high_low = df['high'] - df['low']
+    high_prev_close = np.abs(df['high'] - df['close'].shift(1))
+    low_prev_close = np.abs(df['low'] - df['close'].shift(1))
+    tr_df = pd.concat([high_low, high_prev_close, low_prev_close], axis=1)
+    true_range = tr_df.max(axis=1)
+    df['Atr_14'] = true_range.ewm(alpha=1/14, adjust=False).mean()
+    
+    # Finalize column names
+    df.rename(columns={'open': 'Open', 'high': 'High', 'low': 'Low', 'close': 'Close', 'volume': 'Volume'}, inplace=True, errors='ignore')
+    df.dropna(inplace=True)
+    
     print(f"Data with all features shape: {df.shape}")
     return df
 
-# =========================
-# Training Data Generation & Augmentation
-# =========================
+# =============================================================================
+# --- Training Data Generation & Augmentation ---
+# (These functions remain unchanged)
+# =============================================================================
 def generate_training_data(featured_data, horizon, feature_cols):
     print(f"\nGenerating training data with a {horizon}-day profit horizon...")
     SHORT_RISK_PENALTY = 0.002
@@ -108,27 +130,34 @@ def generate_training_data(featured_data, horizon, feature_cols):
     return pd.DataFrame(rows)
 
 def augment_training_data(training_df, featured_data, horizon, feature_cols):
+    """
+    This function augments the training data with high-conviction samples.
+    This version is updated to use the new 'slow' features (e.g., Roc_15).
+    """
     print("\nAugmenting training data...")
     aug_rows = []
-    # Using the standardized column names
-    mask_short = (featured_data["Rsi_14"] > 75) & (featured_data["Roc_5"] < 0)
+
+    mask_short = (featured_data["Rsi_14"] > 75) & (featured_data["Roc_15"] > 0)
     indices_short = featured_data[mask_short].index
-    mask_buy = (featured_data["Rsi_14"] < 25) & (featured_data["Roc_5"] > 0)
+    
+    mask_buy = (featured_data["Rsi_14"] < 25) & (featured_data["Roc_15"] < 0)
     indices_buy = featured_data[mask_buy].index
+    
     for pos in tqdm(range(len(featured_data) - horizon), desc="Augmenting Data"):
         profit_change = (featured_data.iloc[pos + horizon]["Close"] - featured_data.iloc[pos]["Close"]) / featured_data.iloc[pos]["Close"]
         context = featured_data.iloc[pos][feature_cols].to_dict()
         if pos in indices_buy and random.random() < 0.20:
-            aug_rows.append({ **context, "Close": featured_data.iloc[pos]["Close"], "action_type": "BUY", "action_amount": 1.0,
-                               "outcome_profit_change": np.clip(profit_change, -0.15, 0.15), "action_type_code": 1 })
+            aug_rows.append({ **context, "Close": featured_data.iloc[pos]["Close"], "action_type": "BUY", "action_amount": 1.0, "outcome_profit_change": np.clip(profit_change, -0.15, 0.15), "action_type_code": 1 })
         if pos in indices_short and random.random() < 0.20:
-             aug_rows.append({ **context, "Close": featured_data.iloc[pos]["Close"], "action_type": "SHORT", "action_amount": 1.0,
-                                "outcome_profit_change": np.clip(-profit_change, -0.15, 0.15), "action_type_code": -1 })
+            aug_rows.append({ **context, "Close": featured_data.iloc[pos]["Close"], "action_type": "SHORT", "action_amount": 1.0, "outcome_profit_change": np.clip(-profit_change, -0.15, 0.15), "action_type_code": -1 })
+            
     if aug_rows:
         aug_df = pd.DataFrame(aug_rows)
         training_df = pd.concat([training_df, aug_df], ignore_index=True)
         print(f"🔧 Added {len(aug_df)} augmented samples.")
+        
     return training_df
+
 
 # =========================
 # Main Execution Block
@@ -140,4 +169,4 @@ if __name__ == "__main__":
         df_aug = augment_training_data(df_gen, featured_data, horizon=TRAINING_HORIZON, feature_cols=FEATURE_COLS_DEFAULT)
         output_path = "causal_training_data_balanced.csv"
         df_aug.to_csv(output_path, index=False)
-        print(f"\n✅ Final training data (Bulletproof Version) successfully saved to '{output_path}'")
+        print(f"\n✅ Final training data (Pure Alpaca & Pandas) successfully saved to '{output_path}'")

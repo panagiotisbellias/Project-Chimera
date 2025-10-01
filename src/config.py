@@ -12,9 +12,10 @@
 # Both data preparation and the engine itself will import from this list.
 FEATURE_COLS_DEFAULT = [
     "Rsi_14",
-    "Roc_5",
+    "Roc_15",         
     "Macdh_12_26_9",
-    "Price_vs_sma10",
-    "Sma10_vs_sma50",
-    "Bb_position"
+    "Price_vs_sma20",  
+    "Sma20_vs_sma100",  
+    "Bb_position",
+    "Atr_14"
 ]

@@ -1,5 +1,4 @@
 # Project Chimera: A Neuro-Symbolic-Causal AI Agent for Strategic Decision-Making
-
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python Version](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
@@ -7,12 +6,7 @@
 
 ## ❤️ Our Contributors!
 
-Thanks goes to these wonderful people
-
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- ALL-CONTRIBUTORS-LIST:END -->
-
-We are a growing community!
+[![Contributors](https://contrib.rocks/image?repo=akarlaraytu/Project-Chimera&cache_bust=1)](...)
 
 ---
 
