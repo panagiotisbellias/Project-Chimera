@@ -1,7 +1,6 @@
 # =============================================================================
-# live_paper_trader.py (v6 - FINAL PRESENTATION VERSION)
+# live_paper_trader.py 
 #
-# Author: Aytug Akarlar & Gemini
 #
 # Description:
 #   This script represents the final, fully operational version of the
@@ -18,9 +17,6 @@
 #       order to the Alpaca exchange.
 #   4.  REPORT: Generates a beautiful, detailed report of the entire cycle
 #       for clear monitoring and analysis.
-#
-# This script is the culmination of the "ilmek ilmek isleme" philosophy,
-# resulting in a robust, intelligent, and autonomous trading agent.
 # =============================================================================
 
 # --- Section 1: Standard Library and Third-Party Imports ---
