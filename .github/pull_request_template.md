@@ -28,6 +28,7 @@ Fixes #(issue number)
     works
 -   [ ] New and existing unit tests pass locally with my changes
 -   [ ] I have updated the documentation where necessary
+-   [ ] I have updated the GLOSSARY.md with the new terms possibly occurred from this change
 
 ## Screenshots (if applicable)
 
