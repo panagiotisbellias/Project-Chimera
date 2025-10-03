@@ -1,11 +1,6 @@
 import streamlit as st
 import os
 
-if "OPENAI_API_KEY" not in st.session_state or not st.session_state["OPENAI_API_KEY"]:
-    st.error("Please enter your OpenAI API key in the sidebar before starting.")
-    st.stop()
-
-
 def main():
     st.set_page_config(
         page_title="Project Chimera - Main Menu",

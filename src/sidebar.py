@@ -38,11 +38,9 @@ def render_sidebar():
         key="openai_api_key_global"
         )
 
-    # 🔹 Anında yaz
     if api_key:
         st.session_state["OPENAI_API_KEY"] = api_key
 
-    # Buton sadece sayfayı yenilemek için
     if st.sidebar.button("Apply API Key"):
         st.rerun()
 
@@ -53,6 +51,49 @@ def render_sidebar():
             st.sidebar.error("Invalid API key ❌")
     else:
         st.sidebar.warning("Please enter your API key.")
+        
+
+    st.sidebar.markdown("---")
+    st.sidebar.markdown(
+        """
+        <style>
+        .sidebar-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #ffffff;
+            color: #2C3E50 !important;
+            padding: 6px 12px;
+            margin: 6px 0;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            text-decoration: none !important;
+            border: 1px solid #E0E0E0;
+            transition: all 0.2s ease-in-out;
+        }
+        .sidebar-button:hover {
+            background: #F8F9FA;
+            border-color: #D0D0D0;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+        .sidebar-button img {
+            height: 16px;
+            margin-right: 6px;
+        }
+        </style>
+
+        <a href="https://github.com/akarlaraytu/Project-Chimera" target="_blank" class="sidebar-button">⭐ Star on GitHub</a>
+        <a href="https://discord.gg/t6M4yyeRQc" target="_blank" class="sidebar-button">
+            <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/discord.svg" alt="Discord"/>
+            Join Discord
+        </a>
+        <a href="https://medium.com/@akarlaraytu" target="_blank" class="sidebar-button">✍️ Support on Medium</a>
+        """,
+        unsafe_allow_html=True
+    )
+
 
     st.sidebar.markdown("---")
     st.sidebar.markdown("<p style='text-align:center; font-size:0.8rem; color:#95A5A6;'>© 2025 Project Chimera</p>", unsafe_allow_html=True)
