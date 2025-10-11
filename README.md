@@ -1,5 +1,5 @@
 # Project Chimera: A Neuro-Symbolic-Causal AI Agent for Strategic Decision-Making
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 [![Python Version](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
@@ -121,8 +121,7 @@ The model is written in TLA+ and checked with the TLC model checker to provide m
 - **Observed fingerprint collision probability:** ~1.85 × 10⁻⁹  
 - **Calculated upper bound:** 6.95 × 10⁻⁵
 
-**Interpretation:**  
-Under the modeled nondeterminism over price and advertising proposals, TLC exhaustively explored millions of states without finding any violation of the defined safety properties. The observed collision probability is far below the calculated bound, supporting the reliability of the result.
+**Interpretation:** Under the modeled nondeterminism over price and advertising proposals, TLC exhaustively explored millions of states without finding any violation of the defined safety properties. The observed collision probability is far below the calculated bound, supporting the reliability of the result.
 
 For more information check [V1.2.3 Release](https://github.com/akarlaraytu/Project-Chimera/releases/tag/v1.2.3 )
 
@@ -136,7 +135,7 @@ For more information check [V1.2.3 Release](https://github.com/akarlaraytu/Proje
 
 | Agent Type                  | Total Profit (Cumulative) | Avg. Weekly Profit | Final Brand Trust | Final Price | Final Ad Spend |
 |-----------------------------|---------------------------|--------------------|-------------------|-------------|----------------|
-| **Full Neuro-Symbolic-Causal** | $2,032,412.65             | $38,347.41         | **1.000**         | $75.97      | $3000.00       |
+| **Full Neuro-Symbolic-Causal** | $2,032,412.65             | $38,347.41         | **1.000** | $75.97      | $3000.00       |
 | LLM-Only                    | $1,418,021.20             | $26,755.12         | 0.633             | $99.00      | $0.10          |
 | LLM + Symbolic              | $812,497.59               | $15,330.14         | 0.843             | $59.31      | $500.00        |
 
@@ -219,21 +218,8 @@ Contributions, issues, and feature requests are welcome! Feel free to check the 
 
 ### 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+This project is licensed under the **GNU AGPLv3 License** - see the `LICENSE` file for details.
 
 ---
 
-*Developed with passion by [Aytug Akarlar](https://www.linkedin.com/in/aytuakarlar/) in collaboration with a strategic AI partner.*
-
-## Contributors ✨
-
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
-
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
-<!-- markdownlint-restore -->
-<!-- prettier-ignore-end -->
-<!-- ALL-CONTRIBUTORS-LIST:END -->
-
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+*Developed with passion by [Aytug Akarlar](https://www.linkedin.com/in/aytuakarlar/) *
