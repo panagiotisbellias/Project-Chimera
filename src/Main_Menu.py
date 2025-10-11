@@ -1,3 +1,5 @@
+# src/Main_Menu.py (GÜNCELLENMİŞ VERSİYON)
+
 import streamlit as st
 import os
 
@@ -13,7 +15,17 @@ def main():
             "Report a bug": None,
         }
     )
-    
+
+    # --- YENİ EKLENEN CSS KISMI ---
+    # Bu CSS bloğu, sütunların içindeki tüm kutuların aynı yüksekliğe sahip olmasını sağlar.
+    st.markdown("""
+        <style>
+            [data-testid="column"] > div > div {
+                height: 100%;
+            }
+        </style>
+        """, unsafe_allow_html=True)
+    # --- CSS KISMI BİTTİ ---
 
     PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
     image_path = os.path.join(PROJECT_ROOT, "assets", "main_menu_banner.png")
@@ -30,11 +42,10 @@ def main():
     )
     st.divider()
 
-    col1, col2 = st.columns(2)
+    col1, col2, col3 = st.columns(3)
 
     #Adaptive Strategy Lab
     with col1:
-        # st.container(border=True)
         with st.container(border=True):
             st.subheader("🔬 Adaptive Strategy Lab")
             st.markdown(
@@ -42,7 +53,6 @@ def main():
                 "Define a strategic goal, watch the agent think, and explore its decisions with an **interactive XAI dashboard**."
             )
             st.caption("*(Use this for detailed, single-agent analysis.)*")
-            
             st.page_link(
                 "pages/1_🔬_Adaptive_Strategy_Lab.py", 
                 label="Launch Strategy Lab",
@@ -59,12 +69,28 @@ def main():
                 "and watch them compete against each other in a **live, gamified simulation**."
             )
             st.caption("*(Use this for multi-agent competitive analysis and fun!)*")
-            
             st.page_link(
                 "pages/2_⚔️_Colosseum.py",
                 label="Enter The Colosseum",
                 icon="⚔️",
                 use_container_width=True
             )
-if __name__ == "__main__":
+
+    # Governance Lab
+    with col3:
+        with st.container(border=True):
+            st.subheader("🏛️ Governance Lab (DEMO)")
+            st.markdown(
+                "A live demonstration of on-chain governance. Compare competing treasury proposals and "
+                "use Chimera to **predict the causal outcome of your vote** before you cast it."
+            )
+            st.caption("*(The demo built for future steps!)*")
+            st.page_link(
+                "pages/3_🏛️_Governance_Lab.py",
+                label="Enter Governance Lab",
+                icon="🏛️",
+                use_container_width=True
+            )
+
+if __name__ == "__name__":
     main()

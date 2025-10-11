@@ -27,6 +27,10 @@ def render_sidebar():
     st.sidebar.page_link("app.py", label="🏠 Main Menu")
     st.sidebar.page_link("pages/1_🔬_Adaptive_Strategy_Lab.py", label="🔬 Strategy Lab")
     st.sidebar.page_link("pages/2_⚔️_Colosseum.py", label="⚔️ Colosseum")
+    
+    # --- YENİ EKLENEN SATIR ---
+    st.sidebar.page_link("pages/3_🏛️_Governance_Lab.py", label="🏛️ Governance Lab")
+    # --- DEĞİŞİKLİK BİTTİ ---
 
     st.sidebar.markdown("---")
 
