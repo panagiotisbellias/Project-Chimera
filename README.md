@@ -13,6 +13,14 @@
 
 ---
 
+### 🚀 Live Demo & Usage
+
+#### Try the Interactive Lab (Business Context)
+
+<a href="https://project-chimera.streamlit.app/" target="_blank"><img src="https://static.streamlit.io/badges/streamlit_badge_black_white.svg" alt="Live Demo"></a>
+
+---
+
 ## 🔴 LIVE 24/7 Trading Stream Now Active!
 
 **Watch the Chimera agent trade Bitcoin (Paper Trading) live on YouTube!** See its decisions, performance, and analysis updated in real-time on the dashboard.
@@ -168,14 +176,6 @@ Having proven the architecture's core abstraction (Phase 1) and its effectivenes
 * Check **Discussions → Roadmap** for areas needing feedback.
 * See **CONTRIBUTING.md** for setup and PR guidelines.
 * Look for **`good first issue`** tasks if you want to contribute code.
-
----
-
-### 🚀 Live Demo & Usage
-
-#### Try the Interactive Lab (Business Context)
-
-<a href="https://project-chimera.streamlit.app/" target="_blank"><img src="https://static.streamlit.io/badges/streamlit_badge_black_white.svg" alt="Live Demo"></a>
 
 ---
 
