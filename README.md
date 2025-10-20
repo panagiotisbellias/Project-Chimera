@@ -21,34 +21,6 @@
 
 ---
 
-## 🔴 LIVE 24/7 Trading Stream Now Active!
-
-**Watch the Chimera agent trade Bitcoin (Paper Trading) live on YouTube!** See its decisions, performance, and analysis updated in real-time on the dashboard.
-
-[![Chimera Live Trading Stream](assets/chimera_live.png)](https://www.youtube.com/watch?v=fa2Skk3dKnk)
-
-**(Click the image above to watch the live stream)**
-
----
-
-## 📊 Latest Performance Results
-
-Here's a look at the agent's performance in recent backtests:
-
-**1. Long-Term Quant Agent Performance (200 Trading Days)**
-
-This report highlights the agent's ability to significantly outperform a Buy & Hold strategy over an extended period, demonstrating robust cumulative returns while managing drawdowns.
-
-![Project Chimera: Final Quant Agent Performance](results/quant/Chimera_Performance_Report_Final.png)
-
-**2. Recent Performance Detail (30 Trading Days)**
-
-This detailed analysis showcases the agent's decision-making on a shorter timeframe, including key performance indicators like Sharpe Ratio and a map of individual trade decisions on the price chart.
-
-![Chimera-Quant: Recent Backtest Performance Analysis](results/quant/recency_test_report.png)
-
----
-
 ## ❗ The Problem: Why Raw LLMs Can Be Risky
 
 Modern LLMs are powerful, but when entrusted with critical decisions, they can be dangerously naive and unpredictable. Without proper guardrails, they can make catastrophic mistakes. Our benchmark experiment proved this: a pure `LLM-Only` agent, lacking rules or causal understanding, drove a simulated company into a multi-billion dollar loss.
@@ -88,6 +60,34 @@ You can try a **live demo** of the Strategy Lab here (Note: Demo might reflect b
 * **Sophisticated Simulation Environment:** Used for backtesting and benchmarking.
 * **Interactive Strategy Lab:** A Streamlit application (`app.py`) for real-time interaction and analysis.
 * **Automated Benchmarking Suite:** Rigorous comparison scripts (`benchmark.py`).
+
+---
+
+## 🔴 LIVE 24/7 Trading Stream Now Active!
+
+**Watch the Chimera agent trade Bitcoin (Paper Trading) live on YouTube!** See its decisions, performance, and analysis updated in real-time on the dashboard.
+
+[![Chimera Live Trading Stream](assets/chimera_live.png)](https://www.youtube.com/watch?v=fa2Skk3dKnk)
+
+**(Click the image above to watch the live stream)**
+
+---
+
+## 📊 Latest Performance Results
+
+Here's a look at the agent's performance in recent backtests:
+
+**1. Long-Term Quant Agent Performance (200 Trading Days)**
+
+This report highlights the agent's ability to significantly outperform a Buy & Hold strategy over an extended period, demonstrating robust cumulative returns while managing drawdowns.
+
+![Project Chimera: Final Quant Agent Performance](results/quant/Chimera_Performance_Report_Final.png)
+
+**2. Recent Performance Detail (30 Trading Days)**
+
+This detailed analysis showcases the agent's decision-making on a shorter timeframe, including key performance indicators like Sharpe Ratio and a map of individual trade decisions on the price chart.
+
+![Chimera-Quant: Recent Backtest Performance Analysis](results/quant/recency_test_report.png)
 
 ---
 
