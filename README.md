@@ -31,13 +31,13 @@ Here's a look at the agent's performance in recent backtests:
 
 This report highlights the agent's ability to significantly outperform a Buy & Hold strategy over an extended period, demonstrating robust cumulative returns while managing drawdowns.
 
-![Project Chimera: Final Quant Agent Performance](results/quant/Chimera_Performance_Report_Final.jpg)
+![Project Chimera: Final Quant Agent Performance](results/quant/Chimera_Performance_Report_Final.png)
 
 **2. Recent Performance Detail (30 Trading Days)**
 
 This detailed analysis showcases the agent's decision-making on a shorter timeframe, including key performance indicators like Sharpe Ratio and a map of individual trade decisions on the price chart.
 
-![Chimera-Quant: Recent Backtest Performance Analysis](results/quant/recency_test_report.jpg)
+![Chimera-Quant: Recent Backtest Performance Analysis](results/quant/recency_test_report.png)
 
 ---
 
