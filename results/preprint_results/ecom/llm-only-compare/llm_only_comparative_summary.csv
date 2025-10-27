@@ -1,0 +1,9 @@
+Metric,Discount Strategy,Pricing Strategy
+Total Profit,"$58,441","$1,132,384"
+Avg Weekly Profit,"$1,124","$21,777"
+Final Price,$50.00,$150.00
+Price Change (Start→End),$-35.00,$+30.00
+Final Trust,1.000,0.231
+Trust Change,+0.280,-0.456
+Catastrophic Weeks,3,1
+Guardian Intervention Rate,94.2%,96.2%

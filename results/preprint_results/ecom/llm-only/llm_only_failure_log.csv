@@ -1,0 +1,53 @@
+week,proposed_price_change,proposed_ad_spend,guardian_would_repair,guardian_validation_msg,repaired_price_change,repaired_ad_spend,actual_price,actual_trust,actual_profit,profit_delta,is_catastrophic,sales_volume
+1,0.15,-200.0,True,Rule Violation: Ad spend cannot be negative.,0.15,0.0,114.99999999999999,0.6846279999999999,29184.999999999993,-2165.0000000000073,False,449
+2,0.1,15.0,False,Action is valid and compliant with all rules.,0.1,15.0,126.5,0.6833604717467237,34410.0,5225.000000000007,False,450
+3,-0.25,30.0,False,Action is valid and compliant with all rules.,-0.25,30.0,94.875,0.7026612001869497,30350.375,-4059.625,False,677
+4,0.0,0.0,False,Action is valid and compliant with all rules.,0.0,0.0,94.875,0.7012558777865757,26431.375,-3919.0,False,589
+5,-0.2,20.0,False,Action is valid and compliant with all rules.,-0.2,20.0,75.9,0.7209917140462384,21761.9,-4669.4749999999985,False,841
+6,0.2,50.0,False,Action is valid and compliant with all rules.,0.2,50.0,91.08,0.7055027841107353,29938.399999999994,8176.499999999993,False,730
+7,-0.1,100.0,False,Action is valid and compliant with all rules.,-0.1,100.0,81.972,0.7259057351731091,27300.004,-2638.3959999999934,False,857
+8,-0.3,200.0,True,Rule Violation: Profit margin < 15% or price below safe threshold ($59.41 with buffer).,-0.2752187978104431,200.0,57.380399999999995,0.7475480021559541,10346.591599999985,-16953.412400000016,True,1429
+9,-0.2,400.0,True,Rule Violation: Profit margin < 15% or price below safe threshold ($59.41 with buffer).,0.03540171741365272,400.0,50.0,0.7710200620628886,-400.0,-10746.591599999985,True,1758
+10,-0.4,15.0,True,Rule Violation: Profit margin < 15% or price below safe threshold ($59.41 with buffer).,0.18823529411764706,15.0,50.0,0.7926803641358641,-15.0,385.0,False,1813
+11,-0.5,50.0,True,Rule Violation: Weekly discount cannot exceed 40%.,0.18823529411764706,50.0,50.0,0.8152254093572457,-50.0,-35.0,False,1886
+12,-0.15,80.0,True,Rule Violation: Profit margin < 15% or price below safe threshold ($59.41 with buffer).,0.18823529411764706,80.0,50.0,0.8386477429799312,-80.0,-30.0,False,1896
+13,-0.4,50.0,True,Rule Violation: Profit margin < 15% or price below safe threshold ($59.41 with buffer).,0.18823529411764706,50.0,50.0,0.862500170951834,-50.0,30.0,False,2038
+14,-0.4,5.0,True,Rule Violation: Profit margin < 15% or price below safe threshold ($59.41 with buffer).,0.18823529411764706,5.0,50.0,0.8866426451927476,-5.0,45.0,False,2001
+15,-0.2,15.0,True,Rule Violation: Profit margin < 15% or price below safe threshold ($59.41 with buffer).,0.18823529411764706,15.0,50.0,0.9115511378126069,-15.0,-10.0,False,1923
+16,-0.2,20.0,True,Rule Violation: Profit margin < 15% or price below safe threshold ($59.41 with buffer).,0.18823529411764706,20.0,50.0,0.937205431156946,-20.0,-5.0,False,2094
+17,-0.5,30.0,True,Rule Violation: Weekly discount cannot exceed 40%.,0.18823529411764706,30.0,50.0,0.9636757177294615,-30.0,-10.0,False,2002
+18,-0.1,50.0,True,Rule Violation: Profit margin < 15% or price below safe threshold ($59.41 with buffer).,0.18823529411764706,50.0,50.0,0.9910841330478387,-50.0,-20.0,False,2246
+19,0.1,30.0,True,Rule Violation: Profit margin < 15% or price below safe threshold ($59.41 with buffer).,0.18823529411764706,30.0,55.00000000000001,0.98939433147548,9350.000000000015,9400.000000000015,False,1876
+20,-0.2,20.0,True,Rule Violation: Profit margin < 15% or price below safe threshold ($59.41 with buffer).,0.08021390374331538,20.0,50.0,1.0,-20.0,-9370.000000000015,True,2074
+21,-0.1,15.0,True,Rule Violation: Profit margin < 15% or price below safe threshold ($59.41 with buffer).,0.18823529411764706,15.0,50.0,1.0,-15.0,5.0,False,1985
+22,0.2,30.0,False,Action is valid and compliant with all rules.,0.2,30.0,60.0,0.9783290969094431,16870.0,16885.0,False,1690
+23,-0.2,50.0,True,Rule Violation: Profit margin < 15% or price below safe threshold ($59.41 with buffer).,-0.009803921568627416,50.0,50.0,1.0,-50.0,-16920.0,True,1981
+24,-0.15,30.0,True,Rule Violation: Profit margin < 15% or price below safe threshold ($59.41 with buffer).,0.18823529411764706,30.0,50.0,1.0,-30.0,20.0,False,1901
+25,0.2,-20.0,True,Rule Violation: Ad spend cannot be negative.,0.2,0.0,60.0,0.97804,14530.0,14560.0,False,1453
+26,0.2,15.0,False,Action is valid and compliant with all rules.,0.2,15.0,72.0,0.9567046604454132,25725.0,11195.0,False,1170
+27,0.25,30.0,False,Action is valid and compliant with all rules.,0.25,30.0,90.0,0.9359720064626166,34010.0,8285.0,False,851
+28,-0.5,50.0,True,Rule Violation: Weekly discount cannot exceed 40%.,-0.33986928104575165,50.0,50.0,0.9625924857457774,-50.0,-34060.0,True,1744
+29,0.35,-25.0,True,Rule Violation: Ad spend cannot be negative.,0.35,0.0,67.5,0.9414539547588001,20037.5,20087.5,False,1145
+30,-0.2,15.0,True,Rule Violation: Profit margin < 15% or price below safe threshold ($59.41 with buffer).,-0.11982570806100212,15.0,54.0,0.967902264019798,6529.0,-13508.5,True,1636
+31,-0.1,18.0,True,Rule Violation: Profit margin < 15% or price below safe threshold ($59.41 with buffer).,0.10021786492374729,18.0,50.0,0.9951229507307974,-18.0,-6547.0,True,1596
+32,-0.2,36.0,True,Rule Violation: Profit margin < 15% or price below safe threshold ($59.41 with buffer).,0.18823529411764706,36.0,50.0,1.0,-36.0,-18.0,False,1569
+33,-0.5,72.0,True,Rule Violation: Weekly discount cannot exceed 40%.,0.18823529411764706,72.0,50.0,1.0,-72.0,-36.0,False,1530
+34,-0.5,20.0,True,Rule Violation: Weekly discount cannot exceed 40%.,0.18823529411764706,20.0,50.0,1.0,-20.0,52.0,False,1592
+35,0.4,10.0,False,Action is valid and compliant with all rules.,0.4,10.0,70.0,0.9781373182158762,20910.0,20930.0,False,1046
+36,0.2,40.0,False,Action is valid and compliant with all rules.,0.2,40.0,84.0,0.9570326305714754,26174.0,5264.0,False,771
+37,0.25,20.0,False,Action is valid and compliant with all rules.,0.25,20.0,105.0,0.9362015498024563,30120.0,3946.0,False,548
+38,0.1,70.0,False,Action is valid and compliant with all rules.,0.1,70.0,115.50000000000001,0.9349613011758076,32221.500000000007,2101.5000000000073,False,493
+39,0.2,70.0,False,Action is valid and compliant with all rules.,0.2,70.0,138.60000000000002,0.9150482416774399,36876.20000000001,4654.700000000004,False,417
+40,-0.4,140.0,False,Action is valid and compliant with all rules.,-0.4,140.0,83.16000000000001,0.9418471606335643,26785.920000000013,-10090.279999999999,True,812
+41,-0.15,50.0,False,Action is valid and compliant with all rules.,-0.15,50.0,70.686,0.968634738311563,20346.396000000008,-6439.524000000005,True,986
+42,-0.15,25.0,False,Action is valid and compliant with all rules.,-0.15,25.0,60.0831,0.9959442568467155,11691.5622,-8654.833800000008,True,1162
+43,-0.2,50.0,True,Rule Violation: Profit margin < 15% or price below safe threshold ($59.41 with buffer).,-0.011173446345439042,50.0,50.0,1.0,-50.0,-11741.5622,True,1552
+44,-0.4,100.0,True,Rule Violation: Profit margin < 15% or price below safe threshold ($59.41 with buffer).,0.18823529411764706,100.0,50.0,1.0,-100.0,-50.0,False,1588
+45,-0.5,150.0,True,Rule Violation: Weekly discount cannot exceed 40%.,0.18823529411764706,150.0,50.0,1.0,-150.0,-50.0,False,1646
+46,-0.4,180.0,True,Rule Violation: Profit margin < 15% or price below safe threshold ($59.41 with buffer).,0.18823529411764706,180.0,50.0,1.0,-180.0,-30.0,False,1746
+47,-0.2,100.0,True,Rule Violation: Profit margin < 15% or price below safe threshold ($59.41 with buffer).,0.18823529411764706,100.0,50.0,1.0,-100.0,80.0,False,1694
+48,-0.2,50.0,True,Rule Violation: Profit margin < 15% or price below safe threshold ($59.41 with buffer).,0.18823529411764706,50.0,50.0,1.0,-50.0,50.0,False,1748
+49,-0.4,-20.0,True,Rule Violation: Ad spend cannot be negative.,0.18823529411764706,0.0,50.0,1.0,0.0,50.0,False,1713
+50,-0.2,20.0,True,Rule Violation: Profit margin < 15% or price below safe threshold ($59.41 with buffer).,0.18823529411764706,20.0,50.0,1.0,-20.0,-20.0,False,1785
+51,-0.4,30.0,True,Rule Violation: Profit margin < 15% or price below safe threshold ($59.41 with buffer).,0.18823529411764706,30.0,50.0,1.0,-30.0,-10.0,False,1866
+52,-0.4,100.0,True,Rule Violation: Profit margin < 15% or price below safe threshold ($59.41 with buffer).,0.18823529411764706,100.0,50.0,1.0,-100.0,-70.0,False,1752

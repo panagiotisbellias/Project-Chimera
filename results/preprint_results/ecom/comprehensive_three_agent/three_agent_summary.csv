@@ -1,0 +1,7 @@
+Agent,Strategy,Total Profit,Avg Weekly,Final Trust,Trust Δ
+LLM-Only,Decrease,"$-99,090","$-1,906",1.000,+0.277
+LLM + Guardian,Decrease,"$657,847","$12,651",0.691,-0.009
+Full Chimera,Decrease,"$1,515,266","$29,140",0.716,+0.018
+LLM-Only,Increase,"$1,623,682","$31,225",0.359,-0.328
+LLM + Guardian,Increase,"$1,695,826","$32,612",0.631,-0.068
+Full Chimera,Increase,"$1,960,078","$37,694",0.795,+0.108

@@ -1,0 +1,4 @@
+Architecture,Total Profit,Mean Weekly Profit,Median Weekly Profit,Std Dev,Min Profit,Max Profit,Sharpe Ratio,Coeff. of Variation,Final Trust,Trust Change,Mean Trust
+LLM-Only,"$1,342,315","$25,814","$26,175","$10,870",$-800,"$41,900",2.375,42.1%,0.482,-0.205,0.561
+LLM + Guardian,"$1,688,563","$32,472","$31,290","$7,450","$18,034","$49,000",4.359,22.9%,0.681,-0.021,0.687
+Full Chimera,"$1,894,900","$36,440","$36,498","$4,869","$25,363","$44,900",7.485,13.4%,0.775,+0.073,0.721

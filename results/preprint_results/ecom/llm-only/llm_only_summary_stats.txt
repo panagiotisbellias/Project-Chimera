@@ -1,0 +1,9 @@
+LLM-ONLY AGENT: FAILURE ANALYSIS SUMMARY
+==================================================
+
+Total Cumulative Profit: $540,095
+Average Weekly Profit: $10,386
+Worst Single Week Loss: $-34,060
+Number of Catastrophic Weeks: 11
+Guardian Intervention Rate: 67.3%
+Final Brand Trust: 1.000

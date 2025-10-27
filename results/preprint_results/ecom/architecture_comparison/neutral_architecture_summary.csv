@@ -1,0 +1,4 @@
+Agent Architecture,Total Profit,Avg Weekly Profit,Final Price,Final Trust,Trust Change,Profit Std Dev
+LLM-Only (No Tools),"$1,342,315","$25,814",$150.00,0.482,-0.205,$10870
+LLM + Symbolic Guardian,"$1,688,563","$32,472",$108.95,0.681,-0.021,$7450
+Full Chimera (Neuro-Symbolic-Causal),"$1,894,900","$36,440",$131.46,0.775,+0.073,$4869

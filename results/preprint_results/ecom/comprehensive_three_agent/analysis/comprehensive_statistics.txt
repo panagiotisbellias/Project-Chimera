@@ -1,0 +1,23 @@
+COMPREHENSIVE STATISTICAL ANALYSIS
+================================================================================================================================================================
+
+Strategy          Agent Total Profit Mean Weekly Median Weekly Std Dev Min Profit Max Profit Sharpe Ratio CV (%) Final Trust Trust Δ Failure Rate
+  Volume       LLM-Only     $-99,090     $-1,906       $-1,000  $1,995    $-5,000         $0       -0.955    inf       1.000  +0.277        82.7%
+  Volume LLM + Guardian     $657,847     $12,651       $10,708  $6,376     $7,444    $32,200        1.984   50.4       0.691  -0.009         0.0%
+  Volume   Full Chimera   $1,515,266     $29,140       $27,402  $7,755    $18,730    $46,059        3.758   26.6       0.716  +0.018         0.0%
+  Margin       LLM-Only   $1,623,682     $31,225       $32,250 $10,694    $16,296    $52,700        2.920   34.2       0.359  -0.328         0.0%
+  Margin LLM + Guardian   $1,695,826     $32,612       $31,999  $5,694    $24,499    $48,100        5.727   17.5       0.631  -0.068         0.0%
+  Margin   Full Chimera   $1,960,078     $37,694       $37,216  $5,542    $25,989    $51,999        6.802   14.7       0.795  +0.108         0.0%
+
+================================================================================================================================================================
+
+KEY FINDINGS:
+
+🏆 Highest Total Profit: Full Chimera (Margin) - $1,960,078
+📊 Best Risk-Adjusted: Full Chimera (Margin) - Sharpe: 6.802
+⭐ Highest Trust: LLM-Only (Volume) - 1.000
+
+🎯 CHIMERA PERFORMANCE:
+   - Volume Strategy: $1,515,266, Trust: +0.018
+   - Margin Strategy: $1,960,078, Trust: +0.108
+   → Robust across organizational biases ✓

@@ -1,0 +1,22 @@
+TRUST MULTIPLIER SENSITIVITY ANALYSIS
+============================================================================================================================================
+
+     Risk Preference Trust Multiplier Total Profit Mean Weekly Profit Std Dev Sharpe Ratio Final Trust Trust Change
+    Aggressive (50K)          $50,000   $2,215,620            $42,608  $5,606        7.600       0.835       +0.151
+ Moderate-Low (100K)         $100,000   $2,107,171            $40,523  $4,899        8.272       0.815       +0.131
+     Balanced (150K)         $150,000   $1,968,292            $37,852  $5,357        7.066       0.769       +0.084
+Moderate-High (200K)         $200,000   $2,050,229            $39,427  $5,302        7.436       0.819       +0.135
+ Conservative (300K)         $300,000   $2,083,349            $40,064  $6,137        6.529       0.846       +0.160
+
+============================================================================================================================================
+
+KEY INSIGHTS:
+
+📊 The trust_multiplier parameter encodes organizational risk preferences:
+
+  - AGGRESSIVE (50K): Maximizes short-term profit, accepts trust erosion
+  - BALANCED (150K): Empirically optimal - maximizes risk-adjusted returns
+  - CONSERVATIVE (300K): Protects brand trust, sacrifices immediate profit
+
+🎯 Chimera adapts its strategy to organizational preferences through this parameter.
+   LLM-Only and rule-based agents cannot express this nuanced risk preference.

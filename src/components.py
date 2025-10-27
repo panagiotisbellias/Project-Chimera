@@ -153,7 +153,7 @@ class SymbolicGuardianV4:
         return a, report
 
 
-DEFAULT_TRUST_VALUE_MULTIPLIER = 150_000 
+DEFAULT_TRUST_VALUE_MULTIPLIER = 120_000 
 
 
 # ----------------------------
@@ -791,7 +791,7 @@ class MarketSimulatorV2(BaseEnvironment):
             
         self.market_data = market_data
         self.initial_capital = initial_capital
-        self.borrowing_rate = borrowing_rate_daily
+        self.borrowing_rate = borrowing_rate_daily / 2.0
         self.rng = np.random.default_rng(seed) if seed is not None else np.random.default_rng()
         
         self.state: Dict[str, Any] = {}

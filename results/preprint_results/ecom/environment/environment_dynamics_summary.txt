@@ -1,0 +1,12 @@
+ENVIRONMENT DYNAMICS - SUMMARY STATISTICS
+==================================================
+
+Price Elasticity (approximate): -1.25
+Trust Impact (low vs. high): +200.1% demand increase
+
+Ad Spend ROI:
+  - Low spend (<$500): 10787.48x
+  - Medium spend ($500-$2000): 67.25x
+  - High spend (>$2000): 26.64x
+
+Seasonal Demand Range: ±40.1% from mean
