@@ -13,6 +13,10 @@
 
 ---
 
+Research Update (Nov 2025): Project Chimera’s theoretical foundations are now live on arXiv — [arXiv:2510.23682](https://arxiv.org/abs/2510.23682)
+
+---
+
 ### 🚀 Live Demo & Usage
 
 #### Try the Interactive Lab (Business Context)
