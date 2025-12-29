@@ -67,6 +67,35 @@ You can try a **live demo** of the Strategy Lab here (Note: Demo might reflect b
 
 ---
 
+### 🗺️ Roadmap: Q1 2026 & Beyond
+
+Project Chimera is evolving from a research prototype into a decentralized, autonomous decision engine.
+Our immediate focus for **Q1 2026** is twofold: **On-Chain Integration** and **Autonomous Causal Discovery**.
+
+---
+
+#### 🎯 Q1 2026 Strategic Priorities
+
+| Priority | Objective | Theme |
+| :--- | :--- | :--- |
+| **1. Web3 Integration** | **Porting Governance to Chain** | Moving the *Symbolic Guardian* and audit logs to a decentralized infrastructure to guarantee immutable, trustless verification of AI decisions. |
+| **2. Causal Discovery** | **Active Inference** | Upgrading the *Causal Engine* from passive learning to active experimentation. The agent will autonomously design and run tests to discover new causal links in its environment. |
+
+---
+
+#### 📍 High-Level Phases
+
+* ✅ **Phase 1 — Strategic Depth & Provable Safety** — *COMPLETE*
+    * *Theme:* Developed the Neuro-Symbolic-Causal architecture with TLA+ verified safety constraints.
+* ✅ **Phase 2 — Cross-Domain Mastery (Quant & E-Com)** — *COMPLETE*
+    * *Theme:* Decoupled the "Brain" from the environment, proving performance in trading and business simulations.
+* ▶️ **Phase 3 — The Decentralized & Autonomous Leap** — *IN PROGRESS (Q1 2026)*
+    * *Theme:* **Governance meets Web3.** Implementing the architecture on-chain for true transparency while unlocking "Autonomous Causal Discovery" so the agent learns the rules of the world without human supervision.
+* 🔮 **Phase 4 — Ecosystem Leadership: The "Chimera Dev Kit"**
+    * *Theme:* Packaging the technology into an open-source SDK (`pip install chimera-agent`) to enable developers to build safe, governed AI agents for any sector.
+    
+---
+
 ## 🔴 LIVE 24/7 Trading Stream Now Active!
 
 **Watch the Chimera agent trade Bitcoin (Paper Trading) live on YouTube!** See its decisions, performance, and analysis updated in real-time on the dashboard.
@@ -127,50 +156,6 @@ This is currently an exclusive **Closed Beta**. Access details below. Learn more
 ## 📚 Documentation & Glossary
 
 For a quick reference of key concepts, see our [Glossary](docs/GLOSSARY.md). Check the [latest release notes](https://github.com/akarlaraytu/Project-Chimera/releases) for detailed updates.
-
----
-
-### 🗺️ Future Roadmap
-
-Project Chimera is a living project. The roadmap outlines our vision for evolving this agent into a truly general-purpose decision-making engine and, ultimately, an open-source ecosystem.
-
----
-
-**High-Level Phases**
-
-* ✅ **Phase 1 — Strategic Depth & Provable Safety** — *COMPLETE*
-    * *Theme:* Transform the agent from a simple optimizer into a strategist that is explainable, competitive, and mathematically verifiable.
-* ✅ **Phase 2 — Architectural Abstraction & Cross-Domain Mastery** — *COMPLETE*
-    * *Theme:* Decouple the agent's brain from any single environment, proving its universal capabilities in the high-stakes world of quantitative finance.
-* ▶️ **Phase 3 — Ultimate Generalization & Autonomous Discovery** — *IN PROGRESS*
-    * *Theme:* Test the limits of the architecture's flexibility (e.g., in Supply Chain simulations) and unlock the agent's ultimate intelligence layer: the ability to learn how the world works on its own.
-* **Phase 4 — Ecosystem Leadership: The "Chimera Dev Kit"**
-    * *Theme:* Package our proven technology into an open-source development kit for the world to build the next generation of trustworthy AI.
-
----
-
-**Current Milestone:** **Phase 3 — Ultimate Generalization & Autonomous Discovery**
-
-Having proven the architecture's core abstraction (Phase 1) and its effectiveness in quantitative finance (Phase 2), we now focus on pushing the boundaries of generalization and intelligence.
-
-**Phase 3 Tasks:**
-
-1.  **Final Flexibility Test (Supply Chain Simulation):**
-    * *What:* Prove the architecture's universality by implementing a `SupplyChainSimulator` for a completely different complex domain.
-    * *Status:* *Upcoming.*
-2.  **The Revolutionary Leap: "Autonomous Causal Discovery"**
-    * *What:* Evolve the Causal Engine from a system that learns from *given data* to one that *autonomously discovers new causal relationships* by designing and running its own experiments within an environment.
-    * *Impact:* This fundamentally changes how AI understands the world. We no longer just tell it the rules; *it learns the changing rules of the game on its own*.
-    * *Status:* *Research & Development in progress.*
-
----
-
-**Future Phases**
-
-* **Phase 4: Ecosystem Leadership: The "Chimera Dev Kit"**
-    * *Goal:* Package the entire project into a clean, well-documented, `pip install chimera-agent` library.
-    * *Includes:* Comprehensive documentation, tutorials for E-commerce, Quant Finance, and Supply Chain domains.
-    * *Vision:* Transform the project into a living open-source ecosystem adopted by a global community.
 
 ---
 
