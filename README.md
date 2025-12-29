@@ -1,4 +1,4 @@
-# Project Chimera: A Neuro-Symbolic-Causal AI Agent for Strategic Decision-Making
+# Project Chimera: A Neuro-Symbolic-Causal AI Layer for Governance & Strategic Decision-Making
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 [![Python Version](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
