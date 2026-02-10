@@ -29,7 +29,7 @@ with st.sidebar:
     st.divider()
     st.info(
         "🚀 **Roadmap Update (Feb 2026)**\n\n"
-        "We are currently developing **Chimera v2.0**, powered by the new **CSL (Chimera Specification Language)** governance kernel.\n\n"
+        "We are currently developing **Chimera v1.6**, powered by the new **CSL (Chimera Specification Language)** governance kernel.\n\n"
         "You are currently using the **Stable v1.5 Release**.\n"
         "[View Roadmap & CSL Details](https://github.com/akarlaraytu/Project-Chimera/issues/4)"
     )
