@@ -27,11 +27,19 @@ def render_sidebar():
     st.sidebar.page_link("app.py", label="🏠 Main Menu")
     st.sidebar.page_link("pages/1_🔬_Adaptive_Strategy_Lab.py", label="🔬 Strategy Lab")
     st.sidebar.page_link("pages/2_⚔️_Colosseum.py", label="⚔️ Colosseum")
-    
-    # --- YENİ EKLENEN SATIR ---
     st.sidebar.page_link("pages/3_🏛️_Governance_Lab.py", label="🏛️ Governance Lab")
-    # --- DEĞİŞİKLİK BİTTİ ---
 
+    st.sidebar.markdown("---")
+    
+    with st.sidebar.container(border=True):
+        st.markdown("**🧬 Introducing CSL**")
+        st.caption("Chimera Specification Language")
+        st.markdown(
+            "We built a dedicated programming language for AI safety. "
+            "**CSL** replaces probabilistic guessing with mathematical guarantees."
+        )
+        st.link_button("👉 Explore CSL Core", "https://github.com/Chimera-Protocol/csl-core", use_container_width=True)
+        
     st.sidebar.markdown("---")
 
     api_key = st.sidebar.text_input(
@@ -100,4 +108,7 @@ def render_sidebar():
 
 
     st.sidebar.markdown("---")
+    
+    
+    
     st.sidebar.markdown("<p style='text-align:center; font-size:0.8rem; color:#95A5A6;'>© 2025 Project Chimera</p>", unsafe_allow_html=True)

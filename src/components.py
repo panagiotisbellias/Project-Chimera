@@ -19,6 +19,19 @@ from .environments import BaseEnvironment, BaseMultiAgentEnvironment
 
 from .config import FEATURE_COLS_DEFAULT
 
+import warnings
+
+# --- ARCHITECTURE NOTICE: v1.6.0 Migration ---
+# The logic within this module (SymbolicGuardian) is being transitioned
+# from hardcoded Python checks to the CSL (Chimera Specification Language) Runtime.
+
+warnings.warn(
+    "Legacy Symbolic Logic detected. Using Python-based fallbacks instead of CSL verification.",
+    DeprecationWarning,
+    stacklevel=2
+)
+# -------------------------------------------
+
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
 COST_PER_ITEM = 50.0

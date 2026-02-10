@@ -1,3 +1,6 @@
+# --- CSL: Core Governance Engine (v2.0 Architecture) ---
+csl-core==0.2.0a1
+# -------------------------------------------------------
 aiohappyeyeballs==2.6.1
 aiohttp==3.12.15
 aiosignal==1.4.0
