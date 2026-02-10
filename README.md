@@ -13,6 +13,16 @@
 
 ---
 
+> [!IMPORTANT]
+> **🚀 MAJOR UPDATE: CHIMERA HAS EVOLVED**
+>
+> The core logic of Chimera has been extracted into a standalone, high-performance compiler/SDK.
+>
+> 🛡️ **Solidity for AI Policies:** Deterministic safety layer for probabilistic systems.
+>
+> 👉 **Check out and Star the new engine here:** [Chimera-Protocol/csl-core](https://github.com/Chimera-Protocol/csl-core)
+
+---
 Research Update (Nov 2025): Project Chimera’s theoretical foundations are now live on arXiv — [arXiv:2510.23682](https://arxiv.org/abs/2510.23682)
 
 ---
