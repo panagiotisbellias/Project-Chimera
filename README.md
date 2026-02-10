@@ -77,33 +77,14 @@ You can try a **live demo** of the Strategy Lab here (Note: Demo might reflect b
 
 ---
 
-### 🗺️ Roadmap: Q1 2026 & Beyond
+### 🗺️ Roadmap: The Path to Verifiable Autonomy
 
-Project Chimera is evolving from a research prototype into a decentralized, autonomous decision engine.
-Our immediate focus for **Q1 2026** is twofold: **On-Chain Integration** and **Autonomous Causal Discovery**.
+Project Chimera is evolving from a specialized trading bot into a general-purpose **AI Governance Protocol**.
 
----
-
-#### 🎯 Q1 2026 Strategic Priorities
-
-| Priority | Objective | Theme |
-| :--- | :--- | :--- |
-| **1. Web3 Integration** | **Porting Governance to Chain** | Moving the *Symbolic Guardian* and audit logs to a decentralized infrastructure to guarantee immutable, trustless verification of AI decisions. |
-| **2. Causal Discovery** | **Active Inference** | Upgrading the *Causal Engine* from passive learning to active experimentation. The agent will autonomously design and run tests to discover new causal links in its environment. |
-
----
-
-#### 📍 High-Level Phases
-
-* ✅ **Phase 1 — Strategic Depth & Provable Safety** — *COMPLETE*
-    * *Theme:* Developed the Neuro-Symbolic-Causal architecture with TLA+ verified safety constraints.
-* ✅ **Phase 2 — Cross-Domain Mastery (Quant & E-Com)** — *COMPLETE*
-    * *Theme:* Decoupled the "Brain" from the environment, proving performance in trading and business simulations.
-* ▶️ **Phase 3 — The Decentralized & Autonomous Leap** — *IN PROGRESS (Q1 2026)*
-    * *Theme:* **Governance meets Web3.** Implementing the architecture on-chain for true transparency while unlocking "Autonomous Causal Discovery" so the agent learns the rules of the world without human supervision.
-* 🔮 **Phase 4 — Ecosystem Leadership: The "Chimera Dev Kit"**
-    * *Theme:* Packaging the technology into an open-source SDK (`pip install chimera-agent`) to enable developers to build safe, governed AI agents for any sector.
-    
+* ✅ **Phase 1 & 2 (Complete):** Validated Neuro-Symbolic architecture in E-commerce and Quant Finance simulations.
+* ✅ **Phase 3 (Complete):** Development of **[CSL (Chimera Specification Language)](https://github.com/Chimera-Protocol/csl-core)** – the deterministic safety kernel.
+* ▶️ **Phase 4 (Current Focus):** **The Great Unification.** Refactoring the Chimera Agent to run entirely on CSL policies, enabling mathematically verifiable decisions.
+* 🔮 **Phase 5 (Future):** **Autonomous Causal Discovery.** Enabling agents to self-write safety policies based on environmental observation.
 ---
 
 ## 🔴 LIVE 24/7 Trading Stream Now Active!
